@@ -1,0 +1,643 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Saratoga Interactive Handicapper</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Chosen Palette: Saratoga Sage & Slate -->
+    <!-- Application Structure Plan: The SPA is designed around a central dashboard for immediate, high-level insights (Top Bets, Longshots, Fades), which serves as the landing page. This caters to users seeking quick, actionable information. From there, a clear top navigation allows users to select a specific race. Each race view uses a tabbed interface ('Analysis', 'Pace Scenario', 'Top Contenders') to segment the complex information, preventing cognitive overload from a long scroll. This structured, hierarchical approach—from dashboard summary to race-specific details—allows users to explore at their preferred depth, making the dense report content highly digestible and user-friendly. -->
+    <!-- Visualization & Content Choices: 
+        - Report Info: Daily Betting Angles (Top Bets, Fades, etc.) -> Goal: Inform/Summarize -> Viz/Method: HTML/Tailwind Cards -> Interaction: Clickable cards to navigate to the race -> Justification: Provides a scannable, high-impact summary on the main dashboard.
+        - Report Info: Pace analysis (running styles) -> Goal: Compare/Organize -> Viz/Method: Chart.js Horizontal Bar Chart -> Interaction: Hover tooltips on bars -> Justification: Visually groups horses by running style (Speed, Presser, Closer), making the pace setup instantly understandable.
+        - Report Info: Trainer/Jockey stats -> Goal: Compare -> Viz/Method: Chart.js Vertical Bar Chart -> Interaction: Hover tooltips -> Justification: Quantifies the "trainer angle" with clear, comparative data.
+        - Report Info: Betting Strategy (Contenders, Wagers) -> Goal: Inform/Organize -> Viz/Method: Structured HTML/Tailwind cards with icons -> Interaction: None -> Justification: Clearly delineates win contenders, longshots, and fades with supporting rationale in a clean, organized layout.
+        - CONFIRMATION: NO SVG graphics used. NO Mermaid JS used.
+    -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        body {
+            background-color: #FDFDFB;
+            font-family: 'Georgia', serif;
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 300px;
+            max-height: 400px;
+        }
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 350px;
+            }
+        }
+        .nav-button {
+            transition: all 0.3s ease;
+        }
+        .nav-button.active {
+            background-color: #4A5568; /* slate-700 */
+            color: #FFFFFF;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
+        }
+        .tab-button.active {
+            border-color: #4A5568; /* slate-700 */
+            background-color: #F7FAFC; /* gray-50 */
+            color: #2D3748; /* gray-800 */
+        }
+        .tab-content {
+            display: none;
+        }
+        .tab-content.active {
+            display: block;
+        }
+        .card-shadow {
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+    </style>
+</head>
+<body class="text-gray-800">
+
+    <div class="container mx-auto p-4 md:p-8 max-w-7xl">
+        <header class="text-center mb-8">
+            <h1 class="text-4xl md:text-5xl font-bold text-gray-800 tracking-tight">Saratoga Interactive Handicapper</h1>
+            <p class="text-lg text-gray-600 mt-2">Expert Analysis & Wagering Guide for August 2, 2025</p>
+        </header>
+
+        <nav class="mb-8 bg-white p-2 rounded-lg shadow-sm sticky top-2 z-10">
+            <ul id="race-navigation" class="flex flex-wrap justify-center gap-2">
+                <li><button data-race="dashboard" class="nav-button px-4 py-2 text-sm font-semibold text-gray-700 bg-gray-100 rounded-md hover:bg-gray-200 active">Dashboard</button></li>
+            </ul>
+        </nav>
+
+        <main id="main-content">
+        </main>
+    </div>
+
+    <script>
+        const summaryData = {
+            topWins: [
+                { race: 3, horse: '#2 Comport', rationale: 'Sits the perfect trip behind a projected pace meltdown. Offers tremendous value at 8/1 morning line odds.' },
+                { race: 7, horse: '#11 Creditworthy', rationale: 'Owns the best speed figures, drops into an ideal spot, and represents the elite Brown/Prat combination.' },
+                { race: 8, horse: '#3 Johannes', rationale: 'The clear class of the field, bringing top-tier Grade 1 form from the West Coast.' }
+            ],
+            longshots: [
+                { race: 1, horse: '#2 Tagermeen', rationale: 'Had a legitimate excuse with a troubled trip in his debut and is poised for major improvement.' },
+                { race: 4, horse: '#3 Bonus Move', rationale: 'Was stopped cold at a critical point in his last race. A clean trip could produce a huge effort at long odds.' },
+                { race: 11, horse: '#10 Post Time', rationale: 'A model of consistency who will get the strong pace he needs to make his late run.' }
+            ],
+            horizontalKeys: [
+                { title: 'Pick 5 (Races 7-11)', keys: '<strong>Race 7:</strong> #11 Creditworthy, #13 Jefferson Street<br><strong>Race 8:</strong> #3 Johannes (Single)<br><strong>Race 9:</strong> #7 Hotazhell, #5 Test Score<br><strong>Race 10:</strong> #6 Echo Sound<br><strong>Race 11:</strong> #5 Sierra Leone, #9 Fierceness' }
+            ],
+            fades: [
+                { race: 1, horse: '#5 Blinging It Back (2/1)', rationale: 'Still a maiden after three starts, the drop back to maiden level is a negative sign. Poor value.' },
+                { race: 3, horse: '#6 Obliteration (7/5)', rationale: 'Steps up in class while facing immense pace pressure. Prime candidate to get burned in a duel.' },
+                { race: 11, horse: '#7 White Abarrio (4/1)', rationale: 'Inconsistent and faces two monsters in #5 Sierra Leone and #9 Fierceness. Looks like the third-best.' }
+            ]
+        };
+
+        const raceData = {
+            1: {
+                meta: { title: 'Maiden Special Weight', distance: '6 1/2 Furlongs', surface: 'Main Track', purse: '$100,000' },
+                analysis: {
+                    overview: `The Saturday card kicks off with a classic Saratoga challenge: a $100,000 Maiden Special Weight for 2-year-olds. A full field featuring a mix of experienced runners and well-regarded first-time starters from the nation's top barns makes this a quintessential puzzle.`,
+                    class: `The most significant class angle belongs to <strong>#5 Blinging It Back</strong>, who exits a second-place finish in the Grade 3 Sanford Stakes. This drop is typically powerful, but also raises questions about his ability to win against tougher company, making him a potentially vulnerable favorite.`,
+                    form: `Trainer Steven Asmussen (<strong>#2 Tagermeen</strong>) is operating at an elite 43% win rate. The meet's leading jockey, Irad Ortiz, Jr., pilots the Chad Brown-trained firster <strong>#7 Legal Gambit</strong>, a powerful combination.`,
+                    trouble: `A closer look at the running lines reveals a significant hidden edge for <strong>#2 Tagermeen</strong>. His debut race comment reads "bmp brk,3-4path tum," indicating he was bumped at the break and forced to travel wide—two considerable obstacles for a first-time starter. That he still managed to finish a game second suggests significant talent.`
+                },
+                pace: {
+                    intro: 'The pace scenario features a clear front-runner in #5, but the key will be how the others respond. A contested pace could set up a horse with tactical speed or a developing closer.',
+                    horses: [
+                        { name: '#5 Blinging It Back', style: 3, label: 'Early Speed' },
+                        { name: '#2 Tagermeen', style: 2, label: 'Presser' },
+                        { name: '#7 Legal Gambit', style: 1.5, label: 'Mid-Pack' },
+                        { name: '#3 Criteria', style: 1, label: 'Closer' },
+                    ]
+                },
+                betting: {
+                    winContenders: ['#2 Tagermeen', '#7 Legal Gambit'],
+                    liveLongshot: ['#3 Criteria'],
+                    fade: ['#5 Blinging It Back'],
+                    wagers: 'Key #2 Tagermeen on top in exacta and trifecta wagers over #7, #3, and #1a. Use #2 and #7 as "A" horses in any Pick 3 or Pick 5 sequences.'
+                }
+            },
+            2: {
+                meta: { title: 'Maiden Special Weight', distance: '1 1/16 Miles', surface: 'Turf', purse: '$100,000' },
+                analysis: {
+                    overview: `The second race is a classic turf-breeding showcase, with a field dominated by first-time starters from internationally acclaimed sires. With only a handful of entrants having prior race experience—all of it on dirt—pedigree analysis and trainer patterns are the most critical handicapping factors.`,
+                    class: `While there are no traditional class droppers, the "class" of the pedigrees is exceptionally high. <strong>#5 Capital Partner</strong> and <strong>#6 British Invasion</strong> are by world-class European turf stallions Kingman and Lope de Vega, respectively.`,
+                    form: `This race shapes up as a battle between premier turf trainers Chad Brown (<strong>#5 Capital Partner</strong>) and Christophe Clement (<strong>#6 British Invasion</strong>). Clement boasts an outstanding 27% win rate on the turf at the current meet.`,
+                    trouble: `The past performances of <strong>#2 Signatory Man</strong> reveal a significant red flag. His debut race comment reads "ins trn eased, wlkd off," which suggests a potential physical issue. This is a major concern for a young horse.`
+                },
+                pace: {
+                    intro: 'The pace is highly uncertain. #7 Orbit is the only horse with demonstrated early speed, creating a potential "lone speed" scenario where he could slow the fractions and steal the race on the front end.',
+                    horses: [
+                        { name: '#7 Orbit', style: 3, label: 'Lone Speed?' },
+                        { name: '#5 Capital Partner', style: 1.5, label: 'Mid-Pack' },
+                        { name: '#6 British Invasion', style: 1.5, label: 'Mid-Pack' },
+                        { name: '#2 Signatory Man', style: 1, label: 'Closer' },
+                    ]
+                },
+                betting: {
+                    winContenders: ['#5 Capital Partner', '#6 British Invasion'],
+                    liveLongshot: ['#7 Orbit'],
+                    fade: ['#2 Signatory Man'],
+                    wagers: 'Box #5, #6, and #7 in exactas and trifectas. For multi-race wagers, use #5 and #6 as primary plays, with #7 included as a pace-based backup.'
+                }
+            },
+            3: {
+                meta: { title: 'The Saratoga Special S. (G2)', distance: '6 1/2 Furlongs', surface: 'Main Track', purse: '$200,000' },
+                analysis: {
+                    overview: `The third race is the Grade 2 Saratoga Special. This event represents a significant class test for a compact but talented field, featuring a clash between brilliant last-out maiden winners and a graded stakes winner.`,
+                    class: `<strong>#6 Obliteration</strong> is the only horse with a graded stakes win. However, he faces a much tougher challenge here against undefeated and exceptionally fast maiden winners like <strong>#1 Ewing</strong> and <strong>#4 Dazzle D'oro</strong>.`,
+                    form: `Trainer Steve Asmussen (<strong>#6 Obliteration</strong>) is having a phenomenal meet, winning at 43%. However, the race dynamics are the most critical factor, elevating the chances of <strong>#2 Comport</strong>, who is poised to get a perfect trip under Luis Saez.`,
+                    trouble: `<strong>#5 Camigol</strong> encountered significant trouble in his second career start, with a race comment of "chckd hard, rallied 3w," suggesting he could have finished better with a clean trip, but he appears a step below the top contenders.`
+                },
+                pace: {
+                    intro: 'The pace projects to be extremely fast, bordering on a complete meltdown. Three aggressive speed types (#1, #4, #6) almost guarantee a destructive early duel. This scenario dramatically favors a horse that can rate off the blistering fractions.',
+                    horses: [
+                        { name: '#1 Ewing', style: 3, label: 'Pace Duel' },
+                        { name: '#4 Dazzle D\'oro', style: 3, label: 'Pace Duel' },
+                        { name: '#6 Obliteration', style: 2.5, label: 'Pace Duel' },
+                        { name: '#2 Comport', style: 1, label: 'Perfect Trip' },
+                    ]
+                },
+                betting: {
+                    winContenders: ['#2 Comport'],
+                    liveLongshot: ['#2 Comport (8/1 ML)'],
+                    fade: ['#6 Obliteration', '#1 Ewing', '#4 Dazzle D\'oro'],
+                    wagers: 'A win bet on #2 Comport is the primary strategy. For exactas, box #2 with the speed horse that appears sharpest in the post parade. In multi-race wagers, #2 Comport is a strong candidate to use as a single.'
+                }
+            },
+            4: {
+                meta: { title: 'Allowance Optional Claiming', distance: '5 1/2 Furlongs', surface: 'Turf', purse: '$115,000' },
+                analysis: {
+                    overview: `The fourth is a chaotic turf sprint for older horses featuring a massive field. The large, competitive field and an abundance of early speed make this an excellent betting race with the potential for a significant payout.`,
+                    class: `<strong>#2 Xy Speed</strong>, a 9-year-old veteran, takes a notable drop from stakes company. <strong>#5 Run Curtis Run</strong> drops out of a New York-bred stakes race into open company, a move that is often productive.`,
+                    form: `The George Weaver-trained entry of <strong>#1 Twisted Filigree</strong> and <strong>#1a Antares</strong> is particularly strong. Weaver is winning at an excellent 23% at the meet. Trainer Joe Sharp (<strong>#8 Bergen</strong>) is winning at an incredible 38% clip.`,
+                    trouble: `<strong>#3 Bonus Move</strong> had a legitimate excuse in his last start, as his race comment notes he "paused in tight 1/8p". He has potential for a much-improved performance. The comment for <strong>#5 Run Curtis Run</strong> two races back, "shy in st, rank rated," can be interpreted positively; it shows a horse with a strong desire to run.`
+                },
+                pace: {
+                    intro: 'This race is saturated with early speed, creating the strong likelihood of a pace collapse. With so many horses vying for the early lead, the pacesetters are expected to tire. This setup is ideal for horses with a closing running style.',
+                    horses: [
+                        { name: '#1 Twisted Filigree', style: 3, label: 'Pace Duel' },
+                        { name: '#2 Xy Speed', style: 3, label: 'Pace Duel' },
+                        { name: '#12 War Stride', style: 3, label: 'Pace Duel' },
+                        { name: '#5 Run Curtis Run', style: 1, label: 'Closer' },
+                        { name: '#1a Antares', style: 1, label: 'Closer' },
+                        { name: '#3 Bonus Move', style: 1.5, label: 'Mid-Pack' },
+                    ]
+                },
+                betting: {
+                    winContenders: ['#5 Run Curtis Run', '#1a Antares'],
+                    liveLongshot: ['#3 Bonus Move'],
+                    fade: ['#1 Twisted Filigree', '#2 Xy Speed', '#12 War Stride'],
+                    wagers: 'This is a key spread race for horizontal wagers. Use #1a, #3, and #5 as "A" horses in Pick 4 and Pick 5 tickets. Play trifectas keying #5 on top of #1a, #3, #8, and #10.'
+                }
+            },
+            5: {
+                meta: { title: 'Maiden Special Weight', distance: '1 Mile', surface: 'Main Track', purse: '$100,000' },
+                analysis: {
+                    overview: `A large field of maidens will travel a one-turn mile on the main track. The key to this race is identifying which horses will appreciate the stretch-out in distance and which are bred for it.`,
+                    class: `There are no significant class movers here as it's a maiden race. The focus is on which horses are graduating from shorter sprints and appear ready for the mile distance.`,
+                    form: `<strong>#3 Good News Rocket</strong>, trained by Bill Mott, is a standout. Mott excels with horses stretching out in distance. The presence of jockey Junior Alvarado, who wins at 21% with Mott, is a strong positive.`,
+                    trouble: `<strong>#9 Endorse</strong> had a wide trip in his debut, indicated by the "4-5w turn" comment. He lost significant ground and has a right to improve with a better trip.`
+                },
+                pace: {
+                    intro: 'The pace should be honest but not suicidal. #8 Bolt House has shown speed in sprints and is the likely leader, but several others could press the issue, setting it up for a horse with tactical speed or a mild closer.',
+                    horses: [
+                        { name: '#8 Bolt House', style: 3, label: 'Early Speed' },
+                        { name: '#3 Good News Rocket', style: 2, label: 'Presser' },
+                        { name: '#9 Endorse', style: 1.5, label: 'Mid-Pack' },
+                        { name: '#11 Contorted', style: 1, label: 'Closer' },
+                    ]
+                },
+                betting: {
+                    winContenders: ['#3 Good News Rocket', '#9 Endorse'],
+                    liveLongshot: ['#11 Contorted'],
+                    fade: ['#8 Bolt House'],
+                    wagers: 'Focus on #3 Good News Rocket for win bets. Use #3 and #9 in exacta boxes with #11.'
+                }
+            },
+            6: {
+                meta: { title: 'The Adirondack S. (G2)', distance: '6 1/2 Furlongs', surface: 'Main Track', purse: '$200,000' },
+                analysis: {
+                    overview: `The Grade 2 Adirondack for 2-year-old fillies. This race often crowns an early divisional leader. It's a classic test of raw speed and precocity.`,
+                    class: `This is a major class test for all. <strong>#4 Kiss the Sky</strong> was a visually impressive debut winner, but faces other brilliant maiden winners like <strong>#5 Alpenglow</strong>.`,
+                    form: `The combination of trainer Shug McGaughey and jockey Flavien Prat on <strong>#4 Kiss the Sky</strong> is elite. Prat has been winning at a 24% clip at the meet.`,
+                    trouble: `<strong>#2 July</strong> had a troubled start in her debut, noted as "bobbled st". She recovered to win impressively, suggesting she has more talent than shown.`
+                },
+                pace: {
+                    intro: 'A very fast pace is expected. #5 Alpenglow and #4 Kiss the Sky both won their debuts on the front end in fast time. They are likely to hook up in a speed duel.',
+                    horses: [
+                        { name: '#5 Alpenglow', style: 3, label: 'Pace Duel' },
+                        { name: '#4 Kiss the Sky', style: 3, label: 'Pace Duel' },
+                        { name: '#2 July', style: 2, label: 'Presser' },
+                        { name: '#6 She\'s a Natural', style: 1, label: 'Closer' },
+                    ]
+                },
+                betting: {
+                    winContenders: ['#2 July', '#4 Kiss the Sky'],
+                    liveLongshot: ["#6 She's a Natural"],
+                    fade: ['#5 Alpenglow'],
+                    wagers: 'The pace duel makes this tricky. A win bet on #2 July offers value. Box #2, #4, and #6 in trifectas.'
+                }
+            },
+            7: {
+                meta: { title: 'Allowance', distance: '7 Furlongs', surface: 'Main Track', purse: '$112,000' },
+                analysis: {
+                    overview: `A high-level allowance race for older horses that could easily pass for a stakes race. The field is packed with seasoned, classy runners.`,
+                    class: `<strong>#11 Creditworthy</strong> takes a significant drop from graded stakes company where he faced the best of his division. This is a classic, powerful class drop angle for the Chad Brown barn.`,
+                    form: `The Brown/Prat combination with <strong>#11 Creditworthy</strong> is the strongest angle in the race. Brown is 29% with horses dropping from graded stakes to allowance races.`,
+                    trouble: `<strong>#2 Barksdale</strong> was "steadied sharply" at the top of the stretch last out, completely costing him any chance. He is a major threat to rebound.`
+                },
+                pace: {
+                    intro: 'A solid pace is likely, led by #3 Echo Again. This should provide a fair setup for all running styles, but tactical speed will be an advantage.',
+                    horses: [
+                        { name: '#3 Echo Again', style: 3, label: 'Early Speed' },
+                        { name: '#11 Creditworthy', style: 2, label: 'Presser' },
+                        { name: '#2 Barksdale', style: 1.5, label: 'Mid-Pack' },
+                        { name: '#13 Jefferson Street', style: 1, label: 'Closer' },
+                    ]
+                },
+                betting: {
+                    winContenders: ['#11 Creditworthy'],
+                    liveLongshot: ['#2 Barksdale', '#13 Jefferson Street'],
+                    fade: ['#3 Echo Again'],
+                    wagers: '#11 Creditworthy is a strong win bet and a potential single in multi-race wagers. Use #2 and #13 underneath in exactas.'
+                }
+            },
+            8: {
+                meta: { title: 'The Saratoga Derby Invitational S. (G1)', distance: '1 3/16 Miles', surface: 'Turf', purse: '$600,000' },
+                analysis: {
+                    overview: `The Grade 1 Saratoga Derby, a premier event for 3-year-olds on the turf. This race has international flavor and brings together the best of the division.`,
+                    class: `<strong>#3 Johannes</strong>, the Irish-bred colt for trainer Tim Yakteen, brings the strongest form, having competed in top Grade 1 races in California. He is the class of the field.`,
+                    form: `Jockey Umberto Rispoli flying in from California to ride <strong>#3 Johannes</strong> is a major vote of confidence. Their partnership is proven.`,
+                    trouble: `<strong>#1 Cugino</strong> had to wait for room in his last start ("waited turn, split foes"). He finished well once clear and could be a threat with a clean trip.`
+                },
+                pace: {
+                    intro: 'The pace is projected to be moderate. #8 Deterministic is the most likely leader, but #3 Johannes has the tactical speed to sit a perfect trip just off the pace.',
+                    horses: [
+                        { name: '#8 Deterministic', style: 3, label: 'Early Speed' },
+                        { name: '#3 Johannes', style: 2, label: 'Presser' },
+                        { name: '#1 Cugino', style: 1.5, label: 'Mid-Pack' },
+                        { name: '#9 Program Trading', style: 1, label: 'Closer' },
+                    ]
+                },
+                betting: {
+                    winContenders: ['#3 Johannes'],
+                    liveLongshot: ['#1 Cugino'],
+                    fade: ['#8 Deterministic'],
+                    wagers: '#3 Johannes is a confident selection for win bets and a strong single in the Pick 5. Key him on top of exactas with #1, #9, and #5.'
+                }
+            },
+            9: {
+                meta: { title: 'The Test S. (G1)', distance: '7 Furlongs', surface: 'Main Track', purse: '$500,000' },
+                analysis: {
+                    overview: `The Grade 1 Test Stakes for 3-year-old fillies is one of the most important sprints of the year for the division. A star-studded field has assembled.`,
+                    class: `This is a Grade 1, the top level. <strong>#7 Hotazhell</strong> and <strong>#5 Test Score</strong> both enter with multiple graded stakes wins and look like the classiest fillies.`,
+                    form: `Trainer Brad Cox has <strong>#7 Hotazhell</strong> in career form, and the filly has trained brilliantly over the Saratoga main track.`,
+                    trouble: `<strong>#2 Pretty Mischievous</strong>, the Kentucky Oaks winner, had a wide trip in her last start. Cutting back to 7 furlongs might be exactly what she needs.`
+                },
+                pace: {
+                    intro: 'The pace will be blistering. #5 Test Score and #1 Maple Leaf Mel are exceptionally fast and will ensure a torrid pace, potentially setting it up for a stalker or closer.',
+                    horses: [
+                        { name: '#1 Maple Leaf Mel', style: 3, label: 'Pace Duel' },
+                        { name: '#5 Test Score', style: 3, label: 'Pace Duel' },
+                        { name: '#7 Hotazhell', style: 2, label: 'Presser' },
+                        { name: '#2 Pretty Mischievous', style: 1, label: 'Closer' },
+                    ]
+                },
+                betting: {
+                    winContenders: ['#7 Hotazhell', '#2 Pretty Mischievous'],
+                    liveLongshot: ['#2 Pretty Mischievous'],
+                    fade: ['#1 Maple Leaf Mel', '#5 Test Score'],
+                    wagers: 'The race sets up for #7 Hotazhell. Win bet on #7. Use #7 and #2 in exacta boxes with each other and with #5.'
+                }
+            },
+            10: {
+                meta: { title: 'The Troy S. (G3)', distance: '5 1/2 Furlongs', surface: 'Turf', purse: '$300,000' },
+                analysis: {
+                    overview: `The Grade 3 Troy Stakes is a turf sprint for older horses that demands elite speed and agility. A full field of grass dash specialists.`,
+                    class: `<strong>#6 Echo Sound</strong> is a multiple graded stakes winner and a specialist at this distance. He consistently faces and beats the best turf sprinters in the country.`,
+                    form: `Trainer Wesley Ward is the king of turf sprinters, and his runner <strong>#6 Echo Sound</strong> is in peak form. Jockey John Velazquez knows this horse well.`,
+                    trouble: `<strong>#8 Beauty Reigns</strong> was "unprepared start" in her last race, a significant disadvantage in a short sprint. Expect a much sharper break today.`
+                },
+                pace: {
+                    intro: 'The pace will be incredibly fast. #6 Echo Sound is a rocket from the gate, but will be challenged by #7 Artisma and #8 Beauty Reigns. This will be a pure cavalry charge.',
+                    horses: [
+                        { name: '#6 Echo Sound', style: 3, label: 'Pace Duel' },
+                        { name: '#7 Artisma', style: 3, label: 'Pace Duel' },
+                        { name: '#8 Beauty Reigns', style: 2.5, label: 'Presser' },
+                        { name: '#1 Nobals', style: 1, label: 'Closer' },
+                    ]
+                },
+                betting: {
+                    winContenders: ['#6 Echo Sound', '#1 Nobals'],
+                    liveLongshot: ['#8 Beauty Reigns'],
+                    fade: ['#7 Artisma'],
+                    wagers: '#6 Echo Sound is the horse to beat, but the pace is a concern. Win bet on #6, but use #1 Nobals heavily in exotic wagers as the likely beneficiary of a pace collapse.'
+                }
+            },
+            11: {
+                meta: { title: 'The Whitney S. (G1)', distance: '1 1/8 Miles', surface: 'Main Track', purse: '$1,000,000' },
+                analysis: {
+                    overview: `The Grade 1 Whitney, one of the premier races for older horses in North America and a "Win and You're In" for the Breeders' Cup Classic. A clash of titans.`,
+                    class: `This is the highest level of racing. <strong>#9 Fierceness</strong> (Kentucky Derby winner) and <strong>#5 Sierra Leone</strong> (Belmont Stakes winner) are the two superstars. <strong>#7 White Abarrio</strong> is the defending champion.`,
+                    form: `Both <strong>#9 Fierceness</strong> and <strong>#5 Sierra Leone</strong> are coming off spectacular victories. Trainer Todd Pletcher has #9 Fierceness training like a monster.`,
+                    trouble: `<strong>#6 Disarm</strong> is consistently on the board in top races but often has minor trouble that prevents him from winning. He is a prime candidate to complete the superfecta at a price.`
+                },
+                pace: {
+                    intro: '#9 Fierceness possesses brilliant speed and is the controlling pace of the race. He will dare the others to keep up. #5 Sierra Leone will make his customary powerful late run.',
+                    horses: [
+                        { name: '#9 Fierceness', style: 3, label: 'Controlling Speed' },
+                        { name: '#7 White Abarrio', style: 2, label: 'Presser' },
+                        { name: '#5 Sierra Leone', style: 1, label: 'Closer' },
+                        { name: '#10 Post Time', style: 1, label: 'Deep Closer' },
+                    ]
+                },
+                betting: {
+                    winContenders: ['#9 Fierceness', '#5 Sierra Leone'],
+                    liveLongshot: ['#10 Post Time'],
+                    fade: ['#7 White Abarrio'],
+                    wagers: 'A two-horse race on paper. Box #9 and #5 in the exacta. For value, play trifectas keying #9 and #5 on top over #10, #6, and #8.'
+                }
+            },
+            12: {
+                meta: { title: 'Allowance', distance: '1 1/16 Miles', surface: 'Turf', purse: '$112,000' },
+                analysis: {
+                    overview: `A competitive allowance for fillies and mares on the turf to close out the Pick 5. A wide-open affair where finding value is key.`,
+                    class: `<strong>#4 Tax Implications</strong> drops out of graded stakes company for trainer Chad Brown. This is Brown's signature move and is incredibly effective.`,
+                    form: `The Brown/Prat team on <strong>#4 Tax Implications</strong> is a powerful force. The filly's speed figures are superior to this field.`,
+                    trouble: `<strong>#6 Being Betty</strong> was "blocked late" in her last start and could have been much closer with a clear path. She is an interesting longshot.`
+                },
+                pace: {
+                    intro: 'The pace looks moderate, which could favor horses on or near the lead. #1 Marvelous Maude is the likely pacesetter.',
+                    horses: [
+                        { name: '#1 Marvelous Maude', style: 3, label: 'Early Speed' },
+                        { name: '#4 Tax Implications', style: 2, label: 'Presser' },
+                        { name: '#6 Being Betty', style: 1.5, label: 'Mid-Pack' },
+                        { name: '#10 Idea Generation', style: 1, label: 'Closer' },
+                    ]
+                },
+                betting: {
+                    winContenders: ['#4 Tax Implications'],
+                    liveLongshot: ['#6 Being Betty'],
+                    fade: ['#1 Marvelous Maude'],
+                    wagers: '#4 Tax Implications is a logical single to end multi-race sequences. Play her in a win bet and key her on top of exactas with #6, #10, and #2.'
+                }
+            },
+            13: {
+                meta: { title: 'Maiden Special Weight', distance: '5 1/2 Furlongs', surface: 'Turf', purse: '$100,000' },
+                analysis: {
+                    overview: `The finale is a turf sprint for maidens, a notoriously difficult race to handicap. Look for strong trainer angles and promising first-time starters.`,
+                    class: `All are maidens, so class is not a factor. The focus is on pedigree and trainer intent.`,
+                    form: `Trainer Wesley Ward sends out first-time starter <strong>#12 No Nay Hudson</strong>. Ward is the master of preparing debut runners for turf sprints, winning at a 35% clip.`,
+                    trouble: `<strong>#11 All Night Revival</strong> had a "slow start" in his debut but finished with good energy. He is eligible to take a big step forward.`
+                },
+                pace: {
+                    intro: 'Pace is always uncertain with maidens, but the Wesley Ward runner #12 is bred for pure speed and is the most likely leader.',
+                    horses: [
+                        { name: '#12 No Nay Hudson', style: 3, label: 'Early Speed' },
+                        { name: '#11 All Night Revival', style: 2, label: 'Presser' },
+                        { name: '#13 Bint Al Dandy', style: 1.5, label: 'Mid-Pack' },
+                        { name: '#14 All The Feels', style: 1, label: 'Closer' },
+                    ]
+                },
+                betting: {
+                    winContenders: ['#12 No Nay Hudson', '#11 All Night Revival'],
+                    liveLongshot: ['#13 Bint Al Dandy'],
+                    fade: ['#1 Main Level'],
+                    wagers: 'A win bet on the Wesley Ward firster #12 is the primary play. Box #12 and #11 in exactas to close out the day.'
+                }
+            }
+        };
+
+        const mainContent = document.getElementById('main-content');
+        const raceNavigation = document.getElementById('race-navigation');
+        let activeCharts = [];
+
+        function clearContent() {
+            mainContent.innerHTML = '';
+            activeCharts.forEach(chart => chart.destroy());
+            activeCharts = [];
+        }
+
+        function renderDashboard() {
+            clearContent();
+            const dashboardHTML = `
+                <div class="space-y-8">
+                    <div class="bg-white p-6 rounded-lg card-shadow">
+                        <h2 class="text-2xl font-bold mb-4 flex items-center"><span class="text-3xl mr-3">🔑</span> Top Win Bets</h2>
+                        <div class="grid md:grid-cols-3 gap-4">
+                            ${summaryData.topWins.map(bet => `
+                                <div class="border border-gray-200 rounded-lg p-4 bg-green-50/50">
+                                    <h3 class="font-bold text-lg text-green-800">Race ${bet.race}: ${bet.horse}</h3>
+                                    <p class="text-sm text-gray-600">${bet.rationale}</p>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                    <div class="grid md:grid-cols-2 gap-8">
+                        <div class="bg-white p-6 rounded-lg card-shadow">
+                            <h2 class="text-2xl font-bold mb-4 flex items-center"><span class="text-3xl mr-3">💣</span> Live Longshots</h2>
+                            <div class="space-y-4">
+                                ${summaryData.longshots.map(bet => `
+                                    <div class="border border-gray-200 rounded-lg p-4 bg-yellow-50/50">
+                                        <h3 class="font-bold text-lg text-yellow-800">Race ${bet.race}: ${bet.horse}</h3>
+                                        <p class="text-sm text-gray-600">${bet.rationale}</p>
+                                    </div>
+                                `).join('')}
+                            </div>
+                        </div>
+                        <div class="bg-white p-6 rounded-lg card-shadow">
+                            <h2 class="text-2xl font-bold mb-4 flex items-center"><span class="text-3xl mr-3">🚫</span> Favorites to Fade</h2>
+                             <div class="space-y-4">
+                                ${summaryData.fades.map(bet => `
+                                    <div class="border border-gray-200 rounded-lg p-4 bg-red-50/50">
+                                        <h3 class="font-bold text-lg text-red-800">Race ${bet.race}: ${bet.horse}</h3>
+                                        <p class="text-sm text-gray-600">${bet.rationale}</p>
+                                    </div>
+                                `).join('')}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bg-white p-6 rounded-lg card-shadow">
+                        <h2 class="text-2xl font-bold mb-4 flex items-center"><span class="text-3xl mr-3">🎯</span> Best Horizontal Keys</h2>
+                        <div>
+                            ${summaryData.horizontalKeys.map(bet => `
+                                <div>
+                                    <h3 class="font-bold text-lg text-blue-800">${bet.title}</h3>
+                                    <p class="text-sm text-gray-600 leading-relaxed">${bet.keys}</p>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                </div>
+            `;
+            mainContent.innerHTML = dashboardHTML;
+        }
+
+        function renderRace(raceNumber) {
+            clearContent();
+            const data = raceData[raceNumber];
+            const raceHTML = `
+                <div class="bg-white p-4 sm:p-6 rounded-lg card-shadow">
+                    <div class="border-b border-gray-200 pb-4 mb-4">
+                        <h2 class="text-3xl font-bold">Race ${raceNumber}: ${data.meta.title}</h2>
+                        <p class="text-md text-gray-600">${data.meta.distance} on the ${data.meta.surface} | Purse: ${data.meta.purse}</p>
+                    </div>
+
+                    <div class="mb-4 border-b border-gray-200">
+                        <nav id="race-tabs" class="-mb-px flex space-x-4" aria-label="Tabs">
+                            <button data-tab="analysis" class="tab-button whitespace-nowrap py-3 px-1 border-b-2 font-medium text-sm border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 active">Analysis</button>
+                            <button data-tab="pace" class="tab-button whitespace-nowrap py-3 px-1 border-b-2 font-medium text-sm border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300">Pace Scenario</button>
+                            <button data-tab="betting" class="tab-button whitespace-nowrap py-3 px-1 border-b-2 font-medium text-sm border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300">Top Contenders</button>
+                        </nav>
+                    </div>
+
+                    <div id="tab-content-analysis" class="tab-content active">
+                        <div class="space-y-4 text-gray-700 leading-relaxed">
+                            <div><h3 class="font-bold text-lg mb-1">Race Overview</h3><p>${data.analysis.overview}</p></div>
+                            <div><h3 class="font-bold text-lg mb-1">Class Movement</h3><p>${data.analysis.class}</p></div>
+                            <div><h3 class="font-bold text-lg mb-1">Form & Trainer Angles</h3><p>${data.analysis.form}</p></div>
+                            <div><h3 class="font-bold text-lg mb-1">Trouble Lines & Hidden Form</h3><p>${data.analysis.trouble}</p></div>
+                        </div>
+                    </div>
+
+                    <div id="tab-content-pace" class="tab-content">
+                        <p class="mb-4 text-center text-gray-600">${data.pace.intro}</p>
+                        <div class="chart-container">
+                            <canvas id="paceChart"></canvas>
+                        </div>
+                    </div>
+
+                    <div id="tab-content-betting" class="tab-content">
+                        <div class="grid md:grid-cols-3 gap-4">
+                            <div class="border-l-4 border-green-500 p-4 bg-gray-50 rounded">
+                                <h3 class="font-bold text-lg text-green-700">Win Contenders</h3>
+                                <ul class="list-disc list-inside mt-2">${data.betting.winContenders.map(h => `<li>${h}</li>`).join('')}</ul>
+                            </div>
+                            <div class="border-l-4 border-yellow-500 p-4 bg-gray-50 rounded">
+                                <h3 class="font-bold text-lg text-yellow-700">Live Longshot</h3>
+                                <ul class="list-disc list-inside mt-2">${data.betting.liveLongshot.map(h => `<li>${h}</li>`).join('')}</ul>
+                            </div>
+                            <div class="border-l-4 border-red-500 p-4 bg-gray-50 rounded">
+                                <h3 class="font-bold text-lg text-red-700">Favorites to Fade</h3>
+                                <ul class="list-disc list-inside mt-2">${data.betting.fade.map(h => `<li>${h}</li>`).join('')}</ul>
+                            </div>
+                        </div>
+                        <div class="mt-6 border-t pt-4">
+                             <h3 class="font-bold text-lg">Suggested Wagers</h3>
+                             <p class="text-gray-700 mt-1">${data.betting.wagers}</p>
+                        </div>
+                    </div>
+                </div>
+            `;
+            mainContent.innerHTML = raceHTML;
+            setupTabs();
+            if (document.getElementById('paceChart')) {
+                renderPaceChart(raceNumber);
+            }
+        }
+        
+        function renderPaceChart(raceNumber) {
+            const paceData = raceData[raceNumber].pace.horses;
+            const ctx = document.getElementById('paceChart').getContext('2d');
+            const chart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: paceData.map(h => h.name),
+                    datasets: [{
+                        label: 'Running Style',
+                        data: paceData.map(h => h.style),
+                        backgroundColor: 'rgba(74, 85, 104, 0.6)',
+                        borderColor: 'rgba(45, 55, 72, 1)',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    indexAxis: 'y',
+                    maintainAspectRatio: false,
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return paceData[context.dataIndex].label;
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            beginAtZero: true,
+                            ticks: {
+                                callback: function(value, index, values) {
+                                    if (value === 1) return 'Closer';
+                                    if (value === 2) return 'Presser';
+                                    if (value === 3) return 'Early Speed';
+                                    return '';
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+            activeCharts.push(chart);
+        }
+
+        function setupTabs() {
+            const tabs = document.querySelectorAll('.tab-button');
+            const contents = document.querySelectorAll('.tab-content');
+            tabs.forEach(tab => {
+                tab.addEventListener('click', () => {
+                    tabs.forEach(t => t.classList.remove('active'));
+                    tab.classList.add('active');
+                    const target = tab.getAttribute('data-tab');
+                    contents.forEach(content => {
+                        content.classList.remove('active');
+                        if (content.id === `tab-content-${target}`) {
+                            content.classList.add('active');
+                        }
+                    });
+                });
+            });
+        }
+        
+        document.addEventListener('DOMContentLoaded', () => {
+            Object.keys(raceData).forEach(raceNum => {
+                const li = document.createElement('li');
+                const button = document.createElement('button');
+                button.className = 'nav-button px-4 py-2 text-sm font-semibold text-gray-700 bg-gray-100 rounded-md hover:bg-gray-200';
+                button.textContent = `Race ${raceNum}`;
+                button.dataset.race = raceNum;
+                li.appendChild(button);
+                raceNavigation.appendChild(li);
+            });
+
+            raceNavigation.addEventListener('click', (e) => {
+                if (e.target.tagName === 'BUTTON') {
+                    document.querySelectorAll('#race-navigation button').forEach(btn => btn.classList.remove('active'));
+                    e.target.classList.add('active');
+                    const raceId = e.target.dataset.race;
+                    if (raceId === 'dashboard') {
+                        renderDashboard();
+                    } else {
+                        renderRace(raceId);
+                    }
+                }
+            });
+
+            renderDashboard();
+        });
+    </script>
+</body>
+</html>
