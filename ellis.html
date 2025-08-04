@@ -36,6 +36,7 @@
         }
         .nav-button {
             transition: all 0.3s ease;
+            display: inline-block;
         }
         .nav-button.active {
             background-color: #4A5568; /* slate-700 */
@@ -69,6 +70,7 @@
 
         <nav class="mb-8 bg-white p-2 rounded-lg shadow-sm sticky top-2 z-10">
             <ul id="race-navigation" class="flex flex-wrap justify-center gap-2">
+                <li><a href="index.html" class="nav-button px-4 py-2 text-sm font-semibold text-gray-700 bg-gray-100 rounded-md hover:bg-gray-200">Home</a></li>
                 <li><button data-race="dashboard" class="nav-button px-4 py-2 text-sm font-semibold text-gray-700 bg-gray-100 rounded-md hover:bg-gray-200 active">Dashboard</button></li>
             </ul>
         </nav>
