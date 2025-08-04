@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JR's Interactive Handicapper Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Chosen Palette: Saratoga Sage & Slate -->
+    <!-- Application Structure Plan: The SPA is designed around a central dashboard for immediate, high-level insights (Top Bets, Longshots, Fades), which serves as the landing page. This caters to users seeking quick, actionable information. From there, a clear top navigation allows users to select a specific race. Each race view uses a tabbed interface ('Analysis', 'Pace Scenario', 'Top Contenders') to segment the complex information, preventing cognitive overload from a long scroll. This structured, hierarchical approach—from dashboard summary to race-specific details—allows users to explore at their preferred depth, making the dense report content highly digestible and user-friendly. -->
+    <!-- Visualization & Content Choices: 
+        - Report Info: Daily Betting Angles (Top Bets, Fades, etc.) -> Goal: Inform/Summarize -> Viz/Method: HTML/Tailwind Cards -> Interaction: Clickable cards to navigate to the race -> Justification: Provides a scannable, high-impact summary on the main dashboard.
+        - Report Info: Pace analysis (running styles) -> Goal: Compare/Organize -> Viz/Method: Chart.js Horizontal Bar Chart -> Interaction: Hover tooltips on bars -> Justification: Visually groups horses by running style (Speed, Presser, Closer), making the pace setup instantly understandable.
+        - Report Info: Trainer/Jockey stats -> Goal: Compare -> Viz/Method: Chart.js Vertical Bar Chart -> Interaction: Hover tooltips -> Justification: Quantifies the "trainer angle" with clear, comparative data.
+        - Report Info: Betting Strategy (Contenders, Wagers) -> Goal: Inform/Organize -> Viz/Method: Structured HTML/Tailwind cards with icons -> Interaction: None -> Justification: Clearly delineates win contenders, longshots, and fades with supporting rationale in a clean, organized layout.
+        - CONFIRMATION: NO SVG graphics used. NO Mermaid JS used.
+    -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        body {
+            background-color: #FDFDFB;
+            font-family: 'Georgia', serif;
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 300px;
+            max-height: 400px;
+        }
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 350px;
+            }
+        }
+        .nav-button {
+            transition: all 0.3s ease;
+        }
+        .nav-button.active {
+            background-color: #4A5568; /* slate-700 */
+            color: #FFFFFF;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
+        }
+        .tab-button.active {
+            border-color: #4A5568; /* slate-700 */
+            background-color: #F7FAFC; /* gray-50 */
+            color: #2D3748; /* gray-800 */
+        }
+        .tab-content {
+            display: none;
+        }
+        .tab-content.active {
+            display: block;
+        }
+        .card-shadow {
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+    </style>
+</head>
+<body class="text-gray-800">
+
+    <div class="container mx-auto p-4 md:p-8 max-w-7xl">
+        <header class="text-center mb-8">
+            <h1 class="text-4xl md:text-5xl font-bold text-gray-800 tracking-tight">Interactive Handicapper Dashboard</h1>
+            <p class="text-lg text-gray-600 mt-2">AI Analysis & Wagering Guide</p>
+        </header>
+
+         <nav class="mb-8 bg-white p-2 rounded-lg shadow-sm sticky top-2 z-10">
+            <ul id="race-navigation" class="flex flex-wrap justify-center gap-2">
+                <li><a href="index.html" class="nav-button px-4 py-2 text-sm font-semibold text-gray-700 bg-gray-100 rounded-md hover:bg-gray-200">Home</a></li>
+                <li><button data-race="dashboard" class="nav-button px-4 py-2 text-sm font-semibold text-gray-700 bg-gray-100 rounded-md hover:bg-gray-200 active">Dashboard</button></li>
+            </ul>
+        </nav>
+
+        <main id="main-content">
+        </main>
+    </div>
+
+    <script>
+        //  USER EDIT SECTION: START
+        //  Update the objects below with your analysis for the race day.
+
+        const summaryData = {
+            topWins: [
+                { race: 1, horse: '#1 Top Horse', rationale: 'Rationale for why this horse is a top win bet...' },
+                { race: 2, horse: '#4 Best Bet', rationale: 'Rationale for why this horse is a top win bet...' },
+                { race: 8, horse: '#7 Single', rationale: 'Rationale for why this horse is a top win bet...' }
+            ],
+            longshots: [
+                { race: 3, horse: '#5 Live Longshot', rationale: 'Rationale for why this horse is a live longshot...' },
+                { race: 5, horse: '#2 Dark Horse', rationale: 'Rationale for why this horse is a live longshot...' },
+                { race: 9, horse: '#10 Price Play', rationale: 'Rationale for why this horse is a live longshot...' }
+            ],
+            horizontalKeys: [
+                { title: 'Pick 5 (Races 1-5)', keys: '<strong>Race 1:</strong> #1, #2<br><strong>Race 2:</strong> #4 (Single)<br><strong>Race 3:</strong> #5, #6, #7<br><strong>Race 4:</strong> #8, #9<br><strong>Race 5:</strong> #2, #10' }
+            ],
+            fades: [
+                { race: 1, horse: '#3 Vulnerable Favorite (2/1)', rationale: 'Rationale for why this favorite is a fade...' },
+                { race: 6, horse: '#1 Morning Line Trap (5/2)', rationale: 'Rationale for why this favorite is a fade...' },
+                { race: 10, horse: '#5 Bad Favorite (9/5)', rationale: 'Rationale for why this favorite is a fade...' }
+            ]
+        };
+
+        const raceData = {
+            // Add a new block for each race on the card.
+            1: {
+                meta: { title: 'Maiden Special Weight', distance: '6 Furlongs', surface: 'Main Track', purse: '$100,000' },
+                analysis: {
+                    scratches: 'Scratched: #9, #10', // Leave blank if no scratches: ''
+                    overview: `[Enter your general overview of the race here. Discuss the conditions, field size, and overall nature of the contest.]`,
+                    class: `[Enter your analysis of class movers here. Note any significant drops or rises in class and what it might mean.]`,
+                    form: `[Enter your analysis of trainer/jockey angles and form cycles here. Highlight any strong statistical patterns.]`,
+                    trouble: `[Enter your analysis of trouble lines and hidden form here. Point out horses with excuses from their last race.]`
+                },
+                pace: {
+                    intro: '[Enter your pace thesis here. Will it be fast, slow, or contested? Who does the scenario favor?]',
+                    horses: [
+                        // Add one entry per horse. Style: 3=Speed, 2=Presser, 1.5=Mid-Pack, 1=Closer
+                        { name: '#1 Speed Horse', style: 3, label: 'Early Speed' },
+                        { name: '#2 Presser', style: 2, label: 'Presser' },
+                        { name: '#3 Mid-Pack Runner', style: 1.5, label: 'Mid-Pack' },
+                        { name: '#4 Closer', style: 1, label: 'Closer' },
+                    ]
+                },
+                betting: {
+                    winContenders: ['#1 Top Contender', '#2 Main Danger'],
+                    liveLongshot: ['#3 Longshot Pick'],
+                    fade: ['#4 Vulnerable Favorite'],
+                    wagers: '[Enter your specific wagering strategy here. Suggest exactas, trifectas, and multi-race wager plays.]'
+                }
+            },
+            2: {
+                meta: { title: 'Allowance (N1X)', distance: '1 1/16 Miles', surface: 'Turf', purse: '$110,000' },
+                analysis: {
+                    scratches: '',
+                    overview: `[Enter your general overview of the race here. Discuss the conditions, field size, and overall nature of the contest.]`,
+                    class: `[Enter your analysis of class movers here. Note any significant drops or rises in class and what it might mean.]`,
+                    form: `[Enter your analysis of trainer/jockey angles and form cycles here. Highlight any strong statistical patterns.]`,
+                    trouble: `[Enter your analysis of trouble lines and hidden form here. Point out horses with excuses from their last race.]`
+                },
+                pace: {
+                    intro: '[Enter your pace thesis here. Will it be fast, slow, or contested? Who does the scenario favor?]',
+                    horses: [
+                        { name: '#1 Pacesetter', style: 3, label: 'Lone Speed?' },
+                        { name: '#2 Stalker', style: 2, label: 'Presser' },
+                        { name: '#3 Grinder', style: 1.5, label: 'Mid-Pack' },
+                        { name: '#4 Deep Closer', style: 1, label: 'Closer' },
+                    ]
+                },
+                betting: {
+                    winContenders: ['#1 Top Contender', '#4 Main Danger'],
+                    liveLongshot: ['#3 Longshot Pick'],
+                    fade: ['#5 Vulnerable Favorite'],
+                    wagers: '[Enter your specific wagering strategy here. Suggest exactas, trifectas, and multi-race wager plays.]'
+                }
+            },
+            // To add more races, copy the block for Race 2 and paste it here, changing the race number.
+        };
+
+        //  USER EDIT SECTION: END
+        //  No need to edit below this line.
+
+        const mainContent = document.getElementById('main-content');
+        const raceNavigation = document.getElementById('race-navigation');
+        let activeCharts = [];
+
+        function clearContent() {
+            mainContent.innerHTML = '';
+            activeCharts.forEach(chart => chart.destroy());
+            activeCharts = [];
+        }
+
+        function renderDashboard() {
+            clearContent();
+            const dashboardHTML = `
+                <div class="space-y-8">
+                    <div class="bg-white p-6 rounded-lg card-shadow">
+                        <h2 class="text-2xl font-bold mb-4 flex items-center"><span class="text-3xl mr-3">🔑</span> Top Win Bets</h2>
+                        <div class="grid md:grid-cols-3 gap-4">
+                            ${summaryData.topWins.map(bet => `
+                                <div class="border border-gray-200 rounded-lg p-4 bg-green-50/50">
+                                    <h3 class="font-bold text-lg text-green-800">Race ${bet.race}: ${bet.horse}</h3>
+                                    <p class="text-sm text-gray-600">${bet.rationale}</p>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                    <div class="grid md:grid-cols-2 gap-8">
+                        <div class="bg-white p-6 rounded-lg card-shadow">
+                            <h2 class="text-2xl font-bold mb-4 flex items-center"><span class="text-3xl mr-3">💣</span> Live Longshots</h2>
+                            <div class="space-y-4">
+                                ${summaryData.longshots.map(bet => `
+                                    <div class="border border-gray-200 rounded-lg p-4 bg-yellow-50/50">
+                                        <h3 class="font-bold text-lg text-yellow-800">Race ${bet.race}: ${bet.horse}</h3>
+                                        <p class="text-sm text-gray-600">${bet.rationale}</p>
+                                    </div>
+                                `).join('')}
+                            </div>
+                        </div>
+                        <div class="bg-white p-6 rounded-lg card-shadow">
+                            <h2 class="text-2xl font-bold mb-4 flex items-center"><span class="text-3xl mr-3">🚫</span> Favorites to Fade</h2>
+                             <div class="space-y-4">
+                                ${summaryData.fades.map(bet => `
+                                    <div class="border border-gray-200 rounded-lg p-4 bg-red-50/50">
+                                        <h3 class="font-bold text-lg text-red-800">Race ${bet.race}: ${bet.horse}</h3>
+                                        <p class="text-sm text-gray-600">${bet.rationale}</p>
+                                    </div>
+                                `).join('')}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bg-white p-6 rounded-lg card-shadow">
+                        <h2 class="text-2xl font-bold mb-4 flex items-center"><span class="text-3xl mr-3">🎯</span> Best Horizontal Keys</h2>
+                        <div>
+                            ${summaryData.horizontalKeys.map(bet => `
+                                <div>
+                                    <h3 class="font-bold text-lg text-blue-800">${bet.title}</h3>
+                                    <p class="text-sm text-gray-600 leading-relaxed">${bet.keys}</p>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                </div>
+            `;
+            mainContent.innerHTML = dashboardHTML;
+        }
+
+        function renderRace(raceNumber) {
+            clearContent();
+            const data = raceData[raceNumber];
+            const raceHTML = `
+                <div class="bg-white p-4 sm:p-6 rounded-lg card-shadow">
+                    <div class="border-b border-gray-200 pb-4 mb-4">
+                        <h2 class="text-3xl font-bold">Race ${raceNumber}: ${data.meta.title}</h2>
+                        <p class="text-md text-gray-600">${data.meta.distance} on the ${data.meta.surface} | Purse: ${data.meta.purse}</p>
+                    </div>
+
+                    ${data.analysis.scratches ? `<div class="mb-4 p-3 bg-yellow-100 border-l-4 border-yellow-500 text-yellow-800 rounded-r-lg">
+                        <p class="font-semibold">Scratched: ${data.analysis.scratches}</p>
+                    </div>` : ''}
+
+                    <div class="mb-4 border-b border-gray-200">
+                        <nav id="race-tabs" class="-mb-px flex justify-center space-x-4" aria-label="Tabs">
+                            <button data-tab="analysis" class="tab-button whitespace-nowrap py-3 px-1 border-b-2 font-medium text-sm border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 active">Analysis</button>
+                            <button data-tab="pace" class="tab-button whitespace-nowrap py-3 px-1 border-b-2 font-medium text-sm border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300">Pace Scenario</button>
+                            <button data-tab="betting" class="tab-button whitespace-nowrap py-3 px-1 border-b-2 font-medium text-sm border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300">Top Contenders</button>
+                        </nav>
+                    </div>
+
+                    <div id="tab-content-analysis" class="tab-content active">
+                        <div class="space-y-4 text-gray-700 leading-relaxed">
+                            <div><h3 class="font-bold text-lg mb-1">Race Overview</h3><p>${data.analysis.overview}</p></div>
+                            <div><h3 class="font-bold text-lg mb-1">Class Movement</h3><p>${data.analysis.class}</p></div>
+                            <div><h3 class="font-bold text-lg mb-1">Form & Trainer Angles</h3><p>${data.analysis.form}</p></div>
+                            <div><h3 class="font-bold text-lg mb-1">Trouble Lines & Hidden Form</h3><p>${data.analysis.trouble}</p></div>
+                        </div>
+                    </div>
+
+                    <div id="tab-content-pace" class="tab-content">
+                        <p class="mb-4 text-center text-gray-600">${data.pace.intro}</p>
+                        <div class="chart-container">
+                            <canvas id="paceChart"></canvas>
+                        </div>
+                    </div>
+
+                    <div id="tab-content-betting" class="tab-content">
+                        <div class="grid md:grid-cols-3 gap-4">
+                            <div class="border-l-4 border-green-500 p-4 bg-gray-50 rounded">
+                                <h3 class="font-bold text-lg text-green-700">Win Contenders</h3>
+                                <ul class="list-disc list-inside mt-2">${data.betting.winContenders.map(h => `<li>${h}</li>`).join('')}</ul>
+                            </div>
+                            <div class="border-l-4 border-yellow-500 p-4 bg-gray-50 rounded">
+                                <h3 class="font-bold text-lg text-yellow-700">Live Longshot</h3>
+                                <ul class="list-disc list-inside mt-2">${data.betting.liveLongshot.map(h => `<li>${h}</li>`).join('')}</ul>
+                            </div>
+                            <div class="border-l-4 border-red-500 p-4 bg-gray-50 rounded">
+                                <h3 class="font-bold text-lg text-red-700">Favorites to Fade</h3>
+                                <ul class="list-disc list-inside mt-2">${data.betting.fade.map(h => `<li>${h}</li>`).join('')}</ul>
+                            </div>
+                        </div>
+                        <div class="mt-6 border-t pt-4">
+                             <h3 class="font-bold text-lg">Suggested Wagers</h3>
+                             <p class="text-gray-700 mt-1">${data.betting.wagers}</p>
+                        </div>
+                    </div>
+                </div>
+            `;
+            mainContent.innerHTML = raceHTML;
+            setupTabs();
+            if (document.getElementById('paceChart')) {
+                renderPaceChart(raceNumber);
+            }
+        }
+        
+        function renderPaceChart(raceNumber) {
+            const paceData = raceData[raceNumber].pace.horses;
+            const ctx = document.getElementById('paceChart').getContext('2d');
+            const chart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: paceData.map(h => h.name),
+                    datasets: [{
+                        label: 'Running Style',
+                        data: paceData.map(h => h.style),
+                        backgroundColor: 'rgba(74, 85, 104, 0.6)',
+                        borderColor: 'rgba(45, 55, 72, 1)',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    indexAxis: 'y',
+                    maintainAspectRatio: false,
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return paceData[context.dataIndex].label;
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            beginAtZero: true,
+                            ticks: {
+                                callback: function(value, index, values) {
+                                    if (value === 1) return 'Closer';
+                                    if (value === 2) return 'Presser';
+                                    if (value === 3) return 'Early Speed';
+                                    return '';
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+            activeCharts.push(chart);
+        }
+
+        function setupTabs() {
+            const tabs = document.querySelectorAll('.tab-button');
+            const contents = document.querySelectorAll('.tab-content');
+            tabs.forEach(tab => {
+                tab.addEventListener('click', () => {
+                    tabs.forEach(t => t.classList.remove('active'));
+                    tab.classList.add('active');
+                    const target = tab.getAttribute('data-tab');
+                    contents.forEach(content => {
+                        content.classList.remove('active');
+                        if (content.id === `tab-content-${target}`) {
+                            content.classList.add('active');
+                        }
+                    });
+                });
+            });
+        }
+        
+        document.addEventListener('DOMContentLoaded', () => {
+            Object.keys(raceData).forEach(raceNum => {
+                const li = document.createElement('li');
+                const button = document.createElement('button');
+                button.className = 'nav-button px-4 py-2 text-sm font-semibold text-gray-700 bg-gray-100 rounded-md hover:bg-gray-200';
+                button.textContent = `Race ${raceNum}`;
+                button.dataset.race = raceNum;
+                li.appendChild(button);
+                raceNavigation.appendChild(li);
+            });
+
+            raceNavigation.addEventListener('click', (e) => {
+                if (e.target.tagName === 'BUTTON') {
+                    document.querySelectorAll('#race-navigation button').forEach(btn => btn.classList.remove('active'));
+                    e.target.classList.add('active');
+                    const raceId = e.target.dataset.race;
+                    if (raceId === 'dashboard') {
+                        renderDashboard();
+                    } else {
+                        renderRace(raceId);
+                    }
+                }
+            });
+
+            renderDashboard();
+        });
+    </script>
+</body>
+</html>
