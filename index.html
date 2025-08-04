@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Horse Racing Handicap Insights</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+        }
+        .font-playfair {
+            font-family: 'Playfair Display', serif;
+        }
+    </style>
+</head>
+<body class="bg-gray-100 text-gray-800">
+
+    <!-- Header -->
+    <header class="bg-gray-800 text-white shadow-lg">
+        <div class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <h1 class="text-3xl font-playfair"><a href="#">Horse Racing Insights</a></h1>
+            <nav>
+                <a href="#courses" class="px-4 hover:text-gray-300">Top Courses</a>
+                <a href="#about" class="px-4 hover:text-gray-300">About</a>
+                <a href="#contact" class="px-4 hover:text-gray-300">Contact</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="bg-white">
+        <div class="container mx-auto px-6 py-20 text-center">
+            <h2 class="text-5xl font-playfair font-bold text-gray-800">In-Depth Handicapping Analysis</h2>
+            <p class="mt-4 text-lg text-gray-600 max-w-2xl mx-auto">Your expert guide to the turf. We provide data-driven insights and handicapping reports for major tracks across the country.</p>
+            <a href="#courses" class="mt-8 inline-block bg-blue-600 text-white font-semibold px-8 py-3 rounded-lg shadow-md hover:bg-blue-700 transition duration-300">Explore Tracks</a>
+        </div>
+    </section>
+
+    <!-- Main Content: Course Links -->
+    <main id="courses" class="container mx-auto px-6 py-16">
+        <h3 class="text-4xl font-playfair font-bold text-center mb-12">Featured Race Courses</h3>
+        
+        <!-- Grid for Course Cards -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
+
+            <!-- Saratoga Card -->
+            <div class="bg-white rounded-lg shadow-lg overflow-hidden transform hover:-translate-y-2 transition duration-300">
+                <img src="https://placehold.co/600x400/334155/ffffff?text=Saratoga" alt="Saratoga Race Course" class="w-full h-48 object-cover">
+                <div class="p-6">
+                    <h4 class="text-2xl font-bold font-playfair mb-2">Saratoga</h4>
+                    <p class="text-gray-600 mb-4">The historic "Graveyard of Champions." Get insights for the prestigious summer meet.</p>
+                    <a href="#" class="inline-block bg-gray-800 text-white px-6 py-2 rounded-full font-semibold hover:bg-gray-700 transition duration-300">View Insights</a>
+                </div>
+            </div>
+
+            <!-- Del Mar Card -->
+            <div class="bg-white rounded-lg shadow-lg overflow-hidden transform hover:-translate-y-2 transition duration-300">
+                <img src="https://placehold.co/600x400/059669/ffffff?text=Del+Mar" alt="Del Mar Racetrack" class="w-full h-48 object-cover">
+                <div class="p-6">
+                    <h4 class="text-2xl font-bold font-playfair mb-2">Del Mar</h4>
+                    <p class="text-gray-600 mb-4">"Where the turf meets the surf." Analysis for Southern California's premier track.</p>
+                    <a href="#" class="inline-block bg-gray-800 text-white px-6 py-2 rounded-full font-semibold hover:bg-gray-700 transition duration-300">View Insights</a>
+                </div>
+            </div>
+
+            <!-- Ellis Park Card -->
+            <div class="bg-white rounded-lg shadow-lg overflow-hidden transform hover:-translate-y-2 transition duration-300">
+                <img src="https://placehold.co/600x400/be123c/ffffff?text=Ellis+Park" alt="Ellis Park" class="w-full h-48 object-cover">
+                <div class="p-6">
+                    <h4 class="text-2xl font-bold font-playfair mb-2">Ellis Park</h4>
+                    <p class="text-gray-600 mb-4">The "Pea Patch." Find your edge at this competitive Kentucky circuit.</p>
+                    <a href="#" class="inline-block bg-gray-800 text-white px-6 py-2 rounded-full font-semibold hover:bg-gray-700 transition duration-300">View Insights</a>
+                </div>
+            </div>
+            
+            <!-- Add more course cards here -->
+            <div class="bg-white rounded-lg shadow-lg overflow-hidden transform hover:-translate-y-2 transition duration-300">
+                <img src="ellis.html" alt="More Tracks" class="w-full h-48 object-cover">
+                <div class="p-6">
+                    <h4 class="text-2xl font-bold font-playfair mb-2">More Tracks</h4>
+                    <p class="text-gray-600 mb-4">Check back for analysis on Keeneland, Churchill Downs, and more.</p>
+                    <a href="#" class="inline-block bg-gray-400 text-white px-6 py-2 rounded-full font-semibold cursor-not-allowed">Coming Soon</a>
+                </div>
+            </div>
+
+        </div>
+    </main>
+    
+    <!-- About Section -->
+    <section id="about" class="bg-gray-200">
+        <div class="container mx-auto px-6 py-20">
+            <div class="max-w-4xl mx-auto text-center">
+                <h3 class="text-4xl font-playfair font-bold mb-4">About This Project</h3>
+                <p class="text-lg text-gray-700">
+                    This project was born from a passion for horse racing and the challenge of finding a winning edge through careful analysis. My goal is to provide clear, concise, and actionable handicapping insights to help fellow racing enthusiasts. All analysis is based on a combination of statistical modeling, trip handicapping, and track bias study.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer id="contact" class="bg-gray-800 text-white">
+        <div class="container mx-auto px-6 py-8 text-center">
+            <p>&copy; 2024 Horse Racing Insights. All Rights Reserved.</p>
+            <p class="mt-2">Contact: <a href="mailto:email@example.com" class="text-blue-400 hover:underline">email@example.com</a></p>
+        </div>
+    </footer>
+
+</body>
+</html>
