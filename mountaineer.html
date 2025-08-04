@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Handicapper Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Chosen Palette: Saratoga Sage & Slate -->
+    <!-- Application Structure Plan: The SPA is designed around a central dashboard for immediate, high-level insights (Top Bets, Longshots, Fades), which serves as the landing page. This caters to users seeking quick, actionable information. From there, a clear top navigation allows users to select a specific race. Each race view uses a tabbed interface ('Analysis', 'Pace Scenario', 'Top Contenders') to segment the complex information, preventing cognitive overload from a long scroll. This structured, hierarchical approach—from dashboard summary to race-specific details—allows users to explore at their preferred depth, making the dense report content highly digestible and user-friendly. -->
+    <!-- Visualization & Content Choices: 
+        - Report Info: Daily Betting Angles (Top Bets, Fades, etc.) -> Goal: Inform/Summarize -> Viz/Method: HTML/Tailwind Cards -> Interaction: Clickable cards to navigate to the race -> Justification: Provides a scannable, high-impact summary on the main dashboard.
+        - Report Info: Pace analysis (running styles) -> Goal: Compare/Organize -> Viz/Method: Chart.js Horizontal Bar Chart -> Interaction: Hover tooltips on bars -> Justification: Visually groups horses by running style (Speed, Presser, Closer), making the pace setup instantly understandable.
+        - Report Info: Trainer/Jockey stats -> Goal: Compare -> Viz/Method: Chart.js Vertical Bar Chart -> Interaction: Hover tooltips -> Justification: Quantifies the "trainer angle" with clear, comparative data.
+        - Report Info: Betting Strategy (Contenders, Wagers) -> Goal: Inform/Organize -> Viz/Method: Structured HTML/Tailwind cards with icons -> Interaction: None -> Justification: Clearly delineates win contenders, longshots, and fades with supporting rationale in a clean, organized layout.
+        - CONFIRMATION: NO SVG graphics used. NO Mermaid JS used.
+    -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        body {
+            background-color: #FDFDFB;
+            font-family: 'Georgia', serif;
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 300px;
+            max-height: 400px;
+        }
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 350px;
+            }
+        }
+        .nav-button {
+            transition: all 0.3s ease;
+        }
+        .nav-button.active {
+            background-color: #4A5568; /* slate-700 */
+            color: #FFFFFF;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
+        }
+        .tab-button.active {
+            border-color: #4A5568; /* slate-700 */
+            background-color: #F7FAFC; /* gray-50 */
+            color: #2D3748; /* gray-800 */
+        }
+        .tab-content {
+            display: none;
+        }
+        .tab-content.active {
+            display: block;
+        }
+        .card-shadow {
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+    </style>
+</head>
+<body class="text-gray-800">
+
+    <div class="container mx-auto p-4 md:p-8 max-w-7xl">
+        <header class="text-center mb-8 relative">
+            <a href="index.html" class="absolute top-0 left-0 text-blue-600 hover:underline">&larr; Home</a>
+            <h1 class="text-4xl md:text-5xl font-bold text-gray-800 tracking-tight">Mountaineer Handicapper</h1>
+            <p class="text-lg text-gray-600 mt-2">Expert Analysis for August 4, 2025</p>
+        </header>
+
+        <nav class="mb-8 bg-white p-2 rounded-lg shadow-sm sticky top-2 z-10">
+            <ul id="race-navigation" class="flex flex-wrap justify-center gap-2">
+                <li><button data-race="dashboard" class="nav-button px-4 py-2 text-sm font-semibold text-gray-700 bg-gray-100 rounded-md hover:bg-gray-200 active">Dashboard</button></li>
+            </ul>
+        </nav>
+
+        <main id="main-content">
+        </main>
+    </div>
+
+    <script>
+        const summaryData = {
+            topWins: [
+                { race: 4, horse: '#4 El Ondeado', rationale: 'A massive class dropper from Southern California for a top trainer/jockey combination; stands out against this field.' },
+                { race: 7, horse: '#1 Master Of The Nite', rationale: 'Faces significantly easier competition than in recent starts and possesses tactical speed in a race that favors it.' }
+            ],
+            longshots: [
+                { race: 1, horse: '#3 Aurora\'s Music', rationale: 'Could show marked improvement cutting back to a sprint. Pace collapse scenario gives this closer a chance at a price.' },
+                { race: 5, horse: '#8 Busker Allie', rationale: 'Possesses winning form over this specific track and distance; could be completely overlooked after a poor last effort.' }
+            ],
+            horizontalKeys: [
+                { title: 'Late Pick 4 (Races 5-8)', keys: '<strong>Race 5:</strong> #4, #5, #8<br><strong>Race 6:</strong> #5, #8<br><strong>Race 7:</strong> #1, #3, #5<br><strong>Race 8:</strong> #1, #7, #9' }
+            ],
+            fades: [
+                { race: 2, horse: '#8 Midnight Channel', rationale: 'Paired with a leading jockey who has a surprisingly poor win percentage on the turf; likely to be an overbet underlay.' },
+                { race: 1, horse: '#9 One Small Victory (GB)', rationale: 'A first-time starter debuting in a chaotic turf sprint against more experienced runners is a difficult proposition.' }
+            ]
+        };
+
+        const raceData = {
+            1: {
+                meta: { title: 'Allowance (NW2L)', distance: '4 1/2 Furlongs', surface: 'Turf', purse: '$18,000' },
+                analysis: {
+                    scratches: '',
+                    overview: `An extremely short turf dash where a clean break and early position are paramount. The full field of ten increases the likelihood of traffic issues and an unpredictable trip.`,
+                    class: `The field is a relatively homogenous group at this allowance condition. #5 Jazz N Blues makes a standard move up in class after breaking her maiden against claiming company.`,
+                    form: `#10 Integrated Design gets top turf jockey B. Whitacre (36% on grass). #6 Wall Street Magic is from the powerful J. Silva stable and has been in sharp form on this course.`,
+                    trouble: `#6 Wall Street Magic may offer value. The public often sours on horses beaten as the favorite, but her stalking style is perfect for today's projected pace.`
+                },
+                pace: {
+                    intro: 'A contested duel among #1, #5, and #7 is highly probable. This pace scenario is disadvantageous for the front-runners and should set the race up for a stalker or closer.',
+                    horses: [
+                        { name: '#1 Leave Drama Behind', style: 3, label: 'Early Speed' },
+                        { name: '#5 Jazz N Blues', style: 3, label: 'Early Speed' },
+                        { name: '#7 Carousing', style: 3, label: 'Early Speed' },
+                        { name: '#6 Wall Street Magic', style: 2, label: 'Stalker' },
+                        { name: '#10 Integrated Design', style: 2, label: 'Stalker' },
+                        { name: '#3 Aurora\'s Music', style: 1, label: 'Closer' },
+                    ]
+                },
+                betting: {
+                    winContenders: ['#10 Integrated Design', '#6 Wall Street Magic'],
+                    liveLongshot: ['#3 Aurora\'s Music'],
+                    fade: ['#9 One Small Victory (GB)'],
+                    wagers: 'Exacta Box: 6, 10. Trifecta: 6,10 / 1,3,6,7,10 / 1,3,6,7,10'
+                }
+            },
+            2: {
+                meta: { title: 'Starter Optional Claiming', distance: '1 3/8 Miles', surface: 'Turf', purse: '$14,600' },
+                analysis: {
+                    scratches: '',
+                    overview: `A marathon turf route testing stamina and jockey tactics. This condition brings together a diverse group of career claiming horses and class-droppers.`,
+                    class: `The key factor is the colossal class drop by #6 Opry, who competed in Grade 2/3 stakes races in 2023. This is a massive plunge.`,
+                    form: `#7 Triple Start has the best recent form and a top turf jockey (C. Oliveros, 32%). In contrast, #6 Opry returns from a long layoff for a low-percentage trainer (5%).`,
+                    trouble: `The value revolves around #6 Opry. If the public focuses on his layoff and trainer stats, his odds could be significant. If he's even 80% of his old self, he wins.`
+                },
+                pace: {
+                    intro: 'The pace projects to be moderate to slow, advantageous for horses with tactical speed. A slow pace would also benefit a classy closer like #6 Opry.',
+                    horses: [
+                        { name: '#1 Artwell', style: 2.5, label: 'Pacesetter' },
+                        { name: '#2 Krug', style: 2.5, label: 'Pacesetter' },
+                        { name: '#7 Triple Start', style: 2, label: 'Stalker' },
+                        { name: '#8 Midnight Channel', style: 2, label: 'Stalker' },
+                        { name: '#6 Opry', style: 1, label: 'Closer' },
+                    ]
+                },
+                betting: {
+                    winContenders: ['#7 Triple Start', '#6 Opry'],
+                    liveLongshot: ['#3 Dr Jack Flyer'],
+                    fade: ['#8 Midnight Channel'],
+                    wagers: 'Exacta Box: 6, 7. Trifecta Key: 7 / 3,6,8 / 3,6,8'
+                }
+            },
+            3: {
+                meta: { title: '$4,000 Claiming', distance: '1 Mile', surface: 'Dirt', purse: '$8,300' },
+                analysis: {
+                    scratches: '',
+                    overview: `A route for bottom-level claimers with inconsistent form, making recent performance a key factor.`,
+                    class: `#3 Confessor takes a massive drop to the lowest level of his career. This is a sign of either desperation or confidence.`,
+                    form: `#1 Turnsandconditions was a decisive winner at this level two back. #5 Candy Crushem also enters off a win and gets leading jockey L. Negron.`,
+                    trouble: `#1 Turnsandconditions may offer value. After a poor last race and a jockey switch, the public might overlook his dominant win two back, causing his odds to rise.`
+                },
+                pace: {
+                    intro: 'The pace projects to be honest, which should be fair to all running styles but may slightly favor horses who can stalk the pace.',
+                    horses: [
+                        { name: '#1 Turnsandconditions', style: 3, label: 'Early Speed' },
+                        { name: '#2 Franco', style: 3, label: 'Early Speed' },
+                        { name: '#5 Candy Crushem', style: 2, label: 'Stalker' },
+                        { name: '#7 Mission Key', style: 1, label: 'Closer' },
+                        { name: '#4 Swelter', style: 1, label: 'Closer' },
+                    ]
+                },
+                betting: {
+                    winContenders: ['#1 Turnsandconditions', '#5 Candy Crushem'],
+                    liveLongshot: ['#4 Swelter'],
+                    fade: ['#3 Confessor'],
+                    wagers: 'Win/Place: #1. Exacta Box: 1, 5.'
+                }
+            },
+            4: {
+                meta: { title: '$4,000 Claiming (NW2L)', distance: '6 Furlongs', surface: 'Dirt', purse: '$7,800' },
+                analysis: {
+                    scratches: '',
+                    overview: `A sprint for non-winners of two, but this field has a clear standout contender that towers over the rest on class.`,
+                    class: `#4 El Ondeado makes one of the most significant class drops imaginable, moving from high-level Southern California races to the absolute bottom at Mountaineer.`,
+                    form: `The trainer/jockey combination for #4 (J. Silva and L. Negron) is one of the most powerful at the meet. Their placement of this horse is a massive sign of confidence.`,
+                    trouble: `There is no value in betting #4 to win. The value is created by identifying the correct horses underneath him in exotic wagers. #2 Flying Blind is a consistent type.`
+                },
+                pace: {
+                    intro: 'The pace will be honest but is unlikely to be destructively fast. This scenario is largely neutral and should ensure a fair race for all running styles.',
+                    horses: [
+                        { name: '#7 Shoot The Breeze', style: 3, label: 'Early Speed' },
+                        { name: '#9 Good Moments', style: 3, label: 'Early Speed' },
+                        { name: '#4 El Ondeado', style: 2, label: 'Stalker' },
+                        { name: '#2 Flying Blind', style: 1, label: 'Closer' },
+                    ]
+                },
+                betting: {
+                    winContenders: ['#4 El Ondeado'],
+                    liveLongshot: ['#2 Flying Blind (for 2nd)'],
+                    fade: ['None'],
+                    wagers: 'Exacta: 4 / 2,7,9. Trifecta: 4 / 2,7,9 / 2,7,9. This horse is a strong single in all multi-race wagers.'
+                }
+            },
+            5: {
+                meta: { title: '$4,000 Claiming', distance: '1 Mile', surface: 'Dirt', purse: '$8,300' },
+                analysis: {
+                    scratches: '',
+                    overview: `A competitive one-mile claiming race for fillies and mares. The field is well-matched at this level.`,
+                    class: `No dramatic class droppers or risers that stand out as significant factors. Most runners have been competing regularly at this level.`,
+                    form: `#4 Best Virginia just missed in her last start under these conditions. #5 Harlan's Legacy is a model of consistency, hitting the board in 4 of her last 5.`,
+                    trouble: `#8 Busker Allie presents a compelling value opportunity. Her excellent form from last year at this track is hidden behind a poor recent race and a layoff. At 10/1, she could be overlooked.`
+                },
+                pace: {
+                    intro: 'The pace projects to be neutral. It should be advantageous for horses with tactical speed but will not completely disadvantage closers if they are good enough.',
+                    horses: [
+                        { name: '#1 Polyester Bride', style: 3, label: 'Early Speed' },
+                        { name: '#4 Best Virginia', style: 2, label: 'Stalker' },
+                        { name: '#5 Harlan\'s Legacy', style: 1, label: 'Closer' },
+                        { name: '#8 Busker Allie', style: 1, label: 'Closer' },
+                    ]
+                },
+                betting: {
+                    winContenders: ['#4 Best Virginia', '#5 Harlan\'s Legacy'],
+                    liveLongshot: ['#8 Busker Allie'],
+                    fade: ['None'],
+                    wagers: 'Exacta Box: 4, 5. Trifecta: 4,5 / 1,4,5,8 / 1,4,5,8.'
+                }
+            },
+            6: {
+                meta: { title: '$4,000 Claiming (NW2L)', distance: '6 Furlongs', surface: 'Dirt', purse: '$7,800' },
+                analysis: {
+                    scratches: '',
+                    overview: `A full field sprint for fillies and mares that ensures a competitive and likely fast-paced event.`,
+                    class: `#8 Morning Holiday takes a logical drop in class from tougher $7,500 claimers at Thistledown. This class relief should make her more competitive.`,
+                    form: `#8 pairs her class drop with leading jockey L. Negron. #9 gets a positive jockey change to the high-percentage B. Whitacre.`,
+                    trouble: `The projected hot pace is key. While the public may focus on the speed of #8, the race shape strongly favors a stalker. #5 Uaint Right fits this profile perfectly and offers excellent value.`
+                },
+                pace: {
+                    intro: 'The pace projects to be very fast and highly contested. The likely speed duel will set the race up for a stalker or closer to capitalize on the tiring leaders.',
+                    horses: [
+                        { name: '#1 Third Tuesday', style: 3, label: 'Early Speed' },
+                        { name: '#8 Morning Holiday', style: 3, label: 'Early Speed' },
+                        { name: '#9 Fiery Side', style: 3, label: 'Early Speed' },
+                        { name: '#5 Uaint Right', style: 2, label: 'Stalker' },
+                        { name: '#3 Maci\'s World', style: 1, label: 'Closer' },
+                    ]
+                },
+                betting: {
+                    winContenders: ['#5 Uaint Right', '#8 Morning Holiday'],
+                    liveLongshot: ['#3 Maci\'s World'],
+                    fade: ['#9 Fiery Side'],
+                    wagers: 'Win Bet: #5. Exacta Box: 5, 8.'
+                }
+            },
+            7: {
+                meta: { title: '$6,500 Claiming', distance: '1 Mile', surface: 'Dirt', purse: '$10,100' },
+                analysis: {
+                    scratches: '',
+                    overview: `A compact but competitive one-mile route for non-winners of four.`,
+                    class: `#1 Master Of The Nite takes a notable drop in class from tougher claiming company at Thistledown and finds a much softer spot here.`,
+                    form: `#1 has been in excellent form, finishing first or second in 5 of his last 8 starts. #3 Brio and #4 Probale Ten both enter off recent victories.`,
+                    trouble: `Value lies with the lone speed horse, #5 Kantpaythetoll. His wins have come when he controls the pace, a scenario he's likely to get today. The public will dismiss him on his poor recent form.`
+                },
+                pace: {
+                    intro: 'The pace is highly advantageous for the likely leader, #5 Kantpaythetoll. As the lone speed, he could get brave if allowed to set comfortable fractions.',
+                    horses: [
+                        { name: '#5 Kantpaythetoll', style: 3, label: 'Lone Speed' },
+                        { name: '#1 Master Of The Nite', style: 2, label: 'Stalker' },
+                        { name: '#3 Brio', style: 1, label: 'Closer' },
+                        { name: '#4 Probale Ten', style: 1, label: 'Closer' },
+                    ]
+                },
+                betting: {
+                    winContenders: ['#1 Master Of The Nite', '#3 Brio'],
+                    liveLongshot: ['#5 Kantpaythetoll'],
+                    fade: ['None'],
+                    wagers: 'Exacta Box: 1, 3. Trifecta: 1 / 3,4,5 / 3,4,5.'
+                }
+            },
+            8: {
+                meta: { title: '$4,000 Claiming (NW2L)', distance: '6 Furlongs', surface: 'Dirt', purse: '$7,800' },
+                analysis: {
+                    scratches: '',
+                    overview: `The nightcap is a challenging and wide-open sprint with a full field, making it a difficult puzzle to solve for multi-race wagers.`,
+                    class: `#4 Wiz The Bomb takes a logical class drop from $7,500 claiming races, which should put her in a more competitive position.`,
+                    form: `#7 Aim's Jubilee gets a significant jockey upgrade to B. Whitacre. #9 On Time Tam broke her maiden impressively for the high-percentage J. Silva barn.`,
+                    trouble: `#1 Hard To Forget offers value. She won her maiden impressively and now gets the meet's top longshot rider, B. Weatherly. Her poor recent form will ensure high odds.`
+                },
+                pace: {
+                    intro: 'The pace projects to be honest to fast, which is likely disadvantageous for the horses committed to the early lead.',
+                    horses: [
+                        { name: '#1 Hard To Forget', style: 3, label: 'Early Speed' },
+                        { name: '#4 Wiz The Bomb', style: 3, label: 'Early Speed' },
+                        { name: '#7 Aim\'s Jubilee', style: 2, label: 'Stalker' },
+                        { name: '#9 On Time Tam', style: 1, label: 'Closer' },
+                    ]
+                },
+                betting: {
+                    winContenders: ['#7 Aim\'s Jubilee', '#9 On Time Tam'],
+                    liveLongshot: ['#1 Hard To Forget'],
+                    fade: ['None'],
+                    wagers: 'Exacta Box: 1, 7, 9. Trifecta: 7,9 / 1,4,5,7,9 / 1,4,5,7,9. Use multiple horses in the final leg of any Pick-X.'
+                }
+            },
+        };
+
+        const mainContent = document.getElementById('main-content');
+        const raceNavigation = document.getElementById('race-navigation');
+        let activeCharts = [];
+
+        function clearContent() {
+            mainContent.innerHTML = '';
+            activeCharts.forEach(chart => chart.destroy());
+            activeCharts = [];
+        }
+
+        function renderDashboard() {
+            clearContent();
+            const dashboardHTML = `
+                <div class="space-y-8">
+                    <div class="bg-white p-6 rounded-lg card-shadow">
+                        <h2 class="text-2xl font-bold mb-4 flex items-center"><span class="text-3xl mr-3">🔑</span> Top Win Bets</h2>
+                        <div class="grid md:grid-cols-3 gap-4">
+                            ${summaryData.topWins.map(bet => `
+                                <div class="border border-gray-200 rounded-lg p-4 bg-green-50/50">
+                                    <h3 class="font-bold text-lg text-green-800">Race ${bet.race}: ${bet.horse}</h3>
+                                    <p class="text-sm text-gray-600">${bet.rationale}</p>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                    <div class="grid md:grid-cols-2 gap-8">
+                        <div class="bg-white p-6 rounded-lg card-shadow">
+                            <h2 class="text-2xl font-bold mb-4 flex items-center"><span class="text-3xl mr-3">💣</span> Live Longshots</h2>
+                            <div class="space-y-4">
+                                ${summaryData.longshots.map(bet => `
+                                    <div class="border border-gray-200 rounded-lg p-4 bg-yellow-50/50">
+                                        <h3 class="font-bold text-lg text-yellow-800">Race ${bet.race}: ${bet.horse}</h3>
+                                        <p class="text-sm text-gray-600">${bet.rationale}</p>
+                                    </div>
+                                `).join('')}
+                            </div>
+                        </div>
+                        <div class="bg-white p-6 rounded-lg card-shadow">
+                            <h2 class="text-2xl font-bold mb-4 flex items-center"><span class="text-3xl mr-3">🚫</span> Favorites to Fade</h2>
+                             <div class="space-y-4">
+                                ${summaryData.fades.map(bet => `
+                                    <div class="border border-gray-200 rounded-lg p-4 bg-red-50/50">
+                                        <h3 class="font-bold text-lg text-red-800">Race ${bet.race}: ${bet.horse}</h3>
+                                        <p class="text-sm text-gray-600">${bet.rationale}</p>
+                                    </div>
+                                `).join('')}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bg-white p-6 rounded-lg card-shadow">
+                        <h2 class="text-2xl font-bold mb-4 flex items-center"><span class="text-3xl mr-3">🎯</span> Best Horizontal Keys</h2>
+                        <div>
+                            ${summaryData.horizontalKeys.map(bet => `
+                                <div>
+                                    <h3 class="font-bold text-lg text-blue-800">${bet.title}</h3>
+                                    <p class="text-sm text-gray-600 leading-relaxed">${bet.keys}</p>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                </div>
+            `;
+            mainContent.innerHTML = dashboardHTML;
+        }
+
+        function renderRace(raceNumber) {
+            clearContent();
+            const data = raceData[raceNumber];
+            const raceHTML = `
+                <div class="bg-white p-4 sm:p-6 rounded-lg card-shadow">
+                    <div class="border-b border-gray-200 pb-4 mb-4">
+                        <h2 class="text-3xl font-bold">Race ${raceNumber}: ${data.meta.title}</h2>
+                        <p class="text-md text-gray-600">${data.meta.distance} on the ${data.meta.surface} | Purse: ${data.meta.purse}</p>
+                    </div>
+
+                    ${data.analysis.scratches ? `<div class="mb-4 p-3 bg-yellow-100 border-l-4 border-yellow-500 text-yellow-800 rounded-r-lg">
+                        <p class="font-semibold">Scratched: ${data.analysis.scratches}</p>
+                    </div>` : ''}
+
+                    <div class="mb-4 border-b border-gray-200">
+                        <nav id="race-tabs" class="-mb-px flex justify-center space-x-4" aria-label="Tabs">
+                            <button data-tab="analysis" class="tab-button whitespace-nowrap py-3 px-1 border-b-2 font-medium text-sm border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 active">Analysis</button>
+                            <button data-tab="pace" class="tab-button whitespace-nowrap py-3 px-1 border-b-2 font-medium text-sm border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300">Pace Scenario</button>
+                            <button data-tab="betting" class="tab-button whitespace-nowrap py-3 px-1 border-b-2 font-medium text-sm border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300">Top Contenders</button>
+                        </nav>
+                    </div>
+
+                    <div id="tab-content-analysis" class="tab-content active">
+                        <div class="space-y-4 text-gray-700 leading-relaxed">
+                            <div><h3 class="font-bold text-lg mb-1">Race Overview</h3><p>${data.analysis.overview}</p></div>
+                            <div><h3 class="font-bold text-lg mb-1">Class Movement</h3><p>${data.analysis.class}</p></div>
+                            <div><h3 class="font-bold text-lg mb-1">Form & Trainer Angles</h3><p>${data.analysis.form}</p></div>
+                            <div><h3 class="font-bold text-lg mb-1">Trouble Lines & Value Creation</h3><p>${data.analysis.trouble}</p></div>
+                        </div>
+                    </div>
+
+                    <div id="tab-content-pace" class="tab-content">
+                        <p class="mb-4 text-center text-gray-600">${data.pace.intro}</p>
+                        <div class="chart-container">
+                            <canvas id="paceChart"></canvas>
+                        </div>
+                    </div>
+
+                    <div id="tab-content-betting" class="tab-content">
+                        <div class="grid md:grid-cols-3 gap-4">
+                            <div class="border-l-4 border-green-500 p-4 bg-gray-50 rounded">
+                                <h3 class="font-bold text-lg text-green-700">Win Contenders</h3>
+                                <ul class="list-disc list-inside mt-2">${data.betting.winContenders.map(h => `<li>${h}</li>`).join('')}</ul>
+                            </div>
+                            <div class="border-l-4 border-yellow-500 p-4 bg-gray-50 rounded">
+                                <h3 class="font-bold text-lg text-yellow-700">Live Longshot</h3>
+                                <ul class="list-disc list-inside mt-2">${data.betting.liveLongshot.map(h => `<li>${h}</li>`).join('')}</ul>
+                            </div>
+                            <div class="border-l-4 border-red-500 p-4 bg-gray-50 rounded">
+                                <h3 class="font-bold text-lg text-red-700">Favorites to Fade</h3>
+                                <ul class="list-disc list-inside mt-2">${data.betting.fade.map(h => `<li>${h}</li>`).join('')}</ul>
+                            </div>
+                        </div>
+                        <div class="mt-6 border-t pt-4">
+                             <h3 class="font-bold text-lg">Suggested Wagers</h3>
+                             <p class="text-gray-700 mt-1">${data.betting.wagers}</p>
+                        </div>
+                    </div>
+                </div>
+            `;
+            mainContent.innerHTML = raceHTML;
+            setupTabs();
+            if (document.getElementById('paceChart')) {
+                renderPaceChart(raceNumber);
+            }
+        }
+        
+        function renderPaceChart(raceNumber) {
+            const paceData = raceData[raceNumber].pace.horses;
+            const ctx = document.getElementById('paceChart').getContext('2d');
+            const chart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: paceData.map(h => h.name),
+                    datasets: [{
+                        label: 'Running Style',
+                        data: paceData.map(h => h.style),
+                        backgroundColor: 'rgba(74, 85, 104, 0.6)',
+                        borderColor: 'rgba(45, 55, 72, 1)',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    indexAxis: 'y',
+                    maintainAspectRatio: false,
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return paceData[context.dataIndex].label;
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            beginAtZero: true,
+                            max: 3.5,
+                            ticks: {
+                                callback: function(value, index, values) {
+                                    if (value === 1) return 'Closer';
+                                    if (value === 2) return 'Stalker/Presser';
+                                    if (value === 3) return 'Early Speed';
+                                    return '';
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+            activeCharts.push(chart);
+        }
+
+        function setupTabs() {
+            const tabs = document.querySelectorAll('.tab-button');
+            const contents = document.querySelectorAll('.tab-content');
+            tabs.forEach(tab => {
+                tab.addEventListener('click', () => {
+                    tabs.forEach(t => t.classList.remove('active'));
+                    tab.classList.add('active');
+                    const target = tab.getAttribute('data-tab');
+                    contents.forEach(content => {
+                        content.classList.remove('active');
+                        if (content.id === `tab-content-${target}`) {
+                            content.classList.add('active');
+                        }
+                    });
+                });
+            });
+        }
+        
+        document.addEventListener('DOMContentLoaded', () => {
+            Object.keys(raceData).forEach(raceNum => {
+                const li = document.createElement('li');
+                const button = document.createElement('button');
+                button.className = 'nav-button px-4 py-2 text-sm font-semibold text-gray-700 bg-gray-100 rounded-md hover:bg-gray-200';
+                button.textContent = `Race ${raceNum}`;
+                button.dataset.race = raceNum;
+                li.appendChild(button);
+                raceNavigation.appendChild(li);
+            });
+
+            raceNavigation.addEventListener('click', (e) => {
+                if (e.target.tagName === 'BUTTON') {
+                    document.querySelectorAll('#race-navigation button').forEach(btn => btn.classList.remove('active'));
+                    e.target.classList.add('active');
+                    const raceId = e.target.dataset.race;
+                    if (raceId === 'dashboard') {
+                        renderDashboard();
+                    } else {
+                        renderRace(raceId);
+                    }
+                }
+            });
+
+            renderDashboard();
+        });
+    </script>
+</body>
+</html>
