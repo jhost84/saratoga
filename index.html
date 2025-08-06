@@ -3,120 +3,152 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Horse Racing Handicap Insights</title>
+    <title>Exacta AI - Intelligent Horse Racing Handicapping</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&family=Poppins:wght@600;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
     <style>
         body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #f0f2f5;
+            color: #334155;
+        }
+        .font-poppins {
             font-family: 'Poppins', sans-serif;
         }
-        .font-playfair {
-            font-family: 'Playfair Display', serif;
+        .pro-card {
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: 0.75rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+        }
+        .pro-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        }
+        .header-btn {
+            transition: all 0.2s ease-in-out;
+        }
+        .track-card {
+            background-size: cover;
+            background-position: center;
+            position: relative;
+        }
+        .track-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(13, 71, 161, 0.7);
+            border-radius: 0.75rem;
+            transition: background-color 0.3s ease;
+        }
+        .track-card:hover::before {
+            background-color: rgba(13, 71, 161, 0.5);
+        }
+        .track-card-content {
+            position: relative;
+            z-index: 10;
         }
     </style>
 </head>
-<body class="bg-gray-100 text-gray-800">
+<body>
 
-    <!-- Header -->
-    <header class="bg-gray-800 text-white shadow-lg">
-        <div class="container mx-auto px-6 py-4 flex justify-between items-center">
-            <h1 class="text-3xl font-playfair"><a href="#">Horse Racing Insights</a></h1>
-            <nav>
-                <a href="#courses" class="px-4 hover:text-gray-300">Top Courses</a>
-                <a href="#about" class="px-4 hover:text-gray-300">About</a>
-                <a href="#contact" class="px-4 hover:text-gray-300">Contact</a>
-            </nav>
+    <header class="bg-white border-b border-gray-200 py-3 sticky top-0 z-20">
+        <div class="container mx-auto px-4 flex justify-between items-center">
+            <div class="flex items-center gap-3">
+                <img src="logo1.jpg" alt="Exacta AI Logo" class="h-12 w-auto">
+            </div>
+            <div class="flex items-center gap-2">
+                <a href="index.html" class="header-btn flex items-center gap-2 px-4 py-2 rounded-lg font-semibold text-white bg-[#0d47a1] hover:bg-[#1565c0]">
+                    <i data-lucide="home" class="h-5 w-5"></i>
+                    Home
+                </a>
+            </div>
         </div>
     </header>
 
-    <!-- Hero Section -->
-    <section class="bg-white">
-        <div class="container mx-auto px-6 py-20 text-center">
-            <h2 class="text-5xl font-playfair font-bold text-gray-800">In-Depth Handicapping Analysis</h2>
-            <p class="mt-4 text-lg text-gray-600 max-w-2xl mx-auto">Your expert guide to the turf. We provide data-driven insights and handicapping reports for major tracks across the country.</p>
-            <a href="#courses" class="mt-8 inline-block bg-blue-600 text-white font-semibold px-8 py-3 rounded-lg shadow-md hover:bg-blue-700 transition duration-300">Explore Tracks</a>
-        </div>
-    </section>
+    <main class="container mx-auto p-4 md:p-6">
 
-    <!-- Main Content: Course Links -->
-    <main id="courses" class="container mx-auto px-6 py-16">
-        <h3 class="text-4xl font-playfair font-bold text-center mb-12">Featured Race Courses</h3>
-        
-        <!-- Grid for Course Cards -->
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
+        <section class="text-center py-12 md:py-20">
+            <h1 class="text-4xl md:text-5xl font-poppins font-bold text-[#0d47a1]">Find Value, Not Just Favorites.</h1>
+            <p class="mt-4 max-w-3xl mx-auto text-lg text-gray-600">Exacta AI revolutionizes handicapping by focusing on market inefficiencies. Our AI-driven analysis goes beyond picking likely winners to identify horses whose odds are greater than their true probability of winning—the key to long-term profitability.</p>
+        </section>
 
-            <!-- Saratoga Card -->
-            <div class="bg-white rounded-lg shadow-lg overflow-hidden transform hover:-translate-y-2 transition duration-300">
-                <img src="https://placehold.co/600x400/334155/ffffff?text=Saratoga" alt="Saratoga Race Course" class="w-full h-48 object-cover">
-                <div class="p-6">
-                    <h4 class="text-2xl font-bold font-playfair mb-2">Saratoga</h4>
-                    <p class="text-gray-600 mb-4">The historic "Graveyard of Champions." Get insights for the prestigious summer meet.</p>
-                    <a href="#" class="inline-block bg-gray-800 text-white px-6 py-2 rounded-full font-semibold hover:bg-gray-700 transition duration-300">View Insights</a>
+        <section id="how-it-works" class="mb-12">
+            <h2 class="text-3xl font-poppins font-bold mb-8 text-center text-[#0d47a1]">Our Analytical Edge</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div class="pro-card p-6 text-center">
+                    <div class="flex justify-center mb-4">
+                        <div class="bg-blue-100 text-blue-700 rounded-full p-4">
+                            <i data-lucide="bar-chart-3" class="h-8 w-8"></i>
+                        </div>
+                    </div>
+                    <h3 class="text-xl font-poppins font-semibold text-[#0d47a1] mb-2">Deep Data Analysis</h3>
+                    <p class="text-gray-600">We process vast amounts of data, including past performances, speed figures, pace dynamics, and workout patterns to build a complete profile for every horse.</p>
+                </div>
+                <div class="pro-card p-6 text-center">
+                    <div class="flex justify-center mb-4">
+                        <div class="bg-green-100 text-green-700 rounded-full p-4">
+                            <i data-lucide="dollar-sign" class="h-8 w-8"></i>
+                        </div>
+                    </div>
+                    <h3 class="text-xl font-poppins font-semibold text-[#0d47a1] mb-2">Value Identification</h3>
+                    <p class="text-gray-600">Our core mission is to calculate our own "assessed probability" and compare it to the market's "implied probability." When our assessment is higher, we've found a value overlay.</p>
+                </div>
+                <div class="pro-card p-6 text-center">
+                    <div class="flex justify-center mb-4">
+                        <div class="bg-yellow-100 text-yellow-700 rounded-full p-4">
+                            <i data-lucide="brain-circuit" class="h-8 w-8"></i>
+                        </div>
+                    </div>
+                    <h3 class="text-xl font-poppins font-semibold text-[#0d47a1] mb-2">Actionable Insights</h3>
+                    <p class="text-gray-600">Our interactive dashboards translate complex analysis into clear, actionable insights—including prime bets, key singles for multi-race wagers, and vulnerable favorites to play against.</p>
                 </div>
             </div>
+        </section>
 
-            <!-- Finger Lakes Card -->
-            <div class="bg-white rounded-lg shadow-lg overflow-hidden transform hover:-translate-y-2 transition duration-300">
-                <img src="https://placehold.co/600x400/059669/ffffff?text=Finger+Lakes" alt="Del Mar Racetrack" class="w-full h-48 object-cover">
-                <div class="p-6">
-                    <h4 class="text-2xl font-bold font-playfair mb-2">Finger Lakes</h4>
-                    <p class="text-gray-600 mb-4">8.05.2025</p>
-                    <a href="ausun.html" class="inline-block bg-gray-800 text-white px-6 py-2 rounded-full font-semibold hover:bg-gray-700 transition duration-300">View Card</a>
-                </div>
-            </div>
+        <section id="track-selection">
+            <h2 class="text-3xl font-poppins font-bold mb-8 text-center text-[#0d47a1]">Select a Racetrack</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                
+                <a href="saratoga_dashboard.html" class="pro-card track-card overflow-hidden" style="background-image: url('https://placehold.co/600x400/1e2b33/ffffff?text=Saratoga');">
+                    <div class="track-card-content flex flex-col justify-center items-center h-48 text-white p-4">
+                        <h3 class="text-3xl font-poppins font-bold">Saratoga</h3>
+                        <p class="mt-2 font-semibold">View Dashboard</p>
+                    </div>
+                </a>
 
-               <!-- Mountaineer Card -->
-            <div class="bg-white rounded-lg shadow-lg overflow-hidden transform hover:-translate-y-2 transition duration-300">
-                <img src="https://placehold.co/600x400/be123c/ffffff?text=Mountaineer" alt="Ellis Park" class="w-full h-48 object-cover">
-                <div class="p-6">
-                    <h4 class="text-2xl font-bold font-playfair mb-2">Mountaineer</h4>
-                    <p class="text-gray-600 mb-4">The "Pea Patch." Find your edge at this competitive Kentucky circuit.</p>
-                    <a href="mountaineer.html" class="inline-block bg-gray-800 text-white px-6 py-2 rounded-full font-semibold hover:bg-gray-700 transition duration-300">View Insights</a>
-                </div>
-            </div>
-              <!-- Thistle Card -->
-            <div class="bg-white rounded-lg shadow-lg overflow-hidden transform hover:-translate-y-2 transition duration-300">
-                <img src="https://placehold.co/600x400/be123c/ffffff?text=Thistle" alt="Ellis Park" class="w-full h-48 object-cover">
-                <div class="p-6">
-                    <h4 class="text-2xl font-bold font-playfair mb-2">Thistle</h4>
-                    <p class="text-gray-600 mb-4">8.5.2025</p>
-                    <a href="aucant.html" class="inline-block bg-gray-800 text-white px-6 py-2 rounded-full font-semibold hover:bg-gray-700 transition duration-300">View Card</a>
-                </div>
-            </div>
-            <!-- Add more course cards here -->
-            <div class="bg-white rounded-lg shadow-lg overflow-hidden transform hover:-translate-y-2 transition duration-300">
-                <img src="https://placehold.co/600x400/9333ea/ffffff?text=More+Tracks" alt="More Tracks" class="w-full h-48 object-cover">
-                <div class="p-6">
-                    <h4 class="text-2xl font-bold font-playfair mb-2">More Tracks</h4>
-                    <p class="text-gray-600 mb-4">Check back for analysis on Keeneland, Churchill Downs, and more.</p>
-                    <a href="#" class="inline-block bg-gray-400 text-white px-6 py-2 rounded-full font-semibold cursor-not-allowed">Coming Soon</a>
-                </div>
-            </div>
+                <a href="#" class="pro-card track-card overflow-hidden" style="background-image: url('https://placehold.co/600x400/1e2b33/ffffff?text=Belmont');">
+                    <div class="track-card-content flex flex-col justify-center items-center h-48 text-white p-4">
+                        <h3 class="text-3xl font-poppins font-bold">Belmont Park</h3>
+                        <p class="mt-2 font-semibold text-gray-300">Coming Soon</p>
+                    </div>
+                </a>
 
-        </div>
+                <a href="#" class="pro-card track-card overflow-hidden" style="background-image: url('https://placehold.co/600x400/1e2b33/ffffff?text=Keeneland');">
+                    <div class="track-card-content flex flex-col justify-center items-center h-48 text-white p-4">
+                        <h3 class="text-3xl font-poppins font-bold">Keeneland</h3>
+                        <p class="mt-2 font-semibold text-gray-300">Coming Soon</p>
+                    </div>
+                </a>
+
+            </div>
+        </section>
+
     </main>
-    
-    <!-- About Section -->
-    <section id="about" class="bg-gray-200">
-        <div class="container mx-auto px-6 py-20">
-            <div class="max-w-4xl mx-auto text-center">
-                <h3 class="text-4xl font-playfair font-bold mb-4">About This Project</h3>
-                <p class="text-lg text-gray-700">
-                    This project was born from a passion for horse racing and the challenge of finding a winning edge through careful analysis. My goal is to provide clear, concise, and actionable handicapping insights to help fellow racing enthusiasts. All analysis is based on a combination of statistical modeling, trip handicapping, and track bias study.
-                </p>
-            </div>
-        </div>
-    </section>
 
-    <!-- Footer -->
-    <footer id="contact" class="bg-gray-800 text-white">
-        <div class="container mx-auto px-6 py-8 text-center">
-            <p>&copy; 2024 Horse Racing Insights. All Rights Reserved.</p>
-            <p class="mt-2">Contact: <a href="mailto:email@example.com" class="text-blue-400 hover:underline">email@example.com</a></p>
-        </div>
+    <footer class="text-center p-6 mt-8 text-gray-500 text-sm border-t border-gray-200">
+        <p>&copy; 2025 Exacta AI. All rights reserved. This interactive dashboard is for informational and entertainment purposes only. Please wager responsibly.</p>
     </footer>
 
+    <script>
+        lucide.createIcons();
+    </script>
 </body>
 </html>
