@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Exacta AI - Handicapping Dashboard: Mountaineer Park</title>
+    <title>Exacta AI - Handicapping Dashboard</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -58,7 +58,7 @@
         }
         .pace-duel { background-color: #ffebee; color: #c62828; }
         .pace-contested { background-color: #fff8e1; color: #f9a825; }
-        .pace-lone { background-color: #e3f2fd; color: #1565c0; }
+        .pace-uncontested { background-color: #e8f5e9; color: #2e7d32; }
         .chart-container {
             position: relative;
             width: 100%;
@@ -104,8 +104,8 @@
         <div class="container mx-auto px-4 flex justify-between items-center">
             <div class="flex items-center gap-4">
                 <div>
-                    <h1 class="text-2xl font-bold text-[#0d47a1] font-poppins">Mountaineer Park Dashboard</h1>
-                    <p class="text-md text-gray-500">Value-Driven Insights for August 5, 2025</p>
+                    <h1 class="text-2xl font-bold text-[#0d47a1] font-poppins">Mountaineer Dashboard</h1>
+                    <p class="text-md text-gray-500">Value-Driven Insights for August 6, 2025</p>
                 </div>
             </div>
             <div class="flex items-center gap-2">
@@ -128,25 +128,25 @@
                 <h2 class="text-2xl font-poppins font-bold mb-5 text-center text-[#0d47a1]">Executive Summary</h2>
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
                     
-                    <div class="pro-card p-5 text-center cursor-pointer" onclick="showRace(4)">
+                    <div class="pro-card p-5 text-center cursor-pointer" onclick="showRace(7)">
                         <div class="flex flex-col items-center">
                             <div class="bg-green-100 text-green-700 rounded-full p-3 mb-3">
                                 <i data-lucide="star" class="lucide"></i>
                             </div>
                             <h3 class="font-poppins font-semibold text-lg text-[#0d47a1] mb-1">Prime Bet (A-Grade)</h3>
-                            <p class="text-gray-800 font-semibold">Race 4, #9 Utterly Enchanting</p>
-                            <p class="text-sm text-gray-500 mt-1">Massive class drop and ideal pace setup.</p>
+                            <p class="text-gray-800 font-semibold">Race 7, #7 Memosis</p>
+                            <p class="text-sm text-gray-500 mt-1">Strongest value overlay on the card.</p>
                         </div>
                     </div>
                     
-                    <div class="pro-card p-5 text-center cursor-pointer" onclick="showRace(6)">
+                    <div class="pro-card p-5 text-center cursor-pointer" onclick="showRace(5)">
                         <div class="flex flex-col items-center">
                             <div class="bg-blue-100 text-blue-700 rounded-full p-3 mb-3">
                                 <i data-lucide="target" class="lucide"></i>
                             </div>
-                            <h3 class="font-poppins font-semibold text-lg text-[#0d47a1] mb-1">Key Horizontal 'Single'</h3>
-                            <p class="text-gray-800 font-semibold">Race 6, #2 Raji</p>
-                            <p class="text-sm text-gray-500 mt-1">A class monster against weak maidens.</p>
+                            <h3 class="font-poppins font-semibold text-lg text-[#0d47a1] mb-1">Key Horizontal Single</h3>
+                            <p class="text-gray-800 font-semibold">Race 5, #1 Castle Lights</p>
+                            <p class="text-sm text-gray-500 mt-1">Most probable winner of the day.</p>
                         </div>
                     </div>
                     
@@ -155,11 +155,11 @@
                             <div class="bg-yellow-100 text-yellow-700 rounded-full p-3 mb-3">
                                 <i data-lucide="lightbulb" class="lucide"></i>
                             </div>
-                            <h3 class="font-poppins font-semibold text-lg text-[#0d47a1] mb-1">Value Plays (B-Grade)</h3>
+                            <h3 class="font-poppins font-semibold text-lg text-[#0d47a1] mb-1">Top Value Plays</h3>
                             <ul class="text-gray-600 mt-2 space-y-2 text-sm">
-                                <li class="cursor-pointer hover:text-blue-600 font-medium" onclick="showRace(1)"><strong>R1, #9 Mr. Bones</strong> (5/1)</li>
-                                <li class="cursor-pointer hover:text-blue-600 font-medium" onclick="showRace(3)"><strong>R3, #6 Chainsaw City</strong> (4/1)</li>
-                                <li class="cursor-pointer hover:text-blue-600 font-medium" onclick="showRace(5)"><strong>R5, #2 Tony Small</strong> (5/1)</li>
+                                <li class="cursor-pointer hover:text-blue-600 font-medium" onclick="showRace(1)"><strong>R1, #6 Doom Loop (8/1)</strong></li>
+                                <li class="cursor-pointer hover:text-blue-600 font-medium" onclick="showRace(2)"><strong>R2, #7 Majestic Eagle (9/2)</strong></li>
+                                <li class="cursor-pointer hover:text-blue-600 font-medium" onclick="showRace(6)"><strong>R6, #6 Foreman (4/1)</strong></li>
                             </ul>
                         </div>
                     </div>
@@ -171,9 +171,8 @@
                             </div>
                             <h3 class="font-poppins font-semibold text-lg text-[#0d47a1] mb-1">Top Fades</h3>
                             <ul class="text-gray-600 mt-2 space-y-2 text-sm">
-                                <li class="cursor-pointer hover:text-blue-600 font-medium" onclick="showRace(3)"><strong>R3, #2 Stratogale</strong> (8/5)</li>
-                                <li class="cursor-pointer hover:text-blue-600 font-medium" onclick="showRace(4)"><strong>R4, #3 Betsy Is The Code</strong> (5/2)</li>
-                                <li class="cursor-pointer hover:text-blue-600 font-medium" onclick="showRace(1)"><strong>R1, #2 Trigger Point</strong> (2/1)</li>
+                                <li class="cursor-pointer hover:text-blue-600 font-medium" onclick="showRace(1)"><strong>R1, #1 All Roads To Denis (2/1)</strong></li>
+                                <li class="cursor-pointer hover:text-blue-600 font-medium" onclick="showRace(6)"><strong>R6, #5 Kozy's Wildcat (5/2)</strong></li>
                             </ul>
                         </div>
                     </div>
@@ -204,131 +203,131 @@
     <script>
         const raceData = {
             1: {
-                meta: "Race 1: Allowance, 4 1/2F Turf, Purse $18,000",
-                pace: { type: "Pressured Duel", class: "pace-duel", text: "A confluence of speed virtually guarantees an energy-depleting duel on the front end." },
-                thesis: "A 'Pressured Duel' involving #2 Trigger Point and #6 Narizon will cause the pace to collapse late, creating a perfect setup for a stalker like #9 Mr. Bones.",
-                spoiler: "#2 Trigger Point leverages his inside post to clear the field easily, securing an uncontested lead and negating the projected duel.",
+                meta: "Race 1: Maiden Special Weight (WV-bred), 5 Furlongs, Purse $16,500",
+                pace: { type: "Moderately Contested", class: "pace-contested", text: "The primary speed belongs to #4 The Groom's Jul, pressed by #1 All Roads To Denis. This projects an honest but not destructive pace, creating an advantageous setup for horses who can settle into a stalking position and conserve energy." },
+                thesis: "A moderately contested pace will see the vulnerable favorite, #1, falter due to his trainer's 0-for-27 record in 2025, setting the stage for a lightly raced contender like #6 Doom Loop to capitalize.",
+                spoiler: "#4 The Groom's Jul secures an uncontested lead and wires the field.",
                 chart: {
-                    labels: ['#9 Mr. Bones (5/1)', '#2 Trigger Point (2/1)'],
-                    implied: [16.7, 33.3],
-                    assessed: [25, 20]
+                    labels: ['#1 All Roads To Denis', '#6 Doom Loop'],
+                    implied: [33.3, 11.1],
+                    assessed: [15, 25]
                 },
                 wagers: {
-                    primary: "Win/Place on #9 Mr. Bones.",
-                    exotics: "Exacta Box: 9, 4. Trifecta: 9 / 2,4,6 / 2,4,6,10.",
-                    horizontal: "'B' Horses: 9, 4. 'C' Horse: 2."
+                    primary: "Win bet on #6 Doom Loop.",
+                    exotics: "Exacta Box using #6 and #3.",
+                    horizontal: "'B' Horses: #6, #3. 'C' Horse (defensive coverage): #1."
                 }
             },
             2: {
-                meta: "Race 2: Claiming $6,500, 1M Turf, Purse $12,400",
-                pace: { type: "Moderately Contested", class: "pace-contested", text: "#4 Princesstapiture projects as the primary speed and should establish an honest pace." },
-                thesis: "A 'Moderately Contested' pace will favor horses with tactical speed. The pronounced class relief for #3 Up Her Sleeve makes her a primary contender.",
-                spoiler: "#4 Princesstapiture secures an easy, uncontested lead, slows the fractions, and carries her speed to the wire.",
+                meta: "Race 2: Claiming $6,500, 1 Mile, Purse $12,400",
+                pace: { type: "Moderately Contested", class: "pace-contested", text: "Led by #3 Obiwan and #4 Carom, the pace projects to be honest. The large field increases the likelihood of wide trips, favoring horses who can secure a stalking position like #5 Bustin Up and #7 Majestic Eagle." },
+                thesis: "A moderately contested pace sets up well for a stalker. #5 Bustin Up is the class of the field, but his last race was compromised by a troubled trip. The class-dropping veteran #7 Majestic Eagle is the main threat and offers better value.",
+                spoiler: "#3 Obiwan gets loose on an easy, uncontested lead and wires the field.",
                 chart: {
-                    labels: ['#3 Up Her Sleeve (4/1)', '#4 Princesstapiture (3/1)'],
-                    implied: [20.0, 25.0],
-                    assessed: [30, 15]
+                    labels: ['#2 Yeudiel', '#7 Majestic Eagle'],
+                    implied: [20.0, 18.2],
+                    assessed: [10, 25]
                 },
                 wagers: {
-                    primary: "Win/Place on #3 Up Her Sleeve.",
-                    exotics: "Exacta Box: 3, 6. Trifecta: 3,6 / 3,6,10 / 1,3,6,10.",
-                    horizontal: "'A' Horse: 3. 'B' Horse: 6."
+                    primary: "Win bet on #7 Majestic Eagle.",
+                    exotics: "Exacta Box: #5, #7. Trifecta: 5,7 with 5,7 with 2,3,4.",
+                    horizontal: "'A' Horses: #5, #7."
                 }
             },
             3: {
-                meta: "Race 3: Claiming $6,500, 5 1/2F, Purse $9,400",
-                pace: { type: "Pressured Duel", class: "pace-duel", text: "A destructive early pace is projected, with #2 Stratogale, #5 New Woman, and #4 Sally Bali all confirmed front-runners." },
-                thesis: "A 'Pressured Duel' between #2 Stratogale and #5 New Woman will set the race up for a pace collapse, allowing the stalking #6 Chainsaw City to capitalize.",
-                spoiler: "#2 Stratogale proves significantly faster than her rivals, clears the field with ease, and wires them despite early pressure.",
+                meta: "Race 3: Claiming $4,000, 5 Furlongs, Purse $11,000",
+                pace: { type: "Pressured Duel", class: "pace-duel", text: "A very fast and contested early pace is projected, with #5 Bazoo, #2 All The Way, and #6 Caboose all vying for the lead. This scenario strongly favors off-the-pace runners." },
+                thesis: "A destructive Pressured Duel will cause the front-runners to collapse, setting the race up perfectly for the powerful Jose Silva barn's entries, #1 Gottagetitback and #4 Alabama Slammer.",
+                spoiler: "#5 Bazoo proves exceptionally fast, clears the field, and steals the race on the front end.",
                 chart: {
-                    labels: ['#6 Chainsaw City (4/1)', '#2 Stratogale (8/5)'],
-                    implied: [20.0, 38.5],
-                    assessed: [35, 20]
+                    labels: ['#5 Bazoo', '#4 Alabama Slammer'],
+                    implied: [25.0, 28.6],
+                    assessed: [10, 35]
                 },
                 wagers: {
-                    primary: "Win/Place on #6 Chainsaw City.",
-                    exotics: "Exacta: 6 / 2,5. Trifecta: 6 / 2,5 / ALL.",
-                    horizontal: "'A' Horse: 6."
+                    primary: "Win bet on #4 Alabama Slammer.",
+                    exotics: "Exacta Box: #1, #4. Trifecta: 1,4 with 1,4 with 3,5.",
+                    horizontal: "'A' Horses: #1, #4."
                 }
             },
             4: {
-                meta: "Race 4: Claiming $4,000, 6F, Purse $8,300",
-                pace: { type: "Pressured Duel", class: "pace-duel", text: "The pace projects to be fast and contested with #3 Betsy Is The Code, #1 Hidden Identity, and #7 Rowdy Daisy ensuring a taxing pace." },
-                thesis: "A 'Pressured Duel' will compromise the chances of the speed horses, setting the race up for the class-dropping stalker #9 Utterly Enchanting.",
-                spoiler: "#3 Betsy Is The Code is able to clear the field from her inside post and wire the field on an uncontested lead.",
+                meta: "Race 4: Claiming $4,000 (NW2), 6 Furlongs, Purse $8,300",
+                pace: { type: "Moderately Contested", class: "pace-contested", text: "The pace appears balanced with several horses possessing tactical speed, but none appear dominant. This points to an honest pace that should give all running styles a fair chance." },
+                thesis: "In a race with inconsistent horses, the contender with the best combination of current form, speed figures, and top connections is #10 Slippery When Wet. He projects to get a favorable stalking trip.",
+                spoiler: "The enigmatic #8 Crow's Nest reproduces his outlier top speed figure and proves to be much the best.",
                 chart: {
-                    labels: ['#9 Utterly Enchanting (10/1)', '#3 Betsy Is The Code (5/2)'],
-                    implied: [9.1, 28.6],
-                    assessed: [25, 15]
+                    labels: ["#8 Crow's Nest", '#1 Congrats This'],
+                    implied: [22.2, 6.3],
+                    assessed: [15, 10]
                 },
                 wagers: {
-                    primary: "Substantial Win/Place bet on #9 Utterly Enchanting.",
-                    exotics: "Exacta: 9 / 1,6,7. Trifecta: 9 / 1,6,7 / ALL.",
-                    horizontal: "'A' Horse: 9."
+                    primary: "Win bet on #10 Slippery When Wet.",
+                    exotics: "Exacta: #10 with #1, #6, #8. Trifecta: #10 with #1, #6, #8 with #1, #6, #7, #8.",
+                    horizontal: "'A' Horse: #10. 'C' Horse: #8."
                 }
             },
             5: {
-                meta: "Race 5: Claiming $4,000, 1M, Purse $11,000",
-                pace: { type: "Pressured Duel", class: "pace-duel", text: "The pace projects to be hotly contested among #1 Ferrari Kid, #5 Group Eighteen, and #4 Leo And Royal. A fast pace is highly probable." },
-                thesis: "A 'Pressured Duel' will set the race up for an off-the-pace winner. #2 Tony Small is a veteran closer perfectly suited to capitalize.",
-                spoiler: "#1 Ferrari Kid out-sprints his rivals to the first turn and secures an easy lead, controlling the race from the front.",
+                meta: "Race 5: Claiming $4,000, 2 Furlongs, Purse $11,000",
+                pace: { type: "Lone/Uncontested", class: "pace-uncontested", text: "#1 Castle Lights stands out for her exceptional gate speed. She is very likely to break on top from the rail and control the race from the outset, a massive tactical advantage at this unique distance." },
+                thesis: "This 2-furlong dash will be won at the break. #1 Castle Lights possesses superior gate speed and draws the rail. She will establish an immediate, uncontested lead and will not be caught.",
+                spoiler: "#1 Castle Lights breaks poorly from the rail, allowing another horse to get the jump on her.",
                 chart: {
-                    labels: ['#2 Tony Small (5/1)', '#6 Cavendish (2/1)'],
-                    implied: [16.7, 33.3],
-                    assessed: [25, 25]
+                    labels: ['#1 Castle Lights', '#5 Miss Nuckols'],
+                    implied: [35.7, 28.6],
+                    assessed: [50, 20]
                 },
                 wagers: {
-                    primary: "Win/Place bet on #2 Tony Small.",
-                    exotics: "Exacta Box: 2, 6.",
-                    horizontal: "'A' Horse: 6. 'B' Horse: 2."
+                    primary: "This race is a prime opportunity for a single in multi-race wagers.",
+                    exotics: "Exacta: #1 with #4, #5.",
+                    horizontal: "'A' Horse (Single): #1."
                 }
             },
             6: {
-                meta: "Race 6: Maiden Claiming $4,000, 5 1/2F, Purse $7,700",
-                pace: { type: "Moderately Contested", class: "pace-contested", text: "Pace is difficult to project with chronic maidens. No horse appears to be a dedicated front-runner." },
-                thesis: "The massive class drop for #2 Raji makes him a standout against a field of exceptionally weak maidens. His speed figures are vastly superior.",
-                spoiler: "#2 Raji fails to fire for unknown reasons, opening the race up to chaos.",
+                meta: "Race 6: Starter $4,000, 6 Furlongs, Purse $14,200",
+                pace: { type: "Pressured Duel", class: "pace-duel", text: "A fast and contested pace is almost certain, with three confirmed front-runners (#1, #4, #5) drawn across the track. This duel is highly disadvantageous for them and sets the race up for a stalker or closer." },
+                thesis: "A hot Pressured Duel will compromise the front-runners, creating a perfect storm for a stalker. #7 Gates Of Heaven is the most logical beneficiary, with #6 Foreman also poised to capitalize.",
+                spoiler: "#5 Kozy's Wildcat is unexpectedly able to clear the field and gets an easy lead.",
                 chart: {
-                    labels: ['#2 Raji'],
-                    implied: [38.5],
-                    assessed: [60]
+                    labels: ["#5 Kozy's Wildcat", '#6 Foreman'],
+                    implied: [28.6, 20.0],
+                    assessed: [15, 30]
                 },
                 wagers: {
-                    primary: "Pass race for win betting due to short price.",
-                    exotics: "Key #2 Raji on top in Trifecta and Superfecta wagers.",
-                    horizontal: "'A' Horse (Single): 2."
+                    primary: "Win bet on #7 Gates Of Heaven.",
+                    exotics: "Exacta Box: #6, #7. Trifecta: 6,7 with 6,7 with 2,3,5.",
+                    horizontal: "'A' Horses: #7, #6. 'B' Horse: #2."
                 }
             },
             7: {
-                meta: "Race 7: Allowance, 5 1/2F, WV-Bred, Purse $19,000",
-                pace: { type: "Lone/Uncontested", class: "pace-lone", text: "#8 Oscor appears to be the lone, controlling speed, giving her a significant tactical advantage." },
-                thesis: "A 'Lone/Uncontested' pace scenario gives a decisive advantage to the front-running #8 Oscor, making her very difficult to catch.",
-                spoiler: "#7 Butterfly Effect shows more speed than anticipated and engages #8 Oscor in an early duel.",
+                meta: "Race 7: Allowance (NW2), 4.5 Furlongs, Purse $18,000",
+                pace: { type: "Moderately Contested", class: "pace-contested", text: "The pace in this short sprint will be fast, dictated by #2 Xtended Streak and #3 Liar For Hire. In a 4.5-furlong race, horses on or near the lead have a distinct advantage." },
+                thesis: "This race will be decided by class. The key horse is #7 Memosis, who ships in from a much tougher circuit and lands in the barn of the meet's leading trainer. Her figures earned against tougher company make her a standout.",
+                spoiler: "The lightly raced #3 Liar For Hire takes a massive step forward and wires the field.",
                 chart: {
-                    labels: ['#8 Oscor', '#7 Butterfly Effect'],
-                    implied: [33.3, 25],
-                    assessed: [40, 20]
+                    labels: ['#3 Liar For Hire', '#7 Memosis'],
+                    implied: [28.6, 16.7],
+                    assessed: [20, 35]
                 },
                 wagers: {
-                    primary: "Win bet on #8 Oscor.",
-                    exotics: "Exacta: 8 / 1,7.",
-                    horizontal: "'A' Horse: 8."
+                    primary: "Win bet on #7 Memosis.",
+                    exotics: "Exacta: #7 with #3, #5, #8.",
+                    horizontal: "'A' Horse: #7. 'B' Horse: #3."
                 }
             },
             8: {
-                meta: "Race 8: Claiming $4,000, 1M, Purse $8,300",
-                pace: { type: "Moderately Contested", class: "pace-contested", text: "An honest pace is likely with #1 Absolute Courage and #9 High Rolling Dude showing speed." },
-                thesis: "In a race with questionable form among many runners, the class and consistency of #7 Zero Gravity should prevail.",
-                spoiler: "#1 Absolute Courage gets an easy lead from the rail and is able to wire the field.",
+                meta: "Race 8: Claiming $4,000 (NW2), 6 Furlongs, Purse $8,300",
+                pace: { type: "Moderately Contested", class: "pace-contested", text: "The pace projects to be honest but not overwhelming, with several horses possessing some degree of early speed. This should provide a fair test for all running styles." },
+                thesis: "A moderately contested pace will unfold in this competitive nightcap. The horse with the best combination of recent form and tactical versatility is #10 Malibu Classic. The recent winner #7 Sneads is the main danger.",
+                spoiler: "#7 Sneads is able to clear the field easily and repeats his last-out wire-to-wire victory.",
                 chart: {
-                    labels: ['#7 Zero Gravity', '#9 High Rolling Dude'],
-                    implied: [35.7, 20],
-                    assessed: [45, 15]
+                    labels: ['#7 Sneads', '#1 Milano'],
+                    implied: [25.0, 18.2],
+                    assessed: [20, 25]
                 },
                 wagers: {
-                    primary: "Win bet on #7 Zero Gravity.",
-                    exotics: "Exacta: 7 / 2,9.",
-                    horizontal: "'A' Horse: 7."
+                    primary: "Win bet on #10 Malibu Classic.",
+                    exotics: "Exacta Box: #1, #7, #10.",
+                    horizontal: "'A' Horse: #10. 'B' Horses: #1, #7."
                 }
             }
         };
