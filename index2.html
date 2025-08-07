@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exacta AI - Handicapping Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&family=Poppins:wght@600;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #f0f2f5;
+            color: #334155;
+        }
+        .font-poppins {
+            font-family: 'Poppins', sans-serif;
+        }
+        .pro-card {
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: 0.75rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+        }
+        .pro-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        }
+        .race-nav-btn {
+            transition: all 0.2s ease-in-out;
+            color: #334155;
+            border-bottom: 3px solid transparent;
+            padding: 0.75rem 1rem;
+        }
+        .race-nav-btn.active {
+            color: #0d47a1;
+            border-bottom-color: #42a5f5;
+        }
+        .race-nav-btn:not(.active):hover {
+            background-color: #e3f2fd;
+        }
+        .pace-tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            padding: 0.3rem 0.8rem;
+            border-radius: 9999px;
+            font-weight: 600;
+            font-size: 0.8rem;
+        }
+        .pace-duel { background-color: #ffebee; color: #c62828; }
+        .pace-contested { background-color: #fff8e1; color: #f9a825; }
+        .pace-void { background-color: #e3f2fd; color: #1565c0; }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 300px;
+            max-height: 400px;
+        }
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 350px;
+            }
+        }
+        .lucide {
+            width: 22px;
+            height: 22px;
+        }
+        .header-btn {
+            transition: all 0.2s ease-in-out;
+        }
+        .race-link-card {
+            background-color: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: 0.5rem;
+            padding: 1rem;
+            text-align: center;
+            font-weight: 600;
+            color: #0d47a1;
+            cursor: pointer;
+            transition: all 0.2s ease-in-out;
+        }
+        .race-link-card:hover {
+            background-color: #0d47a1;
+            color: #ffffff;
+            transform: scale(1.05);
+        }
+        
+        /* -- NEW STYLES ADDED -- */
+        .bg-brand-gradient {
+            background: linear-gradient(135deg, #0d47a1 0%, #1565c0 50%, #42a5f5 100%);
+        }
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        .fade-in-up {
+            animation: fadeInUp 0.6s ease-out forwards;
+        }
+    </style>
+</head>
+<body>
+
+    <header class="sticky top-0 z-20 bg-white/80 backdrop-blur-xl border-b border-gray-200/80 py-3">
+        <div class="container mx-auto px-4 flex justify-between items-center">
+            <div class="flex items-center gap-3">
+                <img src="logo.svg" alt="Exacta AI Logo" class="h-14 w-auto">
+                <div>
+                   <h1 class="text-xl font-bold text-[#0d47a1] font-poppins">[Racetrack Name]</h1>
+                   <p class="text-sm text-gray-500">Value-Driven Insights for [Date]</p>
+                </div>
+            </div>
+            <div class="flex items-center gap-2">
+                <a href="#" onclick="showHome(); event.preventDefault();" class="header-btn flex items-center gap-2 px-4 py-2 rounded-lg font-semibold text-[#0d47a1] bg-blue-100 border border-blue-200 hover:bg-blue-200">
+                    <i data-lucide="layout-dashboard" class="h-5 w-5"></i>
+                    Dashboard
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <main class="container mx-auto p-4 md:p-6">
+        
+        <div id="home-page">
+            <section id="executive-summary" class="mb-10">
+                <h2 class="text-2xl font-poppins font-bold mb-5 text-center text-[#0d47a1]">Executive Summary</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
+                    
+                    <div class="pro-card p-5 text-center cursor-pointer text-white bg-brand-gradient fade-in-up" style="animation-delay: 0.1s;" onclick="showRace(2)">
+                        <div class="flex flex-col items-center">
+                            <div class="bg-white/20 rounded-full p-3 mb-3">
+                                 <i data-lucide="star" class="lucide text-white"></i>
+                            </div>
+                            <h3 class="font-poppins font-semibold text-lg mb-1">Prime Bet</h3>
+                            <p class="font-semibold">Race 2, #7 [Horse Name]</p>
+                            <p class="text-sm text-white/80 mt-1">Strongest value overlay on the card.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="pro-card p-5 text-center cursor-pointer fade-in-up" style="animation-delay: 0.2s;" onclick="showRace(5)">
+                        <div class="flex flex-col items-center">
+                            <div class="bg-blue-100 text-blue-700 rounded-full p-3 mb-3">
+                                <i data-lucide="target" class="lucide"></i>
+                            </div>
+                            <h3 class="font-poppins font-semibold text-lg text-[#0d47a1] mb-1">Key Single</h3>
+                            <p class="text-gray-800 font-semibold">Race 5, #7 [Horse Name]</p>
+                            <p class="text-sm text-gray-500 mt-1">Most probable winner of the day.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="pro-card p-5 text-center fade-in-up" style="animation-delay: 0.3s;">
+                         <div class="flex flex-col items-center">
+                            <div class="bg-yellow-100 text-yellow-700 rounded-full p-3 mb-3">
+                                <i data-lucide="lightbulb" class="lucide"></i>
+                            </div>
+                            <h3 class="font-poppins font-semibold text-lg text-[#0d47a1] mb-1">Value Plays</h3>
+                            <ul class="text-gray-600 mt-2 space-y-2 text-sm">
+                                <li class="cursor-pointer hover:text-blue-600 font-medium" onclick="showRace(1)"><strong>R1, #4 [Horse Name]</strong></li>
+                                <li class="cursor-pointer hover:text-blue-600 font-medium" onclick="showRace(4)"><strong>R4, #3 [Horse Name]</strong></li>
+                                <li class="cursor-pointer hover:text-blue-600 font-medium" onclick="showRace(7)"><strong>R7, #3 [Horse Name]</strong></li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="pro-card p-5 text-center fade-in-up" style="animation-delay: 0.4s;">
+                        <div class="flex flex-col items-center">
+                            <div class="bg-red-100 text-red-700 rounded-full p-3 mb-3">
+                                <i data-lucide="thumbs-down" class="lucide"></i>
+                            </div>
+                            <h3 class="font-poppins font-semibold text-lg text-[#0d47a1] mb-1">Top Fades</h3>
+                            <ul class="text-gray-600 mt-2 space-y-2 text-sm">
+                                <li class="cursor-pointer hover:text-blue-600 font-medium" onclick="showRace(2)"><strong>R2, #5 [Horse Name]</strong></li>
+                                <li class="cursor-pointer hover:text-blue-600 font-medium" onclick="showRace(1)"><strong>R1, #3 & #12</strong></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="race-navigation-home">
+                 <h2 class="text-2xl font-poppins font-bold mb-5 text-center text-[#0d47a1]">Race-by-Race Analysis</h2>
+                 <div id="race-link-container" class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-8 gap-3">
+                 </div>
+            </section>
+        </div>
+
+        <div id="race-page" class="hidden">
+            <nav class="bg-white rounded-lg shadow-sm mb-8 border border-gray-200">
+                <div id="race-nav-container" class="flex flex-wrap justify-center">
+                </div>
+            </nav>
+            <div id="race-details-container"></div>
+        </div>
+
+    </main>
+
+    <footer class="text-center p-6 mt-8 text-gray-500 text-sm border-t border-gray-200">
+        <p>This interactive dashboard is for informational and entertainment purposes only. Please wager responsibly.</p>
+        <p>&copy; 2025 Exacta AI. All Rights Reserved.</p>
+    </footer>
+
+    <script>
+        const raceData = {
+            1: {
+                meta: "Race 1: Maiden Claiming, 6 Furlongs, Purse $25,000",
+                pace: { type: "Pressured Duel", class: "pace-duel", text: "A contested early pace is expected between the #3 and #12." },
+                thesis: "The pace collapse sets up perfectly for a mid-pack closer. #4 shows a pattern of improving speed figures against similar fractions and should get a dream setup.",
+                spoiler: "If the #3 gets an easy, uncontested lead, he could be difficult to catch and may not come back to the field as projected.",
+                chart: {
+                    labels: ['#4 Value Horse', '#3 Morning Line Fav', '#12 Speed Threat'],
+                    implied: [20, 33.3, 15], 
+                    assessed: [35, 20, 10]
+                },
+                wagers: {
+                    primary: "Win bet on #4 at 3-1 or better.",
+                    exotics: "Exacta Box 4 with 1, 7. Trifecta 4 over 1,7 over 1,2,7,8.",
+                    horizontal: "'A' Horse: #4. 'B' Horse: #7. 'C' Horses: #1, #2."
+                }
+            },
+            2: {
+                meta: "Race 2: Allowance Optional Claiming, 1 Mile, Purse $75,000",
+                pace: { type: "Moderately Contested", class: "pace-contested", text: "A fair pace scenario; no single horse is likely to run away." },
+                thesis: "#7 holds a significant class and speed figure advantage. The odds are projected to be short, but reflect a high win probability.",
+                spoiler: "The #5 is taking a significant drop in class and could wake up with a big effort against this softer competition.",
+                chart: {
+                    labels: ['#7 Prime Bet', '#5 Class Dropper', '#2 Consistent'],
+                    implied: [40.0, 15, 25],
+                    assessed: [55, 10, 20]
+                },
+                wagers: {
+                    primary: "Key #7 in all multi-race wagers. Use as a single in Pick 3s/4s.",
+                    exotics: "Exacta 7 over 2,5. Consider a small saver Exacta 2 over 7.",
+                    horizontal: "'A' Horse (Single): #7. 'B' Horse (for backup): #2."
+                }
+            },
+            4: {
+                meta: "Race 4: Starter Allowance, 5.5 Furlongs (Turf), Purse $45,000",
+                pace: { type: "Void of Speed", class: "pace-void", text: "A severe lack of early speed could see a surprise leader." },
+                thesis: "In a race without a clear frontrunner, #3 possesses tactical speed and could steal the race on an easy lead from the rail.",
+                spoiler: "If an unexpected speed duel develops, it could compromise #
