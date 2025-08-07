@@ -109,7 +109,7 @@
                 </div>
             </div>
             <div class="flex items-center gap-2">
-                <a href="index.html" onclick="showHome(); event.preventDefault();" class="header-btn flex items-center gap-2 px-4 py-2 rounded-lg font-semibold text-white bg-[#0d47a1] hover:bg-[#1565c0]">
+                <a href="#" onclick="showHome(); event.preventDefault();" class="header-btn flex items-center gap-2 px-4 py-2 rounded-lg font-semibold text-white bg-[#0d47a1] hover:bg-[#1565c0]">
                     <i data-lucide="home" class="h-5 w-5"></i>
                     Home
                 </a>
@@ -134,8 +134,8 @@
                                 <i data-lucide="star" class="lucide"></i>
                             </div>
                             <h3 class="font-poppins font-semibold text-lg text-[#0d47a1] mb-1">Prime Bet (A-Grade)</h3>
-                            <p class="text-gray-800 font-semibold">Race 7, #5 Stolen (6/1)</p>
-                            <p class="text-sm text-gray-500 mt-1">Strongest value overlay on the card.</p>
+                            <p class="text-gray-800 font-semibold">Race 7, #2 Forest B (8/1)</p>
+                            <p class="text-sm text-gray-500 mt-1">Elevated to top pick after key scratch.</p>
                         </div>
                     </div>
                     
@@ -157,7 +157,7 @@
                             </div>
                             <h3 class="font-poppins font-semibold text-lg text-[#0d47a1] mb-1">Top Value Plays</h3>
                             <ul class="text-gray-600 mt-2 space-y-2 text-sm">
-                                <li class="cursor-pointer hover:text-blue-600 font-medium" onclick="showRace(1)"><strong>R1, #7 Ala Turka (2/1)</strong></li>
+                                <li class="cursor-pointer hover:text-blue-600 font-medium" onclick="showRace(1)"><strong>R1, #1 Where's Sam (15/1)</strong></li>
                                 <li class="cursor-pointer hover:text-blue-600 font-medium" onclick="showRace(4)"><strong>R4, #7 Get Out The Vote (6/1)</strong></li>
                                 <li class="cursor-pointer hover:text-blue-600 font-medium" onclick="showRace(5)"><strong>R5, #3 Ya Mar (3/1)</strong></li>
                             </ul>
@@ -203,19 +203,19 @@
     <script>
         const raceData = {
             1: {
-                meta: "Race 1: Claiming $7,500, 5 Furlongs, Purse $28,600",
-                pace: { type: "Pressured Duel", class: "pace-duel", text: "Destructive pace favors closers." },
-                thesis: "A pace collapse will favor a closer. #7 Ala Turka is perfectly positioned to benefit from a troubled trip last out and a positive form cycle.",
-                spoiler: "#6 Quiet Maddelena is fast enough to clear the field and wire them if she gets an unexpectedly easy lead.",
+                meta: "Race 1: Claiming $7,500, 5 Furlongs (SCR #7)",
+                pace: { type: "Pressured Duel", class: "pace-duel", text: "Pace duel still likely; main closer scratched." },
+                thesis: "With the key closer scratched, the massive class drop for #3 Ima Beast becomes the deciding factor. He should be talented enough to withstand the pace pressure against this group.",
+                spoiler: "The pace duel is so severe it causes a total collapse, allowing deep closer #1 Where's Sam to pick up the pieces at a huge price.",
                 chart: {
-                    labels: ['#7 Ala Turka (2/1)', '#6 Quiet Maddelena (5/2)'],
-                    implied: [33.3, 28.6],
-                    assessed: [40, 20]
+                    labels: ['#3 Ima Beast (3/1)', '#6 Quiet Maddelena (5/2)'],
+                    implied: [25.0, 28.6],
+                    assessed: [30, 20]
                 },
                 wagers: {
-                    primary: "Win on #7 Ala Turka.",
-                    exotics: "Exacta Box: 7 with 3,6.",
-                    horizontal: "'B' Horse: #7."
+                    primary: "Win on #3 Ima Beast.",
+                    exotics: "Exacta Box: 3 with 1,6.",
+                    horizontal: "'B' Horse: #3."
                 }
             },
             2: {
@@ -267,26 +267,26 @@
                 }
             },
             5: {
-                meta: "Race 5: Starter Optional Claiming $15,000, 5 Furlongs (Turf), Purse $40,700",
+                meta: "Race 5: Starter Opt. Claiming $15,000, 5 Furlongs (Turf) (SCR #5)",
                 pace: { type: "Pressured Duel", class: "pace-duel", text: "A destructive speed duel is anticipated, heavily favoring closers." },
-                thesis: "Pace collapse sets the race up perfectly for the closing kick of course-specialist #3 Ya Mar.",
+                thesis: "Pace collapse sets the race up perfectly for the closing kick of course-specialist #3 Ya Mar. The scratch of a rival closer helps her cause.",
                 spoiler: "The class and speed of #2 Breezero are too much, and she wires the field despite pressure.",
                 chart: {
                     labels: ['#3 Ya Mar (3/1)', '#2 Breezero (8/5)'],
                     implied: [25.0, 38.5],
-                    assessed: [35, 30]
+                    assessed: [40, 30]
                 },
                 wagers: {
                     primary: "Win on #3 Ya Mar.",
-                    exotics: "Exacta Box: 3 with 2,5.",
-                    horizontal: "'B+' Horse: #3. 'B' Horse: #2."
+                    exotics: "Exacta Box: 3 with 2,4.",
+                    horizontal: "'A' Horse: #3. 'B' Horse: #2."
                 }
             },
             6: {
-                meta: "Race 6: Maiden Optional Claiming $25,000, 6 Furlongs, Purse $49,200",
+                meta: "Race 6: Maiden Opt. Claiming $25,000, 6 Furlongs (SCR #10)",
                 pace: { type: "Moderately Contested", class: "pace-contested", text: "Honest pace should give all running styles a fair chance." },
-                thesis: "The class drop for #4 Wild Red, who has been consistently second against tougher company, makes her poised to win.",
-                spoiler: "#2 Veri Collected, also dropping in class for a top barn, improves enough to win.",
+                thesis: "The class drop for #4 Wild Red, who has been consistently second against tougher company, makes her poised to win. Scratch of #10 has minimal impact.",
+                spoiler: "#2 Veri Collected, also dropping in class for a top barn, improves enough to defeat the favorite.",
                 chart: {
                     labels: ['#4 Wild Red (5/2)', '#2 Veri Collected (7/2)'],
                     implied: [28.6, 22.2],
@@ -299,35 +299,35 @@
                 }
             },
             7: {
-                meta: "Race 7: Claiming $25,000, 5 1/2 Furlongs, Purse $56,100",
+                meta: "Race 7: Claiming $25,000, 5 1/2 Furlongs (SCR #5)",
                 pace: { type: "Pressured Duel", class: "pace-duel", text: "A hot, contested pace will benefit a stalker." },
-                thesis: "A contested pace sets the race up perfectly for the stalking #5 Stolen, who is positioned to run down the tiring leaders.",
+                thesis: "With the primary closer scratched, #2 Forest B is now in a perfect tactical position to capitalize on the expected speed duel up front.",
                 spoiler: "The class of #4 I'm Into Mischief is simply too much. She presses the pace and still has enough left to win.",
                 chart: {
-                    labels: ['#5 Stolen (6/1)', "#4 I'm Into Mischief (6/5)"],
-                    implied: [14.3, 45.5],
+                    labels: ['#2 Forest B (8/1)', "#4 I'm Into Mischief (6/5)"],
+                    implied: [11.1, 45.5],
                     assessed: [25, 35]
                 },
                 wagers: {
-                    primary: "Win on #5 Stolen.",
-                    exotics: "Exacta Box: 5 with 4,1.",
-                    horizontal: "'B' Horses: #4, #5."
+                    primary: "Win on #2 Forest B.",
+                    exotics: "Exacta Box: 2 with 1,4.",
+                    horizontal: "'A' Horse: #2. 'B' Horse: #4."
                 }
             },
             8: {
-                meta: "Race 8: Maiden Claiming $10,000, 6 Furlongs, Purse $32,500",
-                pace: { type: "Moderately Contested", class: "pace-contested", text: "Honest pace in a large, chaotic field. A clean trip is key." },
-                thesis: "In a wide-open race, the class drop and trainer switch for #8 Sky Divine make her the most logical contender.",
-                spoiler: "First-time starter #6 Secret Plan for a top barn is more talented and wins on debut.",
+                meta: "Race 8: Maiden Claiming $10,000, 6 Furlongs (SCR #3,5,7,15)",
+                pace: { type: "Moderately Contested", class: "pace-contested", text: "Smaller field makes a clean trip more likely." },
+                thesis: "The significant class drop and trainer switch for #8 Sky Divine still make her the most logical contender in a now more compact field.",
+                spoiler: "First-time starter #6 Secret Plan for a top barn is more talented and wins on debut, a task made easier by the smaller field.",
                 chart: {
-                    labels: ['#8 Sky Divine (4/1)', '#6 Secret Plan (6/1)'],
-                    implied: [20.0, 14.3],
-                    assessed: [25, 20]
+                    labels: ['#8 Sky Divine (4/1)', '#6 Secret Plan (6/1)', '#9 Hyper Holiday (8/1)'],
+                    implied: [20.0, 14.3, 11.1],
+                    assessed: [28, 22, 15]
                 },
                 wagers: {
                     primary: "Win/Place on #8 Sky Divine.",
-                    exotics: "Exacta Box: 8,9,6.",
-                    horizontal: "'B' Horses: #6, #8, #9. 'C' Horses: #1, #4, #13."
+                    exotics: "Exacta Box: 8,6,9.",
+                    horizontal: "'A' Horse: #8. 'B' Horses: #6, #9."
                 }
             }
         };
