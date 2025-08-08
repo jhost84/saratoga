@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Exacta AI - Del Mar Handicapping Dashboard</title>
+    <title>Exacta AI - Handicapping Dashboard</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -59,7 +59,6 @@
         .pace-duel { background-color: #ffebee; color: #c62828; }
         .pace-contested { background-color: #fff8e1; color: #f9a825; }
         .pace-void { background-color: #e3f2fd; color: #1565c0; }
-        .pace-lone { background-color: #e8f5e9; color: #2e7d32; }
         .chart-container {
             position: relative;
             width: 100%;
@@ -106,7 +105,7 @@
             <div class="flex items-center gap-4">
                 <div>
                     <h1 class="text-2xl font-bold text-[#0d47a1] font-poppins">Del Mar Dashboard</h1>
-                    <p class="text-md text-gray-500">Value-Driven Insights for August 7, 2025</p>
+                    <p class="text-md text-gray-500">Value-Driven Insights for August 8, 2025</p>
                 </div>
             </div>
             <div class="flex items-center gap-2">
@@ -126,28 +125,28 @@
         
         <div id="home-page">
             <section id="executive-summary" class="mb-10">
-                <h2 class="text-2xl font-poppins font-bold mb-5 text-center text-[#0d47a1]">Executive Summary (Updated for Scratches)</h2>
+                <h2 class="text-2xl font-poppins font-bold mb-5 text-center text-[#0d47a1]">Executive Summary</h2>
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
                     
-                    <div class="pro-card p-5 text-center cursor-pointer" onclick="showRace(7)">
+                    <div class="pro-card p-5 text-center cursor-pointer" onclick="showRace(3)">
                         <div class="flex flex-col items-center">
                             <div class="bg-green-100 text-green-700 rounded-full p-3 mb-3">
                                 <i data-lucide="star" class="lucide"></i>
                             </div>
                             <h3 class="font-poppins font-semibold text-lg text-[#0d47a1] mb-1">Prime Bet</h3>
-                            <p class="text-gray-800 font-semibold">Race 7, #5 Young Love</p>
-                            <p class="text-sm text-gray-500 mt-1">Massively advantaged by the scratch of her main rival.</p>
+                            <p class="text-gray-800 font-semibold">Race 3, #1 Big Pop</p>
+                            <p class="text-sm text-gray-500 mt-1">Strongest value overlay on the card.</p>
                         </div>
                     </div>
                     
-                    <div class="pro-card p-5 text-center cursor-pointer" onclick="showRace(7)">
+                    <div class="pro-card p-5 text-center cursor-pointer" onclick="showRace(6)">
                         <div class="flex flex-col items-center">
                             <div class="bg-blue-100 text-blue-700 rounded-full p-3 mb-3">
                                 <i data-lucide="target" class="lucide"></i>
                             </div>
                             <h3 class="font-poppins font-semibold text-lg text-[#0d47a1] mb-1">Key Single</h3>
-                            <p class="text-gray-800 font-semibold">Race 7, #5 Young Love</p>
-                            <p class="text-sm text-gray-500 mt-1">Most probable winner, now with an insurmountable pace advantage.</p>
+                            <p class="text-gray-800 font-semibold">Race 6, #5 Crazy Cavalier</p>
+                            <p class="text-sm text-gray-500 mt-1">Most probable winner of the day.</p>
                         </div>
                     </div>
                     
@@ -158,10 +157,9 @@
                             </div>
                             <h3 class="font-poppins font-semibold text-lg text-[#0d47a1] mb-1">Value Plays</h3>
                             <ul class="text-gray-600 mt-2 space-y-2 text-sm">
-                                <li class="cursor-pointer hover:text-blue-600 font-medium" onclick="showRace(1)"><strong>R1, #2 Cheekwood (5/1)</strong></li>
-                                <li class="cursor-pointer hover:text-blue-600 font-medium" onclick="showRace(2)"><strong>R2, #1 Danzing Daisy (6/1)</strong></li>
-                                <li class="cursor-pointer hover:text-blue-600 font-medium" onclick="showRace(5)"><strong>R5, #2 Brunchandcrunch (3/1)</strong></li>
-                                <li class="cursor-pointer hover:text-blue-600 font-medium" onclick="showRace(8)"><strong>R8, #2 Blue Oasis (5/1)</strong></li>
+                                <li class="cursor-pointer hover:text-blue-600 font-medium" onclick="showRace(2)"><strong>R2, #5 Heads In Beds (FR)</strong></li>
+                                <li class="cursor-pointer hover:text-blue-600 font-medium" onclick="showRace(5)"><strong>R5, #2 Another Bulleit</strong></li>
+                                <li class="cursor-pointer hover:text-blue-600 font-medium" onclick="showRace(7)"><strong>R7, #1 What's A Good Name</strong></li>
                             </ul>
                         </div>
                     </div>
@@ -173,9 +171,8 @@
                             </div>
                             <h3 class="font-poppins font-semibold text-lg text-[#0d47a1] mb-1">Top Fades</h3>
                             <ul class="text-gray-600 mt-2 space-y-2 text-sm">
-                                <li class="cursor-pointer hover:text-blue-600 font-medium" onclick="showRace(2)"><strong>R2, #6 Shady Stripes (8/5)</strong></li>
-                                <li class="cursor-pointer hover:text-blue-600 font-medium" onclick="showRace(1)"><strong>R1, #4 Fire Ile (5/2)</strong></li>
-                                <li class="cursor-pointer hover:text-blue-600 font-medium" onclick="showRace(3)"><strong>R3, #2 Twilight Empire (2/1)</strong></li>
+                                <li class="cursor-pointer hover:text-blue-600 font-medium" onclick="showRace(3)"><strong>R3, #5 Miracle Ball</strong></li>
+                                <li class="cursor-pointer hover:text-blue-600 font-medium" onclick="showRace(5)"><strong>R5, #4 Tommy Norris</strong></li>
                             </ul>
                         </div>
                     </div>
@@ -206,131 +203,131 @@
     <script>
         const raceData = {
             1: {
-                meta: "Race 1: Maiden Claiming $32k, 5.5 Furlongs, Purse $31,000",
-                pace: { type: "Moderately Contested", class: "pace-contested", text: "An honest but not destructive pace, favoring tactical stalkers." },
-                thesis: "The outcome hinges on a clean trip. Value lies with #2 Cheekwood and #3 Little Tinker Elle, whose ability is masked by severe trouble in past races.",
-                spoiler: "First-time starter #7 Dragon Kat shows unexpected speed and wires the field.",
+                meta: "Race 1: Claiming $40,000, 1 Mile, Purse $51,000",
+                pace: { type: "Moderately Contested", class: "pace-contested", text: "An honest pace is expected. #2 Del Mar Jerry, #3 Father Delay, and #6 Cowboy Mike all possess early speed, ensuring a contested but not necessarily destructive tempo. A horse sitting just off the pace is favored." },
+                thesis: "A significant class drop positions #6 Cowboy Mike as the horse to beat, but pace pressure from #3 Father Delay makes the favorite vulnerable. This sets up a potential value opportunity for a stalker.",
+                spoiler: "#6 Cowboy Mike's class is simply too much, and he wires the group with ease despite pace pressure.",
                 chart: {
-                    labels: ['#2 Cheekwood (5/1)', '#4 Fire Ile (5/2)'],
-                    implied: [16.7, 28.6],
-                    assessed: [25, 20]
+                    labels: ['#2 Del Mar Jerry', '#3 Father Delay'],
+                    implied: [25.0, 22.2],
+                    assessed: [30.0, 15.0]
                 },
                 wagers: {
-                    primary: "Win on #2 Cheekwood.",
-                    exotics: "Exacta Box (1, 2, 3).",
-                    horizontal: "'A' Horses: #2, #3. 'B' Horse: #1."
+                    primary: "Exacta: 6 / 2",
+                    exotics: "Trifecta: 6 / 2 / ALL",
+                    horizontal: "'A' Horse: #6 Cowboy Mike. 'B' Horse: #2 Del Mar Jerry."
                 }
             },
             2: {
-                meta: "Race 2: Cal-Bred Maiden Special Weight, 5 Furlongs (Turf), Purse $80,000",
-                pace: { type: "Pressured Duel", class: "pace-duel", text: "An energy-depleting pace favoring off-pace runners." },
-                thesis: "A pace collapse sets up a stalker/closer. #1 Danzing Daisy and #7 Too Sassy are bred for this and perfectly positioned.",
-                spoiler: "The raw speed of #3 Midnight Cowgirl is superior, and she wires the field.",
+                meta: "Race 2: Maiden Special Weight, 5 Furlongs on Turf, Purse $80,000",
+                pace: { type: "Moderately Contested", class: "pace-contested", text: "Projecting the pace in a field with numerous debutantes is challenging. However, several factors point toward an honest tempo. #4 Baela is bred for speed and is expected to be sent from the gate." },
+                thesis: "A contentious maiden turf sprint where the well-bred, highly-touted first-time starter #4 Baela holds a theoretical edge. However, the race-seasoned European-breds #2 Vinalia (GB) and #5 Heads In Beds (FR) possess improving form and valuable experience.",
+                spoiler: "One of the lesser-regarded first-time starters, such as #3 Wildfire Princess, is exceptionally talented and wires the field at a significant price.",
                 chart: {
-                    labels: ['#1 Danzing Daisy (6/1)', '#6 Shady Stripes (8/5)'],
-                    implied: [14.3, 38.5],
-                    assessed: [22, 20]
+                    labels: ['#5 Heads In Beds (FR)', '#2 Vinalia (GB)'],
+                    implied: [22.2, 25.0],
+                    assessed: [28.0, 20.0]
                 },
                 wagers: {
-                    primary: "Win/Place on #1 Danzing Daisy.",
-                    exotics: "Exacta Box (1, 7).",
-                    horizontal: "'A' Horses: #1, #7. 'B' Horses: #3, #4."
+                    primary: "Win/Place bet on #5 Heads In Beds (FR).",
+                    exotics: "Exacta Box: 4, 5. Trifecta: 4,5 / 2,4,5 / 2,4,5,7.",
+                    horizontal: "'A' Horses: #4 Baela, #5 Heads In Beds (FR). 'B' Horse: #2 Vinalia (GB)."
                 }
             },
             3: {
-                meta: "Race 3: Claiming $8k, 1 Mile, Purse $25,000 (SCR #1)",
-                pace: { type: "Moderately Contested", class: "pace-contested", text: "With the lone closer scratched, the dynamic shifts to the front-runners." },
-                thesis: "The scratch of #1 Hollywood Mistress fundamentally changes the race. The advantage now lies with the forwardly-placed horses. #7 Sweet Hello is proven at the distance and gets top billing over #2 Twilight Empire, who still has distance questions.",
-                spoiler: "#2 Twilight Empire handles the mile distance with ease and wires the field.",
+                meta: "Race 3: Claiming $25,000, 6 Furlongs, Purse $32,000",
+                pace: { type: "Pressured Duel", class: "pace-duel", text: "A fast and contested pace is highly probable. #5 Miracle Ball, #4 Shes Just Fluffy, and #2 Queen Girvin are all confirmed front-runners drawn near each other, setting up an energy-depleting duel." },
+                thesis: "A 'Pressured Duel' is projected to unfold, compromising the front-runners and setting the race up perfectly for a stalker. The class-dropping #1 Big Pop is ideally positioned to take advantage.",
+                spoiler: "#5 Miracle Ball is faster than her rivals, clears the field easily, and wires them without significant pressure.",
                 chart: {
-                    labels: ['#7 Sweet Hello (3/1)', '#2 Twilight Empire (2/1)'],
-                    implied: [25.0, 33.3],
-                    assessed: [35, 20]
+                    labels: ['#6 Moochie Girl', '#5 Miracle Ball'],
+                    implied: [22.2, 33.3],
+                    assessed: [28.0, 20.0]
                 },
                 wagers: {
-                    primary: "Win on #7 Sweet Hello.",
-                    exotics: "Exacta Box (2, 5, 7).",
-                    horizontal: "'A' Horse: #7. 'B' Horses: #2, #5."
+                    primary: "Win bet on #1 Big Pop",
+                    exotics: "Exacta Box: 1, 6",
+                    horizontal: "'A' Horse: #1 Big Pop. 'B' Horse: #6 Moochie Girl."
                 }
             },
             4: {
-                meta: "Race 4: Claiming $50k, 1 Mile (Turf), Purse $60,000",
-                pace: { type: "Pace Void (Slow)", class: "pace-void", text: "Slow pace strongly favors horses on or near the lead." },
-                thesis: "A lack of speed gives a massive advantage to the tactical types. #8 Curvino and #7 Tariff have the best figures and the best trips.",
-                spoiler: "#2 Earned Not Given shows new speed and sets a faster-than-expected pace.",
+                meta: "Race 4: Maiden Special Weight, 5 Furlongs on Turf, Purse $80,000",
+                pace: { type: "Moderately Contested", class: "pace-contested", text: "With an entire field of debutantes, projecting the pace is speculative. However, based on workout patterns and sire profiles, several are likely to show speed. #5 He's A Knockout and #4 Throwthefirstpunch both show sharp works." },
+                thesis: "A two-year-old maiden turf sprint for Cal-breds dominated by first-time starters. The analysis hinges on pedigree and preparation, with #5 He's A Knockout emerging as the most likely winner. The main threat would be the experienced #12 Still Bulletproof if he draws into the race.",
+                spoiler: "The pace is faster than anticipated, leading to a collapse that allows a well-bred closer to win on debut at a large price.",
                 chart: {
-                    labels: ['#8 Curvino (5/2)', '#7 Tariff (3/1)', '#2 Earned Not Given (4/1)'],
-                    implied: [28.6, 25.0, 20.0],
-                    assessed: [30, 28, 25]
+                    labels: ["#7 Kiki Ride", "#5 He's A Knockout"],
+                    implied: [20.0, 38.5],
+                    assessed: [25.0, 40.0]
                 },
                 wagers: {
-                    primary: "Exacta Box: 7, 8.",
-                    exotics: "Trifecta: 7,8 with 2,7,8 with 1,2,4,7,8.",
-                    horizontal: "'A' Horses: #7, #8. 'B' Horse: #2."
+                    primary: "Win bet on #5 He's A Knockout. If #12 Still Bulletproof draws in, switch to an Exacta Box: 5, 12.",
+                    exotics: "Trifecta: 5 / 4,7,12 / 4,7,12.",
+                    horizontal: "'A' Horse: #5 He's A Knockout. 'B' Horses: #4 Throwthefirstpunch, #7 Kiki Ride, #12 Still Bulletproof (if in)."
                 }
             },
             5: {
-                meta: "Race 5: Cal-Bred Maiden Special Weight, 6 Furlongs, Purse $100,000",
-                pace: { type: "Moderately Contested", class: "pace-contested", text: "Honest pace should give every horse a fair chance." },
-                thesis: "The favorite, #1 Ya'll Come, is vulnerable. The race is ripe for an upset from layoff runner #2 Brunchandcrunch or firster #4 Crime Lord.",
-                spoiler: "#1 Ya'll Come leverages the rail and his experience to get a perfect trip and win.",
+                meta: "Race 5: Maiden Special Weight, 5 1/2 Furlongs, Purse $100,000",
+                pace: { type: "Pressured Duel", class: "pace-duel", text: "This race projects to have a very fast and contested pace. #1 Moonshiner and #4 Tommy Norris are almost certain to engage in an early speed duel, setting things up for a closer." },
+                thesis: "A 'Pressured Duel' between #1 Moonshiner and #4 Tommy Norris is expected to set a fast pace, leading to a late-race collapse. This scenario strongly favors closers like #2 Another Bulleit and #9 Southern Melodee.",
+                spoiler: "#4 Tommy Norris is significantly faster than #1 Moonshiner, clears the field easily, and manages to slow the pace down enough to wire the field.",
                 chart: {
-                    labels: ['#2 Brunchandcrunch (3/1)', '#1 Ya\'ll Come (2/1)'],
-                    implied: [25.0, 33.3],
-                    assessed: [35, 20]
+                    labels: ['#2 Another Bulleit', '#4 Tommy Norris'],
+                    implied: [11.1, 25.0],
+                    assessed: [20.0, 15.0]
                 },
                 wagers: {
-                    primary: "Win on #2 Brunchandcrunch.",
-                    exotics: "Exacta Box: 2, 4, 6.",
-                    horizontal: "'A' Horses: #2, #4. 'B' Horse: #6."
+                    primary: "Win/Place/Show bet on #2 Another Bulleit.",
+                    exotics: "Exacta Box: 2, 6, 9. Trifecta: 2,6,9 / 2,6,9 / 1,2,4,6,7,9.",
+                    horizontal: "'A' Horses: #2 Another Bulleit, #6 Pavel's Treasure. 'B' Horse: #9 Southern Melodee."
                 }
             },
             6: {
-                meta: "Race 6: Starter Allowance, 1 1/16 Miles (Turf), Purse $47,000 (SCR #1)",
-                pace: { type: "Moderately Contested", class: "pace-contested", text: "Slightly less pressure with a pace horse scratched; still favors tactical stalkers." },
-                thesis: "The scratch of #1 Promissio solidifies the advantage for stalkers. #7 Baldoro's consistency makes him a top pick, but layoff threat #9 Russells Hustle and recent winner #6 Mr. Leasure offer value.",
-                spoiler: "#4 De' Medici loves the turf and wires the field in a class-and-speed performance.",
+                meta: "Race 6: Maiden Claiming $50,000, 1 Mile on Turf, Purse $40,000",
+                pace: { type: "Pace Void (Slow)", class: "pace-void", text: "A distinct lack of dedicated front-running speed. This strongly favors horses that can race on or near the lead, as they will likely face minimal pressure and be able to control the race." },
+                thesis: "A 'Pace Void' scenario gives a significant tactical advantage to horses on or near the lead. #5 Crazy Cavalier, the most accomplished horse, is also best positioned to take advantage of the slow pace.",
+                spoiler: "An unexpected horse, perhaps #2 Hamlin, goes to the front and steals the race on an easy, uncontested lead.",
                 chart: {
-                    labels: ['#6 Mr. Leasure (6/1)', '#4 De\' Medici (7/2)'],
-                    implied: [14.3, 22.2],
-                    assessed: [20, 15]
+                    labels: ['#2 Hamlin', '#5 Crazy Cavalier'],
+                    implied: [20.0, 38.5],
+                    assessed: [25.0, 45.0]
                 },
                 wagers: {
-                    primary: "Win/Place on #6 Mr. Leasure.",
-                    exotics: "Exacta Box: 6, 7, 9.",
-                    horizontal: "'A' Horses: #7, #9. 'B' Horses: #6, #5."
+                    primary: "Win bet on #5 Crazy Cavalier",
+                    exotics: "Exacta: 5 / 2,8",
+                    horizontal: "'A' Horse (Single): #5 Crazy Cavalier"
                 }
             },
             7: {
-                meta: "Race 7: Allowance Optional Claiming $20k, 6 Furlongs, Purse $81,000 (SCR #3)",
-                pace: { type: "Lone and Unchallenged", class: "pace-lone", text: "The primary stalking threat is scratched, leaving the lead uncontested." },
-                thesis: "The scratch of #3 Sharp Ride makes #5 Young Love's tactical advantage insurmountable. She is now a potential 'free square' single against a field with major questions.",
-                spoiler: "#5 Young Love fails to handle the dirt surface switch, opening the door for an upset.",
+                meta: "Race 7: Graduation Stakes, 5 Furlongs, Purse $100,000",
+                pace: { type: "Pressured Duel", class: "pace-duel", text: "This race is loaded with early speed. #3 Trump Era, #4 Sammy Davis, #5 Fionello, and #6 Hero Or Zero all won their maiden races in wire-to-wire or pace-pressing fashion. A fast, contested pace is virtually guaranteed." },
+                thesis: "A 'Pressured Duel' among at least four speed horses will create a fast pace and a potential late-race meltdown. This scenario perfectly suits the stalking running style of #1 What's A Good Name.",
+                spoiler: "#6 Hero Or Zero is a freakishly talented horse who is able to clear the field and wire them despite the pace pressure.",
                 chart: {
-                    labels: ['#5 Young Love (1/1)', '#1 Lady Gregory (5/2)'],
-                    implied: [50.0, 28.6],
-                    assessed: [60, 25]
+                    labels: ["#1 What's A Good Name", "#4 Sammy Davis"],
+                    implied: [14.3, 35.7],
+                    assessed: [25.0, 25.0]
                 },
                 wagers: {
-                    primary: "Key #5 Young Love in all wagers.",
-                    exotics: "Exacta: 5 with 1, 7.",
-                    horizontal: "'A' Horse (Single): #5."
+                    primary: "Win/Place bet on #1 What's A Good Name.",
+                    exotics: "Exacta Box: 1, 4, 6.",
+                    horizontal: "'A' Horse: #1 What's A Good Name. 'B' Horses: #4 Sammy Davis, #6 Hero Or Zero."
                 }
             },
             8: {
-                meta: "Race 8: Claiming $25k, 1 Mile (Turf), Purse $31,000",
-                pace: { type: "Moderately Contested", class: "pace-contested", text: "Fair pace should give every horse a chance." },
-                thesis: "The class-dropping #7 Lady Of Power is the horse to beat. The consistent #10 Ms Brightside (ire) and trouble-prone #2 Blue Oasis are the main threats.",
-                spoiler: "The pace is much faster than anticipated, leading to a collapse that sets up a deep closer for an upset.",
+                meta: "Race 8: Starter Allowance ($50,000), 1 Mile on Turf, Purse $47,000",
+                pace: { type: "Moderately Contested", class: "pace-contested", text: "#2 Princess Snow and #5 Oveta's Hobby both possess good tactical speed and are likely to be forwardly placed. The presence of these two should ensure an honest tempo." },
+                thesis: "A competitive turf route where the sharp recent form of #4 Word Play (GB) and #5 Oveta's Hobby makes them the horses to beat. The pace should be honest, giving all running styles a fair chance.",
+                spoiler: "#2 Princess Snow rebounds to her form from two starts back and wires the field at a square price.",
                 chart: {
-                    labels: ['#2 Blue Oasis (5/1)', '#7 Lady Of Power (7/2)'],
-                    implied: [16.7, 22.2],
-                    assessed: [22, 30]
+                    labels: ['#2 Princess Snow', '#4 Word Play (GB)'],
+                    implied: [20.0, 25.0],
+                    assessed: [25.0, 25.0]
                 },
                 wagers: {
-                    primary: "Win on #7 Lady Of Power.",
-                    exotics: "Exacta Box: 2, 7, 10.",
-                    horizontal: "'A' Horse: #7. 'B' Horses: #10, #2."
+                    primary: "Exacta Box: 2, 4, 5.",
+                    exotics: "Trifecta: 2,4,5 / 2,4,5 / 1,2,4,5,8.",
+                    horizontal: "'A' Horses: #4 Word Play (GB), #5 Oveta's Hobby. 'B' Horse: #2 Princess Snow."
                 }
             }
         };
@@ -446,10 +443,7 @@
                                 color: '#e0e0e0'
                             },
                             ticks: {
-                                color: '#334155',
-                                callback: function(value) {
-                                    return value + '%'
-                                }
+                                color: '#334155'
                             },
                             title: {
                                 display: true,
