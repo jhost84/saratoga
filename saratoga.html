@@ -113,8 +113,8 @@
                 </div>
             </div>
             <div class="flex items-center gap-2">
- <a href="index.html" class="header-btn flex items-center gap-2 px-4 py-2 rounded-lg font-semibold text-[#0d47a1] bg-white border border-[#0d47a1] hover:bg-blue-50">
-                    <i data-lucide="home" class="h-5 w-5"></i>
+ <a href="index.html" onclick="showHome(); event.preventDefault();" class="header-btn flex items-center gap-2 px-4 py-2 rounded-lg font-semibold text-white bg-[#0d47a1] hover:bg-[#1565c0]">
+                    <i data-lucide="layout-dashboard" class="h-5 w-5"></i>
                     Home
                 </a>
                 <a href="#" onclick="showHome(); event.preventDefault();" class="header-btn flex items-center gap-2 px-4 py-2 rounded-lg font-semibold text-white bg-[#0d47a1] hover:bg-[#1565c0]">
@@ -161,9 +161,9 @@
                             </div>
                             <h3 class="font-poppins font-semibold text-lg text-[#0d47a1] mb-1">Value Plays</h3>
                             <ul class="text-gray-600 mt-2 space-y-2 text-sm">
-                                <li class="cursor-pointer hover:text-blue-600 font-medium" onclick="showRace(1)"><strong>R1, #5 TRUST FUND</strong></li>
-                                <li class="cursor-pointer hover:text-blue-600 font-medium" onclick="showRace(4)"><strong>R4, #6 BE OF COURAGE</strong></li>
+                                <li class="cursor-pointer hover:text-blue-600 font-medium" onclick="showRace(1)"><strong>R1, #1 WHAT'S UP BRO</strong></li>
                                 <li class="cursor-pointer hover:text-blue-600 font-medium" onclick="showRace(8)"><strong>R8, #6 LITTLE NI</strong></li>
+                                <li class="cursor-pointer hover:text-blue-600 font-medium" onclick="showRace(12)"><strong>R12, #10 CHARLES J</strong></li>
                             </ul>
                         </div>
                     </div>
@@ -177,7 +177,7 @@
                             <ul class="text-gray-600 mt-2 space-y-2 text-sm">
                                 <li class="cursor-pointer hover:text-blue-600 font-medium" onclick="showRace(1)"><strong>R1, #4 I'M WIDE AWAKE</strong></li>
                                 <li class="cursor-pointer hover:text-blue-600 font-medium" onclick="showRace(2)"><strong>R2, #8 GLINT</strong></li>
-                                <li class="cursor-pointer hover:text-blue-600 font-medium" onclick="showRace(4)"><strong>R4, #9 COMMON DEFENSE</strong></li>
+                                <li class="cursor-pointer hover:text-blue-600 font-medium" onclick="showRace(12)"><strong>R12, #2 AMPLITUDE</strong></li>
                             </ul>
                         </div>
                     </div>
@@ -243,24 +243,24 @@
         const raceData = {
             1: {
                 meta: "Race 1: Allowance Optional Claiming, 6 Furlongs, Purse $100,000",
-                pace: { type: "Moderately Contested", class: "pace-contested", text: "Fair test for all running styles." },
-                thesis: "Public will over-bet #4 I'M WIDE AWAKE off a likely regression, creating value on the consistent #1 WHAT'S UP BRO and improving #5 TRUST FUND.",
+                pace: { type: "Moderately Contested", class: "pace-contested", text: "Slightly less pressure with the scratch of #5." },
+                thesis: "With the scratch of key contender #5, this race funnels to a showdown between the vulnerable, over-bet favorite #4 I'M WIDE AWAKE and the ultra-consistent #1 WHAT'S UP BRO. The value has shifted squarely to #1.",
                 spoiler: "#4 I'M WIDE AWAKE is a transformed horse and repeats his last performance.",
                 chart: {
-                    labels: ['#5 TRUST FUND', '#4 I\'M WIDE AWAKE'],
-                    implied: [22.2, 35.7],
-                    assessed: [30, 20]
+                    labels: ['#1 WHAT\'S UP BRO', '#4 I\'M WIDE AWAKE'],
+                    implied: [25, 45.5],
+                    assessed: [35, 25]
                 },
                 wagers: {
-                    primary: "Win/Place on #5 TRUST FUND.",
-                    exotics: "Exacta: 1,5 Box. Trifecta: 1,5 / 1,5 / 2,4,6.",
-                    horizontal: { a: '#1, #5', b: '', c: '#2, #4, #6' }
+                    primary: "Win/Place on #1 WHAT'S UP BRO.",
+                    exotics: "Exacta: 1 / 2,4,6. Trifecta: 1 / 2,4,6 / 2,4,6.",
+                    horizontal: { a: '#1', b: '#4', c: '#2, #6' }
                 }
             },
             2: {
                 meta: "Race 2: Claiming, 7 Furlongs, Purse $38,000",
                 pace: { type: "Pressured Duel", class: "pace-duel", text: "Pace collapse is likely, favoring off-pace runners." },
-                thesis: "Pace collapse sets up perfectly for a stalker/closer. #8 GLINT is a vulnerable favorite on a negative form cycle.",
+                thesis: "Pace collapse sets up perfectly for a stalker/closer. #8 GLINT is a vulnerable favorite on a negative form cycle. The scratch of #5 DADS GOOD RUNNER does not change the overall pace dynamic.",
                 spoiler: "#8 GLINT's class relief is enough for him to clear the field and wire them.",
                 chart: {
                     labels: ['#2 RIDE UP', '#8 GLINT'],
@@ -275,8 +275,8 @@
             },
             3: {
                 meta: "Race 3: Maiden Special Weight, 5 1/2 Furlongs (Turf), Purse $90,000",
-                pace: { type: "Moderately Contested", class: "pace-contested", text: "Honest pace likely from experienced fillies and debut runners." },
-                thesis: "A duel between the experienced #7 TRADING TROUBLE (who had a troubled debut) and the promising first-timer #8 FANCY LIGHTS.",
+                pace: { type: "Moderately Contested", class: "pace-contested", text: "Honest pace likely. Scratch of #4 is minor." },
+                thesis: "A duel between the experienced #7 TRADING TROUBLE (who had a troubled debut) and the promising first-timer #8 FANCY LIGHTS. The scratch of #4 BICKERTON solidifies their advantage.",
                 spoiler: "#2 RUN ON STATES transfers dirt form to turf, or #3 CHARLOTTESUNIVERSE improves massively.",
                 chart: {
                     labels: ['#7 TRADING TROUBLE', '#3 CHARLOTTESUNIVERSE'],
@@ -291,9 +291,9 @@
             },
             4: {
                 meta: "Race 4: Allowance, 1 Mile (Turf), Purse $110,000",
-                pace: { type: "Moderately Contested", class: "pace-contested", text: "Fair setup for horses just off the pace." },
-                thesis: "Public will favor #4 WHITE PALOMINO & #9 COMMON DEFENSE, creating value on proven older horses #2 WALLEY WORLD and #6 BE OF COURAGE.",
-                spoiler: "#4 WHITE PALOMINO is a budding superstar and handles the step up in class with ease.",
+                pace: { type: "Moderately Contested", class: "pace-contested", text: "Pace slows with scratches, but remains honest." },
+                thesis: "The mass scratches significantly alter this race, but the core value remains. The public will still favor #4 WHITE PALOMINO & #9 COMMON DEFENSE, creating value on proven older horses #2 WALLEY WORLD and #6 BE OF COURAGE.",
+                spoiler: "#4 WHITE PALOMINO proves to be a budding superstar and handles the step up in class with ease against a smaller field.",
                 chart: {
                     labels: ['#6 BE OF COURAGE', '#4 WHITE PALOMINO'],
                     implied: [22.2, 28.6],
@@ -301,14 +301,14 @@
                 },
                 wagers: {
                     primary: "Win/Place on #6 BE OF COURAGE.",
-                    exotics: "Exacta: 2,6 Box. Trifecta: 2,6 / 2,6 / 4,7,8.",
-                    horizontal: { a: '#6', b: '#2', c: '#4, #7, #8' }
+                    exotics: "Exacta: 2,6 Box. Trifecta: 2,6 / 2,6 / 4,7,8,9.",
+                    horizontal: { a: '#6', b: '#2', c: '#4, #7, #8, #9' }
                 }
             },
             5: {
                 meta: "Race 5: Claiming, 6 Furlongs, Purse $47,000",
                 pace: { type: "Moderately Contested", class: "pace-contested", text: "Honest tempo gives all running styles a fair shot." },
-                thesis: "The class and consistency of #1 AMUNDSON make him a standout. He's dropping to a level where his figures are dominant and gets a perfect trip.",
+                thesis: "The class and consistency of #1 AMUNDSON make him a standout. He's dropping to a level where his figures are dominant and gets a perfect trip. The scratch of #6 SHIPMAN removes a minor pace player.",
                 spoiler: "The pace becomes unexpectedly fast, setting up a closer like #2 FITZPATRICK.",
                 chart: {
                     labels: ['#1 AMUNDSON', '#4 FORGIVING SPIRIT'],
@@ -317,15 +317,15 @@
                 },
                 wagers: {
                     primary: "Win bet on #1 AMUNDSON.",
-                    exotics: "Exacta: 1 / 5,7. Trifecta: 1 / 5,7 / 2,4,5,7.",
+                    exotics: "Exacta: 1 / 7. Trifecta: 1 / 7 / 2,4.",
                     horizontal: { a: '#1 (Single)', b: '', c: '' }
                 }
             },
             6: {
                 meta: "Race 6: Maiden Special Weight, 6 Furlongs, Purse $100,000",
                 pace: { type: "Moderately Contested", class: "pace-contested", text: "Unpredictable pace with many first-time starters." },
-                thesis: "The workout tab of #2 OSCAR'S HOPE is too impressive to ignore; his sub-minute drill signals exceptional talent. #6 and #8 are other major players.",
-                spoiler: "Race experience of #1A HANDSOME LINC proves decisive if the first-timers are green.",
+                thesis: "With the only experienced runner #1A scratched, this is a pure test of first-time starters. The workout tab of #2 OSCAR'S HOPE is too impressive to ignore. #6 and #8 are other major players.",
+                spoiler: "One of the lesser-regarded debutantes is a superstar in disguise.",
                 chart: {
                     labels: ['#2 OSCAR\'S HOPE', '#6 GOLDEN TORNADO'],
                     implied: [22.2, 28.6],
@@ -333,14 +333,14 @@
                 },
                 wagers: {
                     primary: "Win bet on #2 OSCAR'S HOPE.",
-                    exotics: "Exacta: 2,6,8 Box. Trifecta: 2,6,8 / 2,6,8 / 1A,7.",
-                    horizontal: { a: '#2, #6, #8', b: '#7', c: '#1A' }
+                    exotics: "Exacta: 2,6,8 Box. Trifecta: 2,6,8 / 2,6,8 / 7.",
+                    horizontal: { a: '#2, #6, #8', b: '#7', c: '#1, #4, #5' }
                 }
             },
             7: {
                 meta: "Race 7: Allowance Optional Claiming, 1 Mile (Turf), Purse $115,000",
                 pace: { type: "Moderately Contested", class: "pace-contested", text: "Fair pace should give stalkers a great chance." },
-                thesis: "A battle between two top-tier turf horses, #6 DEPICTION and #7 EXACT ESTIMATE. #7 holds the edge due to current sharpness.",
+                thesis: "The large number of scratches decimates the field, making the showdown between top-tier turf horses #6 DEPICTION and #7 EXACT ESTIMATE even more likely. #7 holds the edge due to current sharpness.",
                 spoiler: "#1 RESILIENCE takes to turf and his G1 class prevails, or #6 DEPICTION is fully ready off the layoff.",
                 chart: {
                     labels: ['#7 EXACT ESTIMATE', '#6 DEPICTION'],
@@ -349,14 +349,14 @@
                 },
                 wagers: {
                     primary: "Win bet on #7 EXACT ESTIMATE.",
-                    exotics: "Exacta: 6,7 Box. Trifecta: 6,7 / 6,7 / 1,2,5.",
-                    horizontal: { a: '#6, #7', b: '#1, #2', c: '#5' }
+                    exotics: "Exacta: 6,7 Box. Trifecta: 6,7 / 6,7 / 1,2,3,5,9.",
+                    horizontal: { a: '#6, #7', b: '#1, #2', c: '#3, #5, #9' }
                 }
             },
             8: {
                 meta: "Race 8: Allowance Optional Claiming, 6 Furlongs, Purse $120,000",
                 pace: { type: "Pressured Duel", class: "pace-duel", text: "Destructive pace duel is highly likely." },
-                thesis: "A pace meltdown between #2 DAMON'S MOUND and #3 MAXIMUS MERIDIUS will set the race up perfectly for the stalker #6 LITTLE NI.",
+                thesis: "A pace meltdown between #2 DAMON'S MOUND and #3 MAXIMUS MERIDIUS will set the race up perfectly for the stalker #6 LITTLE NI. Scratches of #4 and #5 don't change the dynamic.",
                 spoiler: "#2 DAMON'S MOUND is so much faster he clears the field easily and wires them.",
                 chart: {
                     labels: ['#6 LITTLE NI', '#2 DAMON\'S MOUND'],
@@ -366,7 +366,7 @@
                 wagers: {
                     primary: "Win bet on #6 LITTLE NI.",
                     exotics: "Exacta: 6 / 2,7,8. Trifecta: 6 / 2,7,8 / 2,3,7,8.",
-                    horizontal: { a: '#6', b: '#2', c: '#7, #8' }
+                    horizontal: { a: '#6', b: '#2', c: '#3, #7, #8' }
                 }
             },
             9: {
@@ -388,7 +388,7 @@
             10: {
                 meta: "Race 10: Sword Dancer S. (G1), 1 1/2 Miles (Turf), Purse $750,000",
                 pace: { type: "Pace Void", class: "pace-void", text: "Slow, tactical pace strongly favors horses on or near the lead." },
-                thesis: "A tactical affair dominated by the two best horses, #6 FAR BRIDGE and #5 NATIONS PRIDE (IRE). The slow pace gives a slight edge to #6.",
+                thesis: "A tactical affair dominated by the two best horses, #6 FAR BRIDGE and #5 NATIONS PRIDE (IRE). The slow pace gives a slight edge to #6. Scratch of #8 is insignificant.",
                 spoiler: "Pace is faster than expected, bringing a closer like #2 REBEL RED (GB) or #9 UTAH BEACH into play.",
                 chart: {
                     labels: ['#6 FAR BRIDGE', '#5 NATIONS PRIDE (IRE)'],
@@ -397,8 +397,8 @@
                 },
                 wagers: {
                     primary: "Win bet on #6 FAR BRIDGE.",
-                    exotics: "Exacta: 5,6 Box. Trifecta: 5,6 / 5,6 / 2,8,9.",
-                    horizontal: { a: '#6 (Single)', b: '#5', c: '#2, #8, #9' }
+                    exotics: "Exacta: 5,6 Box. Trifecta: 5,6 / 5,6 / 1,2,7,9.",
+                    horizontal: { a: '#6 (Single)', b: '#5', c: '#1, #2, #7, #9' }
                 }
             },
             11: {
@@ -420,17 +420,17 @@
             12: {
                 meta: "Race 12: Allowance, 1 1/8 Miles (Turf), Purse $95,000",
                 pace: { type: "Moderately Contested", class: "pace-contested", text: "Honest pace ensures a fair race for all." },
-                thesis: "#11 HIT THE POST is the most likely winner, but at a very short price. The value lies in trying to beat him with the improving #2 AMPLITUDE.",
-                spoiler: "A longshot like #10 CHARLES J gets a perfect trip and pulls off the upset.",
+                thesis: "With the scratch of heavy favorite #11 HIT THE POST, this race is now wide open. #2 AMPLITUDE becomes the logical favorite, but offers little value. The new value play is #10 CHARLES J, who gets significant pace relief.",
+                spoiler: "#2 AMPLITUDE proves to be much the best and wins easily despite low odds.",
                 chart: {
-                    labels: ['#2 AMPLITUDE', '#11 HIT THE POST'],
-                    implied: [28.6, 41.7],
-                    assessed: [30, 40]
+                    labels: ['#2 AMPLITUDE', '#10 CHARLES J'],
+                    implied: [33.3, 16.7],
+                    assessed: [35, 25]
                 },
                 wagers: {
-                    primary: "Win bet on #2 AMPLITUDE.",
-                    exotics: "Exacta: 2,11 Box. Trifecta: 2,11 / 2,11 / 5,7,10.",
-                    horizontal: { a: '#2, #11', b: '#5, #7', c: '#10' }
+                    primary: "Win/Place bet on #10 CHARLES J.",
+                    exotics: "Exacta: 2,10 Box. Trifecta: 2,10 / 2,10 / 5,7.",
+                    horizontal: { a: '#2', b: '#10', c: '#5, #7' }
                 }
             }
         };
