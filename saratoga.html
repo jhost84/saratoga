@@ -127,7 +127,7 @@
 </head>
 <body>
     <div class="bg-yellow-100 border-b-2 border-yellow-300 text-yellow-800 text-center p-2 font-semibold text-sm">
-        Analysis updated for scratches as of 10:27 AM EDT on August 10, 2025. Turf Rails: 18'.
+        Analysis updated for scratches as of 4:18 PM EDT on August 10, 2025. Turf Rails: 18'.
     </div>
     <header class="bg-white border-b border-gray-200 py-3 sticky top-0 z-20">
         <div class="container mx-auto px-4 flex justify-between items-center">
@@ -138,10 +138,6 @@
                 </div>
             </div>
             <div class="flex items-center gap-2">
-<a href="index.html" onclick="showHome(); event.preventDefault();" class="header-btn flex items-center gap-2 px-4 py-2 rounded-lg font-semibold text-white bg-[#0d47a1] hover:bg-[#1565c0]">
-                    <i data-lucide="layout-dashboard" class="h-5 w-5"></i>
-                    Home
-                </a>
                 <a href="#" onclick="showHome(); event.preventDefault();" class="header-btn flex items-center gap-2 px-4 py-2 rounded-lg font-semibold text-white bg-[#0d47a1] hover:bg-[#1565c0]">
                     <i data-lucide="layout-dashboard" class="h-5 w-5"></i>
                     Dashboard
@@ -168,13 +164,13 @@
                         </div>
                     </div>
                     
-                    <div class="pro-card p-5 text-center cursor-pointer" onclick="showRace(10)">
+                    <div class="pro-card p-5 text-center cursor-pointer" onclick="showRace(8)">
                         <div class="flex flex-col items-center">
                             <div class="bg-blue-100 text-blue-700 rounded-full p-3 mb-3">
                                 <i data-lucide="target" class="lucide"></i>
                             </div>
                             <h3 class="font-poppins font-semibold text-lg text-[#0d47a1] mb-1">Key Single</h3>
-                            <p class="text-gray-800 font-semibold">Race 10, #2 Classicist</p>
+                            <p class="text-gray-800 font-semibold">Race 8, #8 Conman</p>
                             <p class="text-sm text-gray-500 mt-1">Most probable winner of the day.</p>
                         </div>
                     </div>
@@ -383,19 +379,19 @@
                 }
             },
             10: {
-                meta: "Race 10: Allowance, 1 1/8 Miles (Dirt), $110,000 Purse (SCR #4, #5)",
-                pace: { type: "Moderately Contested", class: "pace-contested", text: "Pace-setter with tactical pressers projects an honest pace." },
-                thesis: "Class and current form are key. #2 Classicist appears to be a rising star with a significant speed figure advantage (98) and projects a perfect stalking trip for elite connections.",
-                spoiler: "#1 Tuscan Gold could be the class of the field. He's dropping from a Grade 1 (the Preakness) and if he returns from the layoff in top form, he could prove superior.",
+                meta: "Race 10: Allowance, 1 1/8 Miles (Dirt), $110,000 Purse (SCR #2, #4, #5)",
+                pace: { type: "Moderately Contested", class: "pace-contested", text: "With the favorite scratched, the race is more wide open." },
+                thesis: "The scratch of the heavy favorite #2 Classicist blows this race wide open. #1 Tuscan Gold, dropping from a G1, now becomes the logical favorite, but the value has evaporated. #6 Pandagate is now a major contender.",
+                spoiler: "#7 Chileno has been improving and could get a perfect stalking trip behind the leaders. If the top contenders falter, he could be in a prime position to pull the upset.",
                 chart: {
-                    labels: ['#7 Chileno', '#2 Classicist'],
-                    implied: [14.3, 25.0],
-                    assessed: [18.0, 35.0]
+                    labels: ['#1 Tuscan Gold', '#6 Pandagate'],
+                    implied: [28.6, 20.0],
+                    assessed: [35.0, 25.0]
                 },
                 wagers: {
-                    primary: "Win wager on #2 Classicist.",
-                    exotics: "Exacta: 2 over 1, 6, 7. Trifecta: 2 with 1,6,7 with 1,6,7,11.",
-                    horizontal: "A: 2; B: 1, 6; C: 7, 11"
+                    primary: "No strong primary wager. Spread in multi-race wagers.",
+                    exotics: "Exacta Box: 1, 6, 7.",
+                    horizontal: "A: 1, 6; B: 7; C: 11"
                 }
             }
         };
@@ -403,19 +399,19 @@
         const multiRaceData = {
             pick5s: [
                 { name: "Late Pick 5", races: "6-10", legs: [
-                    { race: 6, selections: "A: 12" },
+                    { race: 6, selections: "A: 12, B: 4, 5" },
                     { race: 7, selections: "A: 8, B: 1a, 3, 9" },
-                    { race: 8, selections: "A: 8, B: 1, 6, 7" },
+                    { race: 8, selections: "SINGLE: 8" },
                     { race: 9, selections: "A: 9, B: 6" },
-                    { race: 10, selections: "SINGLE: 2" }
+                    { race: 10, selections: "A: 1, 6, B: 7" }
                 ]}
             ],
             pick4s: [
                 { name: "Late Pick 4", races: "7-10", legs: [
                     { race: 7, selections: "A: 8, B: 1a, 3, 9" },
-                    { race: 8, selections: "A: 8, B: 1, 6, 7" },
-                    { race: 9, selections: "A: 9, B: 6" },
-                    { race: 10, selections: "SINGLE: 2" }
+                    { race: 8, selections: "SINGLE: 8" },
+                    { race: 9, selections: "A: 9, B: 6, C: 5" },
+                    { race: 10, selections: "A: 1, 6, 7" }
                 ]}
             ],
             pick3s: [],
@@ -423,8 +419,8 @@
             dailyDoubles: [
                 { races: "2-3", leg1: "7", leg2: "2, 5, 6", confidence: "High" },
                 { races: "3-4", leg1: "2, 5, 6", leg2: "2, 3, 5", confidence: "Medium" },
-                { races: "8-9", leg1: "8", leg2: "6, 9", confidence: "Medium" },
-                { races: "9-10", leg1: "6, 9", leg2: "2", confidence: "High" }
+                { races: "8-9", leg1: "8", leg2: "6, 9", confidence: "High" },
+                { races: "9-10", leg1: "6, 9", leg2: "1, 6, 7", confidence: "Medium" }
             ]
         };
 
