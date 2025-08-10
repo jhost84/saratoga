@@ -126,7 +126,9 @@
     </style>
 </head>
 <body>
-
+    <div class="bg-yellow-100 border-b-2 border-yellow-300 text-yellow-800 text-center p-2 font-semibold text-sm">
+        Analysis updated for scratches as of 10:27 AM EDT on August 10, 2025. Turf Rails: 18'.
+    </div>
     <header class="bg-white border-b border-gray-200 py-3 sticky top-0 z-20">
         <div class="container mx-auto px-4 flex justify-between items-center">
             <div class="flex items-center gap-4">
@@ -136,7 +138,7 @@
                 </div>
             </div>
             <div class="flex items-center gap-2">
-                <a href="index.html" onclick="showHome(); event.preventDefault();" class="header-btn flex items-center gap-2 px-4 py-2 rounded-lg font-semibold text-white bg-[#0d47a1] hover:bg-[#1565c0]">
+<a href="index.html" onclick="showHome(); event.preventDefault();" class="header-btn flex items-center gap-2 px-4 py-2 rounded-lg font-semibold text-white bg-[#0d47a1] hover:bg-[#1565c0]">
                     <i data-lucide="layout-dashboard" class="h-5 w-5"></i>
                     Home
                 </a>
@@ -152,17 +154,17 @@
         
         <div id="home-page">
             <section id="executive-summary" class="mb-10">
-                <h2 class="text-2xl font-poppins font-bold mb-5 text-center text-[#0d47a1]">Executive Summary</h2>
+                <h2 class="text-2xl font-poppins font-bold mb-5 text-center text-[#0d47a1]">Executive Summary (Updated for Scratches)</h2>
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
                     
-                    <div class="pro-card p-5 text-center cursor-pointer" onclick="showRace(3)">
+                    <div class="pro-card p-5 text-center cursor-pointer" onclick="showRace(9)">
                         <div class="flex flex-col items-center">
                             <div class="bg-green-100 text-green-700 rounded-full p-3 mb-3">
                                 <i data-lucide="star" class="lucide"></i>
                             </div>
                             <h3 class="font-poppins font-semibold text-lg text-[#0d47a1] mb-1">Prime Bet (A-Grade)</h3>
-                            <p class="text-gray-800 font-semibold">Race 3, #6 Irish Gent (ire)</p>
-                            <p class="text-sm text-gray-500 mt-1">Strongest value overlay on the card.</p>
+                            <p class="text-gray-800 font-semibold">Race 9, #6 No Evidence</p>
+                            <p class="text-sm text-gray-500 mt-1">Best value overlay on the updated card.</p>
                         </div>
                     </div>
                     
@@ -185,8 +187,8 @@
                             <h3 class="font-poppins font-semibold text-lg text-[#0d47a1] mb-1">Value Plays (B-Grade)</h3>
                             <ul class="text-gray-600 mt-2 space-y-2 text-sm">
                                 <li class="cursor-pointer hover:text-blue-600 font-medium" onclick="showRace(1)"><strong>R1, #7 Momentum Files</strong></li>
+                                <li class="cursor-pointer hover:text-blue-600 font-medium" onclick="showRace(2)"><strong>R2, #7 Who's The King</strong></li>
                                 <li class="cursor-pointer hover:text-blue-600 font-medium" onclick="showRace(7)"><strong>R7, #8 Five To Two</strong></li>
-                                <li class="cursor-pointer hover:text-blue-600 font-medium" onclick="showRace(9)"><strong>R9, #6 No Evidence</strong></li>
                             </ul>
                         </div>
                     </div>
@@ -198,7 +200,7 @@
                             </div>
                             <h3 class="font-poppins font-semibold text-lg text-[#0d47a1] mb-1">Top Fades</h3>
                             <ul class="text-gray-600 mt-2 space-y-2 text-sm">
-                                <li class="cursor-pointer hover:text-blue-600 font-medium" onclick="showRace(3)"><strong>R3, #9 Caribbean Wind</strong></li>
+                                <li class="cursor-pointer hover:text-blue-600 font-medium" onclick="showRace(2)"><strong>R2, #1 Le Gris</strong></li>
                                 <li class="cursor-pointer hover:text-blue-600 font-medium" onclick="showRace(9)"><strong>R9, #9 Governor Sam</strong></li>
                             </ul>
                         </div>
@@ -239,8 +241,8 @@
             1: {
                 meta: "Race 1: Maiden Special Weight, 1 Mile (Dirt), $100,000 Purse",
                 pace: { type: "Moderately Contested", class: "pace-contested", text: "Multiple runners prefer to be on or near the lead, ensuring an honest test." },
-                thesis: "A moderately contested pace will unfold, likely led by #7 Momentum Files and pressured by #4 Chillax. This scenario will favor a horse sitting a stalking trip just off the leaders.",
-                spoiler: "One of the speed horses, likely #7 Momentum Files, clears the field easily and gets an uncontested lead.",
+                thesis: "The projected honest pace will tax the stamina of dedicated front-runners. Horses with a stalking or closing style, like the #1A Worthy Charge, are advantaged as their late run will be more effective against tired leaders.",
+                spoiler: "#7 Momentum Files could get an uncontested lead and steal the race. His sharp 'bullet' workout signals peak fitness and strong intent from a capable barn.",
                 chart: {
                     labels: ['#7 Momentum Files', '#1/#1A Entry'],
                     implied: [20.0, 33.3],
@@ -253,42 +255,42 @@
                 }
             },
             2: {
-                meta: "Race 2: Claiming, 1 1/8 Miles (Dirt), $48,000 Purse",
-                pace: { type: "Moderately Contested", class: "pace-contested", text: "A combination of pace-pressers should ensure an honest pace." },
-                thesis: "A moderately contested pace, set by #7 Who's The King and pressured by #2 Mr. Ripple, will set the table for a mid-pack runner or closer.",
-                spoiler: "The #1 Le Gris, taking a massive class drop, reverts to his best form and simply outclasses this field.",
+                meta: "Race 2: Claiming, 1 1/8 Miles (Dirt), $48,000 Purse (SCR #2, #4)",
+                pace: { type: "Pace Void (Slow)", class: "pace-void", text: "With key speed scratched, #7 is now the lone front-runner." },
+                thesis: "The scratch of #2 Mr. Ripple and #4 Rock Chalk completely changes the race shape. #7 Who's The King is now the lone speed and projects to get an uncontested lead, a massive advantage at this distance.",
+                spoiler: "#1 Le Gris, despite the unfavorable pace setup for a closer, could still win if he reverts to his best form and simply outclasses this field on talent alone.",
                 chart: {
-                    labels: ['#6 Leftembehind', '#1 Le Gris'],
-                    implied: [18.2, 33.3],
-                    assessed: [25.0, 28.0]
+                    labels: ["#7 Who's The King", '#1 Le Gris'],
+                    implied: [22.2, 33.3],
+                    assessed: [35.0, 25.0]
                 },
                 wagers: {
-                    primary: "Win/Place wager on #6 Leftembehind.",
-                    exotics: "Exacta Box: 1, 2, 6, 7. Trifecta: 6 with 1,2,7 with 1,2,7.",
-                    horizontal: "A: 1, 6; B: 2, 7; C: 5"
+                    primary: "Win wager on #7 Who's The King.",
+                    exotics: "Exacta: 7 with 1, 6. Trifecta: 7 with 1,6 with 1,5,6.",
+                    horizontal: "A: 7; B: 1; C: 6"
                 }
             },
             3: {
-                meta: "Race 3: Allowance, 5 1/2 Furlongs (Turf), $110,000 Purse",
-                pace: { type: "Pressured Duel", class: "pace-duel", text: "This race is loaded with early speed, virtually guaranteeing a fast, energy-depleting pace." },
-                thesis: "A destructive pace duel between #5 Waralo and #9 Caribbean Wind will set the race up for a stalker or closer.",
-                spoiler: "#9 Caribbean Wind is exceptionally fast and clears the field from the inside post, shaking loose to an uncontested lead.",
+                meta: "Race 3: Allowance, 5 1/2 Furlongs (Turf), $110,000 Purse (SCR #1, #8, #9, #10)",
+                pace: { type: "Moderately Contested", class: "pace-contested", text: "The scratch of key speed (#9) significantly slows the projected pace." },
+                thesis: "With the heavy favorite and main speed #9 Caribbean Wind scratched, this race is wide open. The pace is no longer projected to be destructive, which hurts the original thesis for #6 Irish Gent. Now, #5 Waralo becomes the main speed and a primary contender.",
+                spoiler: "#6 Irish Gent (ire) is still a very talented horse for Todd Pletcher. Even without a pace collapse to run into, his class may be enough to win from a stalking position.",
                 chart: {
-                    labels: ['#6 Irish Gent (ire)', '#9 Caribbean Wind'],
-                    implied: [25.0, 35.7],
-                    assessed: [35.0, 20.0]
+                    labels: ['#6 Irish Gent (ire)', '#5 Waralo'],
+                    implied: [25.0, 20.0],
+                    assessed: [30.0, 28.0]
                 },
                 wagers: {
-                    primary: "Win wager on #6 Irish Gent (ire).",
-                    exotics: "Exacta: 6 over 2, 5, 7. Trifecta: 6 with 2,5,7 with 2,5,7,9.",
-                    horizontal: "A: 6; B: 2, 5; C: 7, 9"
+                    primary: "No strong primary wager. Use multiple horses in exotics.",
+                    exotics: "Exacta Box: 2, 5, 6, 7.",
+                    horizontal: "A: 2, 5, 6; B: 7; C: 3"
                 }
             },
             4: {
-                meta: "Race 4: Maiden Special Weight, 1 1/16 Miles (Turf), $100,000 Purse",
+                meta: "Race 4: Maiden Special Weight, 1 1/16 Miles (Turf), $100,000 Purse (SCR #6)",
                 pace: { type: "Pace Void (Slow)", class: "pace-void", text: "A field of inexperienced two-year-olds lacks a clear speed horse, strongly favoring horses on or near the lead." },
-                thesis: "A slow pace (Pace Void) will develop, giving a decisive advantage to horses on or near the lead.",
-                spoiler: "Several first-time starters show unexpected speed, leading to a contested pace that sets up for a closer.",
+                thesis: "In a slowly run race, horses with tactical speed have a massive advantage. They can secure forward position without using much energy, leaving more in reserve for the stretch run.",
+                spoiler: "With so many first-time starters, an unknown quantity could show unexpected speed, creating a contested pace that would disadvantage the front-runners and set up for a closer.",
                 chart: {
                     labels: ["#3 Heeere's Johnny", '#5 Final Score'],
                     implied: [25.0, 28.6],
@@ -301,10 +303,10 @@
                 }
             },
             5: {
-                meta: "Race 5: Maiden Special Weight, 6 1/2 Furlongs (Dirt), $100,000 Purse",
+                meta: "Race 5: Maiden Special Weight, 6 1/2 Furlongs (Dirt), $100,000 Purse (SCR #1)",
                 pace: { type: "Moderately Contested", class: "pace-contested", text: "Experienced #5 will be challenged by fast-working first-timers." },
-                thesis: "The experienced #5 Essential Coffee will be challenged for the lead by the fast-working first-time starter #8 So Vain, setting up a contested pace.",
-                spoiler: "#5 Essential Coffee bounces back to her debut form and proves to be a class above these maidens.",
+                thesis: "A contested pace favors horses with stamina. A well-bred first-timer like #4 Memorized (by Tapit) may sustain a run better than those bred for pure speed.",
+                spoiler: "#5 Essential Coffee could rebound. She had a significantly troubled trip last time; a cleaner run could see her return to the powerful form she showed in her debut.",
                 chart: {
                     labels: ['#4 Memorized', '#8 So Vain'],
                     implied: [25.0, 28.6],
@@ -317,10 +319,10 @@
                 }
             },
             6: {
-                meta: "Race 6: Maiden Claiming, 1 1/16 Miles (Turf), $50,000 Purse",
+                meta: "Race 6: Maiden Claiming, 1 1/16 Miles (Turf), $50,000 Purse (SCR #11, #13-16)",
                 pace: { type: "Moderately Contested", class: "pace-contested", text: "Dirt speed stretching out on turf should ensure an honest pace." },
-                thesis: "The class-dropping #12 Spirit Of The Law projects to get a favorable stalking trip and prove superior to this field.",
-                spoiler: "#4 Powered By Coal takes to the turf unexpectedly well and wires the field on an easy lead.",
+                thesis: "In a low-level race, class often prevails. #12 Spirit Of The Law's experience against tougher maiden special weight company gives him a significant advantage.",
+                spoiler: "#4 Powered By Coal has high speed figures on dirt. If that ability translates to turf, he has the early speed to potentially wire the field on an uncontested lead.",
                 chart: {
                     labels: ["#5 Arch's Assault", '#12 Spirit Of The Law'],
                     implied: [16.7, 28.6],
@@ -329,14 +331,14 @@
                 wagers: {
                     primary: "Win wager on #12 Spirit Of The Law.",
                     exotics: "Exacta Box: 4, 5, 9, 12.",
-                    horizontal: "A: 12; B: 4, 5, 9; C: 16"
+                    horizontal: "A: 12; B: 4, 5, 9; C: 1"
                 }
             },
             7: {
-                meta: "Race 7: Claiming, 6 1/2 Furlongs (Dirt), $38,000 Purse",
+                meta: "Race 7: Claiming, 6 1/2 Furlongs (Dirt), $38,000 Purse (SCR #2, #7)",
                 pace: { type: "Pressured Duel", class: "pace-duel", text: "Significant amount of early speed signed on points to a fast, contested pace." },
-                thesis: "A contested pace will set the race up for a closer, with #8 Five To Two being the prime beneficiary.",
-                spoiler: "#3 My Two Sophia's proves to be the 'speed of the speed,' clears the field easily, and wires them.",
+                thesis: "A hot pace perfectly suits #8 Five To Two. As a consistent closer for a top barn (Linda Rice), her running style allows her to save energy and make one late run against tiring speed.",
+                spoiler: "#3 My Two Sophia's could be the 'speed of the speed'. The subtle class drop is a sign of intent, and if she's fast enough to clear the field, she could go all the way.",
                 chart: {
                     labels: ['#8 Five To Two', "#3 My Two Sophia's"],
                     implied: [18.2, 33.3],
@@ -349,10 +351,10 @@
                 }
             },
             8: {
-                meta: "Race 8: Allowance Optional Claiming, 1 1/8 Miles (Turf), $100,000 Purse",
+                meta: "Race 8: Allowance Optional Claiming, 1 1/8 Miles (Turf), $100,000 Purse (SCR #11-15)",
                 pace: { type: "Moderately Contested", class: "pace-contested", text: "A confirmed front-runner with tactical pressers should lead to a fair pace." },
-                thesis: "A fair pace will allow the class of the field to rise to the top. The #8 Conman projects to get a perfect stalking trip and prove best.",
-                spoiler: "The #5 Coinage gets an unexpectedly easy lead and wires the field.",
+                thesis: "With a fair pace expected, raw talent becomes the deciding factor. #8 Conman, with his strong speed figures and stakes experience, is the class of the field and projects a perfect trip.",
+                spoiler: "#5 Coinage is a confirmed front-runner. If the other speed doesn't challenge him, he could get an unexpectedly easy lead and wire the field.",
                 chart: {
                     labels: ['#6 Russian Realm', '#8 Conman'],
                     implied: [14.3, 33.3],
@@ -361,14 +363,14 @@
                 wagers: {
                     primary: "Win wager on #8 Conman.",
                     exotics: "Exacta Box: 1, 6, 7, 8.",
-                    horizontal: "A: 8; B: 1, 6, 7; C: 11"
+                    horizontal: "A: 8; B: 1, 6, 7; C: 10"
                 }
             },
             9: {
-                meta: "Race 9: Grade 3 Mahony Stakes, 5 1/2 Furlongs (Turf), $175,000 Purse",
-                pace: { type: "Pressured Duel", class: "pace-duel", text: "The exceptionally fast favorite will face challenges from other high-speed runners." },
-                thesis: "A fast pace, led by #9 Governor Sam, will set the race up for a stalker or closer. The #6 No Evidence is poised to get a perfect trip.",
-                spoiler: "#9 Governor Sam is simply too fast and too good, clearing the field and winning impressively.",
+                meta: "Race 9: Grade 3 Mahony Stakes, 5 1/2 Furlongs (Turf), $175,000 Purse (SCR #3)",
+                pace: { type: "Pressured Duel", class: "pace-duel", text: "The favorite will still face pressure from other speed." },
+                thesis: "Even with the scratch of #3, #8 Gabaldon ensures pressure on the favorite, #9 Governor Sam. This still creates a scenario where a stalker like #6 No Evidence can benefit from a contested pace and offers tremendous value.",
+                spoiler: "#9 Governor Sam might just be too good. Despite the pace pressure, his top-tier speed figures mean he has the raw talent to potentially outrun the field from start to finish.",
                 chart: {
                     labels: ['#6 No Evidence', '#9 Governor Sam'],
                     implied: [11.1, 50.0],
@@ -376,15 +378,15 @@
                 },
                 wagers: {
                     primary: "Win/Place wager on #6 No Evidence.",
-                    exotics: "Exacta Box: 6, 9. Exacta: 6 over 3, 5, 8, 9.",
-                    horizontal: "A: 9; B: 6; C: 3, 5"
+                    exotics: "Exacta Box: 6, 9. Exacta: 6 over 5, 8, 9.",
+                    horizontal: "A: 9; B: 6; C: 5"
                 }
             },
             10: {
-                meta: "Race 10: Allowance, 1 1/8 Miles (Dirt), $110,000 Purse",
+                meta: "Race 10: Allowance, 1 1/8 Miles (Dirt), $110,000 Purse (SCR #4, #5)",
                 pace: { type: "Moderately Contested", class: "pace-contested", text: "Pace-setter with tactical pressers projects an honest pace." },
-                thesis: "The #2 Classicist is the most likely winner, possessing the best recent speed figure and top connections. He projects to get a perfect stalking trip.",
-                spoiler: "#1 Tuscan Gold returns from the layoff in top form and proves to be the class of the field.",
+                thesis: "Class and current form are key. #2 Classicist appears to be a rising star with a significant speed figure advantage (98) and projects a perfect stalking trip for elite connections.",
+                spoiler: "#1 Tuscan Gold could be the class of the field. He's dropping from a Grade 1 (the Preakness) and if he returns from the layoff in top form, he could prove superior.",
                 chart: {
                     labels: ['#7 Chileno', '#2 Classicist'],
                     implied: [14.3, 25.0],
@@ -402,8 +404,8 @@
             pick5s: [
                 { name: "Late Pick 5", races: "6-10", legs: [
                     { race: 6, selections: "A: 12" },
-                    { race: 7, selections: "A: 8, B: 3, 9" },
-                    { race: 8, selections: "A: 8, B: 1, 7" },
+                    { race: 7, selections: "A: 8, B: 1a, 3, 9" },
+                    { race: 8, selections: "A: 8, B: 1, 6, 7" },
                     { race: 9, selections: "A: 9, B: 6" },
                     { race: 10, selections: "SINGLE: 2" }
                 ]}
@@ -419,8 +421,8 @@
             pick3s: [],
             pick6s: [],
             dailyDoubles: [
-                { races: "2-3", leg1: "1, 6", leg2: "6", confidence: "High" },
-                { races: "3-4", leg1: "6", leg2: "2, 3, 5", confidence: "High" },
+                { races: "2-3", leg1: "7", leg2: "2, 5, 6", confidence: "High" },
+                { races: "3-4", leg1: "2, 5, 6", leg2: "2, 3, 5", confidence: "Medium" },
                 { races: "8-9", leg1: "8", leg2: "6, 9", confidence: "Medium" },
                 { races: "9-10", leg1: "6, 9", leg2: "2", confidence: "High" }
             ]
