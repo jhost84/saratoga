@@ -1,0 +1,595 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exacta AI - Handicapping Dashboard Template</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&family=Poppins:wght@600;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #f0f2f5;
+            color: #334155;
+        }
+        .font-poppins {
+            font-family: 'Poppins', sans-serif;
+        }
+        .pro-card {
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: 0.75rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+        }
+        .pro-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        }
+        .race-nav-btn {
+            transition: all 0.2s ease-in-out;
+            color: #334155;
+            border-bottom: 3px solid transparent;
+            padding: 0.75rem 1rem;
+        }
+        .race-nav-btn.active {
+            color: #0d47a1;
+            border-bottom-color: #42a5f5;
+        }
+        .race-nav-btn:not(.active):hover {
+            background-color: #e3f2fd;
+        }
+        .pace-tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            padding: 0.3rem 0.8rem;
+            border-radius: 9999px;
+            font-weight: 600;
+            font-size: 0.8rem;
+        }
+        .pace-duel { background-color: #ffebee; color: #c62828; }
+        .pace-contested { background-color: #fff8e1; color: #f9a825; }
+        .pace-void { background-color: #e3f2fd; color: #1565c0; }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 300px;
+            max-height: 400px;
+        }
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 350px;
+            }
+        }
+        .lucide {
+            width: 22px;
+            height: 22px;
+        }
+        .header-btn {
+            transition: all 0.2s ease-in-out;
+        }
+        .race-link-card {
+            background-color: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: 0.5rem;
+            padding: 1rem;
+            text-align: center;
+            font-weight: 600;
+            color: #0d47a1;
+            cursor: pointer;
+            transition: all 0.2s ease-in-out;
+        }
+        .race-link-card:hover {
+            background-color: #0d47a1;
+            color: #ffffff;
+            transform: scale(1.05);
+        }
+        /* Styles for new multi-race tables */
+        .wager-table th, .wager-table td {
+            padding: 0.75rem 0.5rem;
+            text-align: left;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        .wager-table th {
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: #475569;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+        .wager-table tr:last-child td {
+            border-bottom: none;
+        }
+        .wager-table td {
+            font-size: 0.9rem;
+            color: #334155;
+        }
+        .confidence-high { background-color: #e8f5e9; }
+        .confidence-medium { background-color: #fffde7; }
+    </style>
+</head>
+<body>
+
+    <header class="bg-white border-b border-gray-200 py-3 sticky top-0 z-20">
+        <div class="container mx-auto px-4 flex justify-between items-center">
+            <div class="flex items-center gap-4">
+                <div>
+                    <h1 class="text-2xl font-bold text-[#0d47a1] font-poppins">[Racetrack Name] Dashboard</h1>
+                    <p class="text-md text-gray-500">Value-Driven Insights for [Date]</p>
+                </div>
+            </div>
+            <div class="flex items-center gap-2">
+                <a href="#" onclick="showHome(); event.preventDefault();" class="header-btn flex items-center gap-2 px-4 py-2 rounded-lg font-semibold text-white bg-[#0d47a1] hover:bg-[#1565c0]">
+                    <i data-lucide="layout-dashboard" class="h-5 w-5"></i>
+                    Dashboard
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <main class="container mx-auto p-4 md:p-6">
+        
+        <div id="home-page">
+            <section id="executive-summary" class="mb-10">
+                <h2 class="text-2xl font-poppins font-bold mb-5 text-center text-[#0d47a1]">Executive Summary</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
+                    
+                    <div class="pro-card p-5 text-center cursor-pointer" onclick="showRace(2)">
+                        <div class="flex flex-col items-center">
+                            <div class="bg-green-100 text-green-700 rounded-full p-3 mb-3">
+                                <i data-lucide="star" class="lucide"></i>
+                            </div>
+                            <h3 class="font-poppins font-semibold text-lg text-[#0d47a1] mb-1">Prime Bet</h3>
+                            <p class="text-gray-800 font-semibold">Race 2, #7 [Horse Name]</p>
+                            <p class="text-sm text-gray-500 mt-1">Strongest value overlay on the card.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="pro-card p-5 text-center cursor-pointer" onclick="showRace(5)">
+                        <div class="flex flex-col items-center">
+                            <div class="bg-blue-100 text-blue-700 rounded-full p-3 mb-3">
+                                <i data-lucide="target" class="lucide"></i>
+                            </div>
+                            <h3 class="font-poppins font-semibold text-lg text-[#0d47a1] mb-1">Key Single</h3>
+                            <p class="text-gray-800 font-semibold">Race 5, #2 [Horse Name]</p>
+                            <p class="text-sm text-gray-500 mt-1">Most probable winner of the day.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="pro-card p-5 text-center">
+                         <div class="flex flex-col items-center">
+                            <div class="bg-yellow-100 text-yellow-700 rounded-full p-3 mb-3">
+                                <i data-lucide="lightbulb" class="lucide"></i>
+                            </div>
+                            <h3 class="font-poppins font-semibold text-lg text-[#0d47a1] mb-1">Value Plays</h3>
+                            <ul class="text-gray-600 mt-2 space-y-2 text-sm">
+                                <li class="cursor-pointer hover:text-blue-600 font-medium" onclick="showRace(1)"><strong>R1, #4 [Horse Name]</strong></li>
+                                <li class="cursor-pointer hover:text-blue-600 font-medium" onclick="showRace(4)"><strong>R4, #3 [Horse Name]</strong></li>
+                                <li class="cursor-pointer hover:text-blue-600 font-medium" onclick="showRace(7)"><strong>R7, #3 [Horse Name]</strong></li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="pro-card p-5 text-center">
+                        <div class="flex flex-col items-center">
+                            <div class="bg-red-100 text-red-700 rounded-full p-3 mb-3">
+                                <i data-lucide="thumbs-down" class="lucide"></i>
+                            </div>
+                            <h3 class="font-poppins font-semibold text-lg text-[#0d47a1] mb-1">Top Fades</h3>
+                            <ul class="text-gray-600 mt-2 space-y-2 text-sm">
+                                <li class="cursor-pointer hover:text-blue-600 font-medium" onclick="showRace(2)"><strong>R2, #5 [Horse Name]</strong></li>
+                                <li class="cursor-pointer hover:text-blue-600 font-medium" onclick="showRace(1)"><strong>R1, #3 & #12</strong></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="multi-race-summary" class="mb-10">
+                <h2 class="text-2xl font-poppins font-bold mb-5 text-center text-[#0d47a1]">Multirace & Daily Double Strategy</h2>
+                <div class="grid grid-cols-1 xl:grid-cols-2 gap-8">
+                    <div id="horizontal-wagers-container"></div>
+                    <div id="daily-doubles-container"></div>
+                </div>
+            </section>
+            <section id="race-navigation-home">
+                 <h2 class="text-2xl font-poppins font-bold mb-5 text-center text-[#0d47a1]">Race-by-Race Analysis</h2>
+                 <div id="race-link-container" class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-8 gap-3">
+                 </div>
+            </section>
+        </div>
+
+        <div id="race-page" class="hidden">
+            <nav class="bg-white rounded-lg shadow-sm mb-8 border border-gray-200">
+                <div id="race-nav-container" class="flex flex-wrap justify-center">
+                </div>
+            </nav>
+            <div id="race-details-container"></div>
+        </div>
+
+    </main>
+
+    <footer class="text-center p-6 mt-8 text-gray-500 text-sm border-t border-gray-200">
+        <p>This interactive dashboard is for informational and entertainment purposes only. Please wager responsibly.</p>
+    </footer>
+
+    <script>
+        // TEMPLATE INSTRUCTIONS:
+        // To use this template, replace placeholder data in the `raceData` and `multiRaceData`
+        // objects below. The dashboard is built dynamically from these objects.
+        
+        const raceData = {
+            1: {
+                meta: "Race 1: Maiden Special Weight, 6F, Purse $80,000",
+                pace: { type: "Pressured Duel", class: "pace-duel", text: "Expecting a hot early pace." },
+                thesis: "First-time starters with strong workout tabs hold an edge.",
+                spoiler: "An experienced horse could steal it if the newcomers falter.",
+                chart: {
+                    labels: ['#4 Fast Debut', '#3 BeenThere'],
+                    implied: [22.2, 33.3], // Implied probability from odds
+                    assessed: [35, 15]    // Your assessed probability
+                },
+                wagers: {
+                    primary: "Win/Place on #4.",
+                    exotics: "Exacta Box 4,1. Trifecta 4 with 1,2 with 1,2,5.",
+                    horizontal: "'A' Horse: #4. 'B' Horse: #1. 'C' Horses: #2, #5."
+                }
+            },
+            2: {
+                meta: "Race 2: Allowance Optional Claiming, 1 Mile (Turf), Purse $95,000",
+                pace: { type: "Moderately Contested", class: "pace-contested", text: "A fair pace should set up for mid-pack runners." },
+                thesis: "#7 is a class-dropper and has the best turf figs.",
+                spoiler: "If the pace is slower than expected, #1 could wire the field.",
+                chart: {
+                    labels: ['#7 Class Drop', '#1 Speed Demon'],
+                    implied: [25.0, 20.0],
+                    assessed: [40, 15]
+                },
+                wagers: {
+                    primary: "Heavy Win bet on #7.",
+                    exotics: "Exacta: 7 with 1,3,4.",
+                    horizontal: "'A' Horse: #7. 'B' Horse: #4. 'C' Horse: #1."
+                }
+            },
+            3: {
+                meta: "Race 3: Claiming $25k, 7F, Purse $45,000",
+                pace: { type: "Void of Speed", class: "pace-void", text: "The horse who takes the lead is likely to keep it." },
+                thesis: "#5 is the only confirmed front-runner and should get a soft lead.",
+                spoiler: "If #2 challenges for the lead, it could set up for a closer.",
+                chart: { labels: ['#5 Lone Speed', '#2 Challenger'], implied: [30, 25], assessed: [45, 20] },
+                wagers: { primary: "Win #5.", exotics: "Exacta 5 with 2,6.", horizontal: "'A' Horse: #5. 'B' Horses: #2,6. 'C' Horses: #4." }
+            },
+            4: {
+                meta: "Race 4: Maiden Special Weight, 1 1/16 Miles, Purse $80,000",
+                pace: { type: "Moderately Contested", class: "pace-contested", text: "Evenly matched pace." },
+                thesis: "#3 showed major improvement in his second start and is bred for distance.",
+                spoiler: "The well-regarded first-time starter #8 is a major unknown.",
+                chart: { labels: ['#3 Second Out', '#8 Firster'], implied: [20, 25], assessed: [30, 22] },
+                wagers: { primary: "Win/Place #3.", exotics: "Exacta Box 3,8.", horizontal: "'A' Horse: #3. 'B' Horse: #8. 'C' Horses: #1,5." }
+            },
+            5: {
+                meta: "Race 5: The [Stakes Name] Stakes (G3), 1 1/8 Miles, Purse $250,000",
+                pace: { type: "Pressured Duel", class: "pace-duel", text: "Two key contenders will likely vie for the early lead." },
+                thesis: "#2 is the class of the field and has tactical speed to sit just off the duel.",
+                spoiler: "If the pace completely collapses, deep closer #9 could get up in time.",
+                chart: { labels: ['#2 The Class', '#9 The Closer'], implied: [40, 15], assessed: [55, 18] },
+                wagers: { primary: "Win #2.", exotics: "Exacta 2 with 4,9.", horizontal: "'SINGLE': #2. 'Backup': #9." }
+            },
+            6: {
+                meta: "Race 6: Starter Allowance, 5.5F (Turf), Purse $60,000",
+                pace: { type: "Pressured Duel", class: "pace-duel", text: "A full-on turf sprint cavalry charge is expected." },
+                thesis: "#10 has consistently high speed figures and draws well outside.",
+                spoiler: "#1 saves ground and could be dangerous if a lane opens.",
+                chart: { labels: ['#10 Outside Speed', '#1 Rail Runner'], implied: [20, 18], assessed: [28, 20] },
+                wagers: { primary: "Win #10.", exotics: "Exacta Box 1,10. Tri Box 1,4,10.", horizontal: "'A' Horses: #10,1. 'B' Horses: #4,7. 'C' Horses: #5." }
+            }
+        };
+        
+        // ================== NEW MULTI-RACE DATA OBJECT ==================
+        // Define your multi-race wagers here.
+        // Use 'A', 'B', 'C' to tier your selections. Use 'SINGLE' for a confident solo pick.
+        const multiRaceData = {
+            pick5s: [
+                { name: "Early Pick 5", races: "1-5", legs: [
+                    { race: 1, selections: "A: 4, B: 1, C: 2" },
+                    { race: 2, selections: "A: 7, B: 4" },
+                    { race: 3, selections: "A: 5, B: 2, 6" },
+                    { race: 4, selections: "A: 3, B: 8" },
+                    { race: 5, selections: "SINGLE: 2" }
+                ]}
+            ],
+            pick4s: [
+                { name: "Late Pick 4", races: "3-6", legs: [
+                    { race: 3, selections: "A: 5, B: 2, 6" },
+                    { race: 4, selections: "A: 3, B: 8, C: 1, 5" },
+                    { race: 5, selections: "SINGLE: 2" },
+                    { race: 6, selections: "A: 10, 1, B: 4, 7" }
+                ]}
+            ],
+            pick3s: [
+                 { name: "Mid Pick 3", races: "2-4", legs: [
+                    { race: 2, selections: "A: 7" },
+                    { race: 3, selections: "A: 5, B: 2, 6" },
+                    { race: 4, selections: "A: 3, 8" }
+                ]}
+            ],
+            pick6s: [], // Example: No Pick 6 play today, leave array empty.
+            dailyDoubles: [
+                { races: "1-2", leg1: "4", leg2: "7", confidence: "High" },
+                { races: "2-3", leg1: "7", leg2: "5, 2", confidence: "High" },
+                { races: "4-5", leg1: "3", leg2: "2", confidence: "Medium" },
+                { races: "5-6", leg1: "2", leg2: "1, 10, 4", confidence: "Medium" }
+            ]
+        };
+
+        let currentChart = null;
+        const homePage = document.getElementById('home-page');
+        const racePage = document.getElementById('race-page');
+        const raceDetailsContainer = document.getElementById('race-details-container');
+
+        function showHome() {
+            homePage.classList.remove('hidden');
+            racePage.classList.add('hidden');
+            window.scrollTo(0, 0);
+        }
+
+        function showRace(raceNumber) {
+            const race = raceData[raceNumber];
+            if (!race) return;
+
+            homePage.classList.add('hidden');
+            racePage.classList.remove('hidden');
+
+            raceDetailsContainer.innerHTML = `
+                <div id="race-${raceNumber}" class="race-content pro-card p-5 md:p-6">
+                    <div class="border-b border-gray-200 pb-4 mb-4">
+                        <h2 class="font-poppins text-2xl font-bold text-[#0d47a1]">${race.meta}</h2>
+                        <div class="mt-2 flex items-center">
+                            <span class="pace-tag ${race.pace.class}">
+                                <i data-lucide="wind" class="h-4 w-4"></i>
+                                ${race.pace.type}
+                            </span>
+                            <p class="text-gray-600 ml-3 text-sm">${race.pace.text}</p>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 lg:grid-cols-5 gap-6">
+                        <div class="lg:col-span-3">
+                            <h3 class="font-poppins text-xl font-semibold mb-2 text-[#0d47a1]">Value Analysis: Probability vs. Price</h3>
+                            <p class="text-sm text-gray-500 mb-3">Comparing implied win probability (from odds) with our assessed probability. A taller "Assessed" bar indicates a potential value overlay.</p>
+                            <div class="chart-container">
+                                <canvas id="raceChart"></canvas>
+                            </div>
+                        </div>
+                        <div class="lg:col-span-2 bg-slate-50 p-4 rounded-lg border border-gray-200">
+                            <h3 class="font-poppins text-xl font-semibold mb-3 text-[#0d47a1]">Strategic Breakdown</h3>
+                            <div class="space-y-4">
+                                <div>
+                                    <h4 class="font-semibold text-gray-700 flex items-center"><i data-lucide="brain-circuit" class="mr-2 h-5 w-5 text-blue-500"></i>Primary Thesis:</h4>
+                                    <p class="text-gray-600 text-sm mt-1 pl-7">${race.thesis}</p>
+                                </div>
+                                <div>
+                                    <h4 class="font-semibold text-gray-700 flex items-center"><i data-lucide="alert-triangle" class="mr-2 h-5 w-5 text-yellow-500"></i>Spoiler Scenario:</h4>
+                                    <p class="text-gray-600 text-sm mt-1 pl-7">${race.spoiler}</p>
+                                </div>
+                                <div>
+                                    <h4 class="font-semibold text-gray-700 flex items-center"><i data-lucide="dollar-sign" class="mr-2 h-5 w-5 text-green-500"></i>Wager Construction:</h4>
+                                    <ul class="list-disc list-inside text-sm text-gray-600 space-y-1 mt-2 pl-7">
+                                        <li><strong>Primary:</strong> ${race.wagers.primary}</li>
+                                        <li><strong>Exotics:</strong> ${race.wagers.exotics}</li>
+                                        <li><strong>Horizontal:</strong> ${race.wagers.horizontal}</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            lucide.createIcons();
+            renderChart(race.chart);
+            updateActiveNav(raceNumber);
+            window.scrollTo(0, 0);
+        }
+        
+        // ================== NEW RENDERING FUNCTION ==================
+        function renderMultiRaceGrids() {
+            const hContainer = document.getElementById('horizontal-wagers-container');
+            const dContainer = document.getElementById('daily-doubles-container');
+            let hHtml = `
+                <div class="pro-card p-5">
+                    <h3 class="font-poppins text-xl font-semibold mb-4 text-[#0d47a1] flex items-center gap-2">
+                        <i data-lucide="git-merge" class="h-6 w-6"></i>
+                        Horizontal Grid
+                    </h3>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-sm wager-table">
+                            <thead><tr><th>Wager</th><th>Races</th><th>Leg 1</th><th>Leg 2</th><th>Leg 3</th><th>Leg 4</th><th>Leg 5</th><th>Leg 6</th></tr></thead>
+                            <tbody>`;
+
+            const allWagers = [
+                ...multiRaceData.pick6s, 
+                ...multiRaceData.pick5s, 
+                ...multiRaceData.pick4s, 
+                ...multiRaceData.pick3s
+            ];
+            
+            if(allWagers.length > 0) {
+                allWagers.forEach(wager => {
+                    hHtml += `<tr><td><strong>${wager.name}</strong></td><td>${wager.races}</td>`;
+                    for(let i=0; i < 6; i++) {
+                        if (wager.legs[i]) {
+                           hHtml += `<td>${wager.legs[i].selections}</td>`;
+                        } else {
+                           hHtml += `<td class="bg-gray-50"></td>`; // Empty cell for alignment
+                        }
+                    }
+                    hHtml += `</tr>`;
+                });
+            } else {
+                hHtml += `<tr><td colspan="8" class="text-center py-4 text-gray-500">No horizontal wagers recommended for today.</td></tr>`;
+            }
+            hHtml += `</tbody></table></div></div>`;
+
+            let dHtml = `
+                <div class="pro-card p-5">
+                     <h3 class="font-poppins text-xl font-semibold mb-4 text-[#0d47a1] flex items-center gap-2">
+                        <i data-lucide="link-2" class="h-6 w-6"></i>
+                        Top Daily Doubles
+                    </h3>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-sm wager-table">
+                            <thead><tr><th>Races</th><th>Leg 1 Picks</th><th>Leg 2 Picks</th><th>Confidence</th></tr></thead>
+                            <tbody>`;
+            
+            if(multiRaceData.dailyDoubles.length > 0) {
+                 multiRaceData.dailyDoubles.forEach(dd => {
+                    const confidenceClass = dd.confidence === 'High' ? 'confidence-high' : 'confidence-medium';
+                    dHtml += `<tr class="${confidenceClass}">
+                                <td><strong>${dd.races}</strong></td>
+                                <td>${dd.leg1}</td>
+                                <td>${dd.leg2}</td>
+                                <td><strong>${dd.confidence}</strong></td>
+                              </tr>`;
+                });
+            } else {
+                 dHtml += `<tr><td colspan="4" class="text-center py-4 text-gray-500">No Daily Double wagers recommended for today.</td></tr>`;
+            }
+
+            dHtml += `</tbody></table></div></div>`;
+
+            hContainer.innerHTML = hHtml;
+            dContainer.innerHTML = dHtml;
+        }
+
+        function renderChart(chartData) {
+            const ctx = document.getElementById('raceChart').getContext('2d');
+            
+            if (currentChart) {
+                currentChart.destroy();
+            }
+
+            currentChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: chartData.labels,
+                    datasets: [
+                        {
+                            label: 'Implied Probability (Odds)',
+                            data: chartData.implied,
+                            backgroundColor: '#90caf9', 
+                            borderColor: '#42a5f5',
+                            borderWidth: 1,
+                            borderRadius: 4
+                        },
+                        {
+                            label: 'Assessed Probability (Analysis)',
+                            data: chartData.assessed,
+                            backgroundColor: '#455a64',
+                            borderColor: '#1e2b33',
+                            borderWidth: 1,
+                            borderRadius: 4
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            grid: { color: '#e0e0e0' },
+                            ticks: { color: '#334155' },
+                            title: {
+                                display: true,
+                                text: 'Win Probability (%)',
+                                color: '#334155',
+                                font: { family: "'Roboto', sans-serif" }
+                            }
+                        },
+                        x: {
+                             grid: { display: false },
+                            ticks: { color: '#334155' }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                            labels: {
+                                color: '#334155',
+                                font: { family: "'Roboto', sans-serif" }
+                            }
+                        },
+                        tooltip: {
+                            backgroundColor: '#0d47a1',
+                            titleColor: '#ffffff',
+                            bodyColor: '#ffffff',
+                            titleFont: { family: "'Poppins', sans-serif" },
+                            bodyFont: { family: "'Roboto', sans-serif" },
+                            callbacks: {
+                                label: function(context) {
+                                    let label = context.dataset.label || '';
+                                    if (label) { label += ': '; }
+                                    if (context.parsed.y !== null) { label += context.parsed.y + '%'; }
+                                    return label;
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        function updateActiveNav(raceNumber) {
+            const buttons = document.querySelectorAll('.race-nav-btn');
+            buttons.forEach(btn => {
+                if (btn.dataset.race === raceNumber.toString()) {
+                    btn.classList.add('active', 'font-bold');
+                } else {
+                    btn.classList.remove('active', 'font-bold');
+                }
+            });
+        }
+
+        function initializeApp() {
+            const raceLinkContainer = document.getElementById('race-link-container');
+            const navContainer = document.getElementById('race-nav-container');
+            const raceKeys = Object.keys(raceData);
+
+            raceLinkContainer.innerHTML = '';
+            navContainer.innerHTML = '';
+
+            for (const raceKey of raceKeys) {
+                // Create links for the home page
+                const raceLink = document.createElement('div');
+                raceLink.className = 'race-link-card';
+                raceLink.textContent = `Race ${raceKey}`;
+                raceLink.onclick = () => showRace(raceKey);
+                raceLinkContainer.appendChild(raceLink);
+
+                // Create navigation buttons for the race page
+                const navButton = document.createElement('button');
+                navButton.textContent = `Race ${raceKey}`;
+                navButton.dataset.race = raceKey;
+                navButton.className = 'race-nav-btn font-semibold';
+                navButton.onclick = () => showRace(raceKey);
+                navContainer.appendChild(navButton);
+            }
+            
+            renderMultiRaceGrids(); // <-- Call the new function here
+            lucide.createIcons();
+            showHome();
+        }
+
+        window.onload = initializeApp;
+    </script>
+</body>
+</html>
