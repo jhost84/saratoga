@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Saratoga Handicapping Dashboard - August 14, 2025</title>
+    <title>Saratoga Handicapping Dashboard - August 14, 2025 (Live Update)</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -96,9 +96,20 @@
             color: #ffffff;
             transform: scale(1.05);
         }
+        .update-banner {
+            background-color: #1e40af;
+            color: white;
+            padding: 0.75rem;
+            text-align: center;
+            font-weight: 500;
+        }
     </style>
 </head>
 <body class="antialiased">
+
+    <div class="update-banner">
+        <i data-lucide="info" class="inline-block h-5 w-5 mr-2"></i>Analysis updated to reflect a speed-favoring track profile on both surfaces.
+    </div>
 
     <header class="bg-white border-b border-gray-200 py-3 sticky top-0 z-20">
         <div class="container mx-auto px-4 flex justify-between items-center">
@@ -109,10 +120,6 @@
                 </div>
             </div>
             <div class="flex items-center gap-2">
- <a href="index.html" onclick="showHome(); event.preventDefault();" class="header-btn flex items-center gap-2 px-4 py-2 rounded-lg font-semibold text-white bg-[#0d47a1] hover:bg-[#1565c0]">
-                    <i data-lucide="layout-dashboard" class="h-5 w-5"></i>
-                    Home
-                </a>
                 <a href="#" onclick="showHome(); event.preventDefault();" class="header-btn flex items-center gap-2 px-4 py-2 rounded-lg font-semibold text-white bg-[#0d47a1] hover:bg-[#1565c0]">
                     <i data-lucide="layout-dashboard" class="h-5 w-5"></i>
                     Dashboard
@@ -135,7 +142,7 @@
                             </div>
                             <h3 class="font-poppins font-semibold text-lg text-[#0d47a1] mb-1">Prime Bet (A-Grade)</h3>
                             <p class="text-gray-800 font-semibold">Race 9, #7 Steadfast Resolve</p>
-                            <p class="text-sm text-gray-500 mt-1">Strongest value overlay on the card.</p>
+                            <p class="text-sm text-gray-500 mt-1">Stalking style is perfect for today's track.</p>
                         </div>
                     </div>
                     
@@ -157,8 +164,8 @@
                             </div>
                             <h3 class="font-poppins font-semibold text-lg text-[#0d47a1] mb-1">Value Plays (B-Grade)</h3>
                             <ul class="text-gray-600 mt-2 space-y-2 text-sm">
-                                <li class="cursor-pointer hover:text-blue-600 font-medium" onclick="showRace('1')"><strong>R1, #2 Bon Vivant (4/1)</strong></li>
-                                <li class="cursor-pointer hover:text-blue-600 font-medium" onclick="showRace('3')"><strong>R3, #6 Cuando (4/1)</strong></li>
+                                <li class="cursor-pointer hover:text-blue-600 font-medium" onclick="showRace('5')"><strong>R5, #1 Toga Dancer (7/2)</strong></li>
+                                <li class="cursor-pointer hover:text-blue-600 font-medium" onclick="showRace('8')"><strong>R8, #6 Two for Charging (4/1)</strong></li>
                             </ul>
                         </div>
                     </div>
@@ -170,8 +177,8 @@
                             </div>
                             <h3 class="font-poppins font-semibold text-lg text-[#0d47a1] mb-1">Top Fades</h3>
                             <ul class="text-gray-600 mt-2 space-y-2 text-sm">
-                                <li class="cursor-pointer hover:text-blue-600 font-medium" onclick="showRace('2')"><strong>R2, #1 Golden Symphony (8/5)</strong></li>
-                                <li class="cursor-pointer hover:text-blue-600 font-medium" onclick="showRace('7')"><strong>R7, #5 George Briggs (8/5)</strong></li>
+                                <li class="cursor-pointer hover:text-blue-600 font-medium" onclick="showRace('5')"><strong>R5, #3 Dark Vector (3/1)</strong></li>
+                                <li class="cursor-pointer hover:text-blue-600 font-medium" onclick="showRace('8')"><strong>R8, #10 My Man Matty (5/2)</strong></li>
                             </ul>
                         </div>
                     </div>
@@ -193,11 +200,11 @@
                         </div>
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4">
                             <div class="bg-slate-50 p-4 rounded-lg border">
-                                <p class="font-semibold text-gray-700">Early Double: Race 2-3</p>
-                                <p class="text-sm mt-1">Connecting the newly-gelded favorite with a top value play.</p>
+                                <p class="font-semibold text-gray-700">Mid-Card Double: Race 5-6</p>
+                                <p class="text-sm mt-1">Pairing a speed horse with a class-dropper.</p>
                                 <ul class="list-disc list-inside text-sm text-gray-600 space-y-1 mt-2">
-                                    <li><strong>Race 2:</strong> #2 Tizmarkus</li>
-                                    <li><strong>Race 3:</strong> #6 Cuando, #2 In The Dark</li>
+                                    <li><strong>Race 5:</strong> #1 Toga Dancer, #3 Dark Vector</li>
+                                    <li><strong>Race 6:</strong> #5 Ruse</li>
                                 </ul>
                             </div>
                             <div class="bg-slate-50 p-4 rounded-lg border">
@@ -223,12 +230,12 @@
                         <div class="bg-slate-50 p-4 rounded-lg border mt-4">
                             <p class="font-semibold text-gray-700">Late Pick 4 (Races 7-10)</p>
                             <ul class="text-sm text-gray-600 space-y-1 mt-2 font-mono">
-                                <li><strong>R7:</strong> 5 (A) / 1,4 (B)</li>
-                                <li><strong>R8:</strong> 10 (A) / 6 (B)</li>
+                                <li><strong>R7:</strong> 5 (A - SINGLE)</li>
+                                <li><strong>R8:</strong> 6, 10 (A) / 1, 5 (B)</li>
                                 <li><strong>R9:</strong> 7 (A - SINGLE)</li>
                                 <li><strong>R10:</strong> 10 (A - SINGLE)</li>
                             </ul>
-                             <p class="text-xs text-gray-500 mt-2">This structure allows for coverage in the early legs while relying on the strongest opinions late.</p>
+                             <p class="text-xs text-gray-500 mt-2">This structure leans on the strong singles late, allowing for more coverage in the now-trickier Race 8.</p>
                         </div>
                     </div>
                 </div>
@@ -257,63 +264,15 @@
 
     <script>
         const raceData = {
-            1: {
-                meta: "Race 1: MSW, 1 1/8 Miles (Dirt), $100,000",
-                pace: { type: "Moderately Contested", class: "pace-contested", text: "Honest but not destructive pace favors tactical speed." },
-                thesis: "The outcome will be dictated by class and pedigree. #3 Danzit's superior breeding, elite connections, and troubled trip last out make her the most probable winner.",
-                spoiler: "#6 Absolute Honor secures an unexpectedly easy lead and wires the field.",
-                chart: {
-                    labels: ['#3 Danzit (8/5)', '#2 Bon Vivant (4/1)'],
-                    implied: [38.5, 20.0],
-                    assessed: [45, 25]
-                },
-                wagers: {
-                    primary: "Win bet on #2 Bon Vivant at 7/2 or higher.",
-                    exotics: "Exacta Box 2, 3.",
-                    horizontal: "A: #3 | B: #2"
-                }
-            },
-            2: {
-                meta: "Race 2: CLM $30k (N3L), 7 Furlongs (Dirt)",
-                pace: { type: "Moderately Contested", class: "pace-contested", text: "The 'First Time Gelding' angle on #2 Tizmarkus gives him a tactical edge." },
-                thesis: "#2 Tizmarkus is now the clear horse to beat. The gelding angle on top of his class drop is a massive positive.",
-                spoiler: "#2 Tizmarkus 'bounces' off the class drop or gets into an unexpected speed duel.",
-                chart: {
-                    labels: ['#2 Tizmarkus (2/1)', '#1 Golden Symphony (8/5)'],
-                    implied: [33.3, 38.5],
-                    assessed: [50, 15]
-                },
-                wagers: {
-                    primary: "Win bet on #2 Tizmarkus.",
-                    exotics: "Exacta: 2 / 6.",
-                    horizontal: "A: #2 (Upgraded to potential single)"
-                }
-            },
-            3: {
-                meta: "Race 3: MSW, 5 1/2 Furlongs (Turf)",
-                pace: { type: "Pressured Duel", class: "pace-duel", text: "Hotly contested pace strongly favors stalkers and closers." },
-                thesis: "A destructive pace duel makes front-runners vulnerable. #6 Cuando's stalking style and distance cutback make him a prime value overlay.",
-                spoiler: "#4 Our Starry Night shakes loose on an uncontested lead and doesn't look back.",
-                chart: {
-                    labels: ['#6 Cuando (4/1)', '#4 Our Starry Night (2/1)'],
-                    implied: [20.0, 33.3],
-                    assessed: [28, 18]
-                },
-                wagers: {
-                    primary: "Win/Place bet on #6 Cuando.",
-                    exotics: "Exacta Box 2, 6.",
-                    horizontal: "A: #6 | B: #2, #3"
-                }
-            },
             4: {
                 meta: "Race 4: CLM $16k, 7 Furlongs (Dirt)",
-                pace: { type: "Moderately Contested", class: "pace-contested", text: "Scratch of inside speed clarifies pace; still competitive." },
-                thesis: "#2 Brownstone takes a notable class drop and boasts superior figures. The clear horse to beat.",
-                spoiler: "#5 Bear Claw Necklace gets a perfect trip and out-kicks a regressing favorite.",
+                pace: { type: "Moderately Contested", class: "pace-contested", text: "Track is favoring speed. Forwardly placed horses have an edge." },
+                thesis: "#2 Brownstone's class drop is still significant, but the speed-favoring track profile keeps #5 Bear Claw Necklace in the mix. A two-horse race.",
+                spoiler: "An overlooked horse gets brave on the lead and wires the field.",
                 chart: {
                     labels: ['#2 Brownstone (5/2)', '#5 Bear Claw (4/1)'],
                     implied: [28.6, 20.0],
-                    assessed: [35, 22]
+                    assessed: [35, 25]
                 },
                 wagers: {
                     primary: "Exacta Box 2, 5.",
@@ -323,88 +282,88 @@
             },
             5: {
                 meta: "Race 5: ALW, 1 1/8 Miles (Dirt)",
-                pace: { type: "Moderately Contested", class: "pace-contested", text: "Inside speed bias could be a major factor." },
-                thesis: "#3 Dark Vector is a lightly-raced colt with ascending figures and a perfect trip projection.",
-                spoiler: "#1 Toga Dancer uses his love for the track and the rail post to steal the race on the lead.",
+                pace: { type: "Moderately Contested", class: "pace-contested", text: "Speed-favoring track elevates the chances of front-runners." },
+                thesis: "UPDATED: The speed-favoring track profile significantly boosts #1 Toga Dancer from the rail. He now gets a slight edge over the classier #3 Dark Vector, who must close into a potentially soft pace.",
+                spoiler: "#3 Dark Vector proves to be too classy and runs down the speed despite the track profile.",
                 chart: {
-                    labels: ['#3 Dark Vector (3/1)', '#1 Toga Dancer (7/2)'],
-                    implied: [25.0, 22.2],
+                    labels: ['#1 Toga Dancer (7/2)', '#3 Dark Vector (3/1)'],
+                    implied: [22.2, 25.0],
                     assessed: [30, 25]
                 },
                 wagers: {
-                    primary: "Exacta Box 1, 3.",
-                    exotics: "Trifecta: 1,3 / 1,3,6 / 1,2,3,6",
-                    horizontal: "A: #3 | B: #1, #6"
+                    primary: "Win bet on #1 Toga Dancer.",
+                    exotics: "Exacta Box 1, 3.",
+                    horizontal: "A: #1, #3"
                 }
             },
             6: {
                 meta: "Race 6: MCL $40k, 5 1/2 Furlongs (Turf)",
-                pace: { type: "Pace Void", class: "pace-void", text: "Field decimated by scratches, leaving a paceless race." },
-                thesis: "#5 Ruse drops in class for an elite turf trainer and stands far above this depleted field.",
-                spoiler: "The favorite fails to fire in a strangely run race, allowing a longshot to upset.",
+                pace: { type: "Pace Void", class: "pace-void", text: "Paceless race on a speed-favoring turf course." },
+                thesis: "UPDATED: In a race devoid of speed, #7 Augustinian could get brave on the front end and is a major threat. #5 Ruse is still the class, but cannot afford to give up too much ground.",
+                spoiler: "The class of #5 Ruse prevails as he easily handles this field despite the trip.",
                 chart: {
                     labels: ['#5 Ruse (2/1)', '#7 Augustinian (5/1)'],
                     implied: [33.3, 16.7],
-                    assessed: [55, 18]
+                    assessed: [45, 25]
                 },
                 wagers: {
-                    primary: "Pass. #5 will be an unbettable price.",
-                    exotics: "Use #5 on top in trifectas.",
-                    horizontal: "A: #5 (Strong single)"
+                    primary: "Pass. #5 is too short, #7 is the value.",
+                    exotics: "Exacta Box 5, 7.",
+                    horizontal: "A: #5 | B: #7"
                 }
             },
             7: {
                 meta: "Race 7: ALW, 1 Mile (Turf)",
-                pace: { type: "Pace Void", class: "pace-void", text: "Scratch of the main speed completely changes the race." },
-                thesis: "The race is now a tactical affair. #5 George Briggs is the most likely winner but offers no value. The play is to find a horse who can take advantage of the lack of speed.",
-                spoiler: "#1 Coach Case is sent to the lead from the rail and manages to wire the field at a huge price.",
+                pace: { type: "Pace Void", class: "pace-void", text: "Scratch of speed confirms a tactical, slow-paced affair." },
+                thesis: "The speed-favoring track profile reinforces the advantage of #5 George Briggs, who has the best tactical speed. He is the most likely winner but will be a very short price.",
+                spoiler: "#1 Coach Case steals the race on the lead from the rail.",
                 chart: {
                     labels: ['#5 George Briggs (8/5)', '#1 Coach Case (12/1)'],
                     implied: [38.5, 7.7],
-                    assessed: [45, 12]
+                    assessed: [50, 12]
                 },
                 wagers: {
-                    primary: "Pass race for win bets.",
+                    primary: "Pass for win bets. Fade the price, not the horse.",
                     exotics: "Exacta: 5 / 1, 4.",
-                    horizontal: "A: #5 (Upgraded to potential single)"
+                    horizontal: "A: #5 (Strong single)"
                 }
             },
             8: {
                 meta: "Race 8: ALW, 6 1/2 Furlongs (Dirt)",
-                pace: { type: "Pressured Duel", class: "pace-duel", text: "Competitive sprint where pace makes the race." },
-                thesis: "#10 My Man Matty exits a key race and has improving figures. The outside post gives him a tactical advantage to stalk and pounce.",
-                spoiler: "#6 Two for Charging gets an uncontested lead and doesn't look back.",
+                pace: { type: "Pressured Duel", class: "pace-duel", text: "Speed is holding well, upgrading front-runners." },
+                thesis: "UPDATED: The speed-favoring track makes #6 Two for Charging a much bigger threat to wire the field. My initial pick, #10 My Man Matty, is now more vulnerable as a closer. This is now a wide-open race.",
+                spoiler: "The pace duel materializes and sets up for a complete outsider.",
                 chart: {
-                    labels: ['#10 My Man Matty (5/2)', '#6 Two for Charging (4/1)'],
-                    implied: [28.6, 20.0],
-                    assessed: [35, 22]
+                    labels: ['#6 Two for Charging (4/1)', '#10 My Man Matty (5/2)'],
+                    implied: [20.0, 28.6],
+                    assessed: [28, 25]
                 },
                 wagers: {
-                    primary: "Win bet on #10 My Man Matty.",
-                    exotics: "Exacta: 10 / 6.",
-                    horizontal: "A: #10 | B: #6"
+                    primary: "Value win bet on #6 Two for Charging.",
+                    exotics: "Exacta Box 6, 10. Use multiple horses in Pick 4.",
+                    horizontal: "A: #6, #10 | B: #1, #5"
                 }
             },
             9: {
                 meta: "Race 9: Starter ALW, 1 1/16 Miles (Turf)",
-                pace: { type: "Moderately Contested", class: "pace-contested", text: "Ideal setup for a stalker." },
-                thesis: "#7 Steadfast Resolve gets significant class relief, projects a perfect trip, and is primed for a peak effort. The strongest value on the card.",
-                spoiler: "The pace is faster than projected, setting up a closer like #3 Brit's Wit.",
+                pace: { type: "Moderately Contested", class: "pace-contested", text: "Perfect setup for a stalker on a speed-favoring course." },
+                thesis: "The track profile CONFIRMS the strength of #7 Steadfast Resolve. His tactical stalking style is the ideal profile for how the turf is playing today. Confidence is high.",
+                spoiler: "An unexpected horse gets loose on the lead and never looks back.",
                 chart: {
                     labels: ['#7 Steadfast Resolve (7/2)', "#3 Brit's Wit (4/1)"],
                     implied: [22.2, 20.0],
-                    assessed: [35, 20]
+                    assessed: [40, 20]
                 },
                 wagers: {
                     primary: "Win bet on #7 Steadfast Resolve.",
                     exotics: "Exacta: 7 / 3, 9.",
-                    horizontal: "A: #7 (Strong single candidate)"
+                    horizontal: "A: #7 (Prime Bet & Strong Single)"
                 }
             },
             10: {
                 meta: "Race 10: NY-Bred MCL $50k, 1 1/16 Miles (Turf)",
                 pace: { type: "Moderately Contested", class: "pace-contested", text: "A massive class drop is the story." },
-                thesis: "#10 Deemer takes a colossal drop from open MSW to a restricted maiden claimer for an elite barn. A classic 'win-or-bust' single.",
+                thesis: "#10 Deemer's class advantage is overwhelming. He should be able to secure a forward position and dominate this field regardless of track profile.",
                 spoiler: "The heavy favorite inexplicably fails to fire after the class drop.",
                 chart: {
                     labels: ['#10 Deemer (6/5)', '#5 Blame It On KJ (5/1)'],
@@ -432,7 +391,12 @@
 
         function showRace(raceNumber) {
             const race = raceData[raceNumber];
-            if (!race) return;
+            if (!race) {
+                // Find the first available race if the clicked one doesn't exist
+                const firstRaceKey = Object.keys(raceData)[0];
+                if(firstRaceKey) showRace(firstRaceKey);
+                return;
+            };
 
             homePage.classList.add('hidden');
             racePage.classList.remove('hidden');
@@ -603,7 +567,11 @@
                 navContainer.appendChild(navButton);
             }
             lucide.createIcons();
-            showHome();
+            // Start by showing the first available race if home page is not the default
+            const firstRaceKey = Object.keys(raceData)[0];
+            if(firstRaceKey) {
+                showHome(); // Or showRace(firstRaceKey) if you want to jump straight to a race
+            }
         }
 
         window.onload = initializeApp;
