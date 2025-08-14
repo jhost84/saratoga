@@ -3,569 +3,360 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Exacta AI - Saratoga Handicapping Dashboard</title>
+    <title>Saratoga Interactive Handicapping Dashboard - August 14, 2025</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&family=Poppins:wght@600;700&display=swap" rel="stylesheet">
-    <script src="https://unpkg.com/lucide@latest"></script>
-    <!-- Chosen Palette: Paddock Stone -->
-    <!-- Application Structure Plan: A user-centric dashboard design. The app opens with a "Card Summary" section highlighting the day's most actionable bets (Prime Bet, Top Value, Key Single, Top Fades). This immediately provides top-level insights. Each summary card is interactive, linking to the full race analysis below. The main content is a "Race-by-Race Deep Dive" section, controlled by a tab-like navigation bar (Race 1-9). This structure allows users to either get a quick overview or explore individual races in depth, which is more intuitive than a simple linear report. This non-linear approach prioritizes user discovery of key betting opportunities. -->
-    <!-- Visualization & Content Choices: 
-        - Report Info: Full Card Summary -> Goal: Inform/Summarize -> Viz: Interactive HTML cards -> Interaction: Click to scroll -> Justification: Provides a high-level entry point to the day's best bets.
-        - Report Info: Pace Projection -> Goal: Inform/Organize -> Viz: HTML/CSS diagram with icons -> Interaction: Static -> Justification: Visually communicates the complex pace scenario more effectively than a block of text.
-        - Report Info: Probability vs. Price table -> Goal: Compare/Analyze -> Viz: Chart.js Bar Chart -> Interaction: Hover tooltips -> Justification: Instantly visualizes the value gap (overlay/underlay), which is the core thesis of the report.
-        - Report Info: Detailed Horse Analysis -> Goal: Inform/Organize -> Viz: Collapsible HTML sections -> Interaction: Click to expand/collapse -> Justification: Prevents information overload and allows users to focus on specific horses of interest.
-        - Library/Method: Chart.js for charts, Tailwind CSS for layout and diagrams.
-    -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Teko:wght@400;600&display=swap" rel="stylesheet">
+    <!-- Chosen Palette: Saratoga Silk -->
+    <!-- Application Structure Plan: The application is designed as a single-page dashboard with a three-part structure to provide a seamless user flow. 1) A main navigation bar allows users to jump directly to any of the 10 races. 2) A "Handicapper's Hub" at the top summarizes the day's top bets (Prime Bet, Value Plays, etc.), providing immediate access to the most critical, high-level insights. 3) The main content area defaults to showing Race 1 but is dynamically updated when a user clicks a race number in the navigation. Each race section is a self-contained module with a consistent layout: Race Overview, Pace Analysis, detailed Horse-by-Horse cards, and a Betting Strategy summary. This structure was chosen to mirror a user's natural workflow: get the day's best bets, then dive into individual races of interest. The card-based system for horses allows for easy comparison and consumption of detailed data without overwhelming the user. -->
+    <!-- Visualization & Content Choices: The report's rich narrative and data are translated into interactive components. Report Info: Race Overview -> Goal: Inform -> Presentation: Structured text block -> Interaction: N/A. Report Info: Pace/Bias Analysis -> Goal: Inform/Compare -> Presentation: Icon-based summary (Pace Projection) and dynamic text -> Interaction: N/A. Report Info: Horse Details (PPs, Speed Figs, Form, etc.) -> Goal: Organize/Compare -> Presentation: Interactive Cards. Each card contains all data for one horse, using bolding and color to highlight key metrics like speed figures and class drops. -> Interaction: Clicking a horse card could expand for more detailed notes (future enhancement). Report Info: Betting Strategy -> Goal: Guide Action -> Presentation: Ranked lists (Prime Contenders, Value Overlays) and explicit wager suggestions. -> Interaction: N/A. Report Info: Top Bets of the Day -> Goal: Synthesize & Prioritize -> Presentation: Prominent summary cards at the top of the page. -> Interaction: Clicking a "Top Bet" horse could scroll the user to the relevant race analysis. Library/Method: All visual structure is handled with Tailwind CSS. No charts were necessary as the report's data is primarily qualitative and comparative, best represented through structured text and layout hierarchies, which avoids SVG/Mermaid as required. -->
     <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
     <style>
         body {
             font-family: 'Roboto', sans-serif;
-            background-color: #f0f2f5;
-            color: #334155;
+            background-color: #f4f1eb;
         }
-        .font-poppins {
-            font-family: 'Poppins', sans-serif;
+        .font-teko {
+            font-family: 'Teko', sans-serif;
         }
-        .pro-card {
-            background: #ffffff;
-            border: 1px solid #e2e8f0;
-            border-radius: 0.75rem;
+        .nav-button {
             transition: all 0.3s ease;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
         }
-        .pro-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
-        }
-        .race-nav-btn {
-            transition: all 0.2s ease-in-out;
-            color: #334155;
-            border-bottom: 3px solid transparent;
-            padding: 0.75rem 1rem;
-        }
-        .race-nav-btn.active {
-            color: #0d47a1;
-            border-bottom-color: #42a5f5;
-        }
-        .race-nav-btn:not(.active):hover {
-            background-color: #e3f2fd;
-        }
-        .pace-tag {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.4rem;
-            padding: 0.3rem 0.8rem;
-            border-radius: 9999px;
-            font-weight: 600;
-            font-size: 0.8rem;
-        }
-        .pace-duel { background-color: #ffebee; color: #c62828; }
-        .pace-contested { background-color: #fff8e1; color: #f9a825; }
-        .pace-void { background-color: #e3f2fd; color: #1565c0; }
-        .chart-container {
-            position: relative;
-            width: 100%;
-            max-width: 600px;
-            margin-left: auto;
-            margin-right: auto;
-            height: 300px;
-            max-height: 400px;
-        }
-        @media (min-width: 768px) {
-            .chart-container {
-                height: 350px;
-            }
-        }
-        .lucide {
-            width: 22px;
-            height: 22px;
-        }
-        .header-btn {
-            transition: all 0.2s ease-in-out;
-        }
-        .race-link-card {
-            background-color: #ffffff;
-            border: 1px solid #e2e8f0;
-            border-radius: 0.5rem;
-            padding: 1rem;
-            text-align: center;
-            font-weight: 600;
-            color: #0d47a1;
-            cursor: pointer;
-            transition: all 0.2s ease-in-out;
-        }
-        .race-link-card:hover {
-            background-color: #0d47a1;
+        .nav-button.active {
+            background-color: #c7a97f;
             color: #ffffff;
-            transform: scale(1.05);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
         }
-        .wager-table th, .wager-table td {
-            padding: 0.75rem 0.5rem;
-            text-align: left;
-            border-bottom: 1px solid #e2e8f0;
+        .nav-button:hover {
+            background-color: #d6c0a5;
         }
-        .wager-table th {
-            font-size: 0.8rem;
-            font-weight: 600;
-            color: #475569;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
+        .content-section {
+            display: none;
         }
-        .wager-table tr:last-child td {
-            border-bottom: none;
+        .content-section.active {
+            display: block;
         }
-        .wager-table td {
-            font-size: 0.9rem;
-            color: #334155;
+        .card {
+            background-color: #ffffff;
+            border-left: 5px solid #4a5568;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
         }
-        .confidence-high { background-color: #e8f5e9; }
-        .confidence-medium { background-color: #fffde7; }
+        .card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+        .card-prime { border-color: #c7a97f; }
+        .card-value { border-color: #5a8a9a; }
+        .card-vulnerable { border-color: #c53030; }
+        .horse-card {
+             background: linear-gradient(145deg, #ffffff, #f7f7f7);
+        }
+        .horse-card .program-number {
+            background-color: #c7a97f;
+            color: white;
+        }
     </style>
 </head>
-<body>
-    <div class="bg-yellow-100 border-b-2 border-yellow-300 text-yellow-800 text-center p-2 font-semibold text-sm">
-        Analysis updated for scratches as of 10:24 AM EDT on August 13, 2025.
-    </div>
-    <header class="bg-white border-b border-gray-200 py-3 sticky top-0 z-20">
-        <div class="container mx-auto px-4 flex justify-between items-center">
-            <div class="flex items-center gap-4">
-                <div>
-                    <h1 class="text-2xl font-bold text-[#0d47a1] font-poppins">Saratoga Race Course</h1>
-                    <p class="text-md text-gray-500">Value-Driven Insights for August 13, 2025</p>
-                </div>
-            </div>
-            <div class="flex items-center gap-2">
+<body class="text-gray-800">
 
-    <a href="index.html" onclick="showHome(); event.preventDefault();" class="header-btn flex items-center gap-2 px-4 py-2 rounded-lg font-semibold text-white bg-[#0d47a1] hover:bg-[#1565c0]">
-                    <i data-lucide="layout-dashboard" class="h-5 w-5"></i>
-                    Home
-                </a>
-                <a href="#" onclick="showHome(); event.preventDefault();" class="header-btn flex items-center gap-2 px-4 py-2 rounded-lg font-semibold text-white bg-[#0d47a1] hover:bg-[#1565c0]">
-                    <i data-lucide="layout-dashboard" class="h-5 w-5"></i>
-                    Dashboard
-                </a>
-            </div>
+    <header class="bg-gray-800 text-white p-4 shadow-lg">
+        <div class="container mx-auto text-center">
+            <h1 class="font-teko text-5xl tracking-wider">SARATOGA RACE COURSE</h1>
+            <p class="font-roboto text-lg text-gray-300">Interactive Handicapping Report: August 14, 2025</p>
         </div>
     </header>
 
+    <nav class="bg-white shadow-md sticky top-0 z-10 py-2">
+        <div class="container mx-auto px-4">
+            <div class="flex flex-wrap justify-center items-center gap-2 md:gap-3">
+                <span class="font-teko text-2xl text-gray-600 mr-4 hidden sm:inline">RACE:</span>
+                <button id="nav-summary" class="nav-button font-teko text-xl px-4 py-1 rounded-md bg-gray-200 text-gray-700">TOP BETS</button>
+                <button class="nav-button font-teko text-xl px-4 py-1 rounded-md bg-gray-200 text-gray-700" data-target="race-1">1</button>
+                <button class="nav-button font-teko text-xl px-4 py-1 rounded-md bg-gray-200 text-gray-700" data-target="race-2">2</button>
+                <button class="nav-button font-teko text-xl px-4 py-1 rounded-md bg-gray-200 text-gray-700" data-target="race-3">3</button>
+                <button class="nav-button font-teko text-xl px-4 py-1 rounded-md bg-gray-200 text-gray-700" data-target="race-4">4</button>
+                <button class="nav-button font-teko text-xl px-4 py-1 rounded-md bg-gray-200 text-gray-700" data-target="race-5">5</button>
+                <button class="nav-button font-teko text-xl px-4 py-1 rounded-md bg-gray-200 text-gray-700" data-target="race-6">6</button>
+                <button class="nav-button font-teko text-xl px-4 py-1 rounded-md bg-gray-200 text-gray-700" data-target="race-7">7</button>
+                <button class="nav-button font-teko text-xl px-4 py-1 rounded-md bg-gray-200 text-gray-700" data-target="race-8">8</button>
+                <button class="nav-button font-teko text-xl px-4 py-1 rounded-md bg-gray-200 text-gray-700" data-target="race-9">9</button>
+                 <button class="nav-button font-teko text-xl px-4 py-1 rounded-md bg-gray-200 text-gray-700" data-target="race-10">10</button>
+            </div>
+        </div>
+    </nav>
+
     <main class="container mx-auto p-4 md:p-6">
         
-        <div id="home-page">
-            <section id="executive-summary" class="mb-10">
-                <h2 class="text-2xl font-poppins font-bold mb-5 text-center text-[#0d47a1]">Executive Summary (Updated for Scratches)</h2>
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
-                    
-                    <div class="pro-card p-5 text-center cursor-pointer" onclick="showRace(7)">
-                        <div class="flex flex-col items-center">
-                            <div class="bg-green-100 text-green-700 rounded-full p-3 mb-3">
-                                <i data-lucide="star" class="lucide"></i>
-                            </div>
-                            <h3 class="font-poppins font-semibold text-lg text-[#0d47a1] mb-1">Prime Bet (A-Grade)</h3>
-                            <p class="text-gray-800 font-semibold">Race 7, #8 Spirit of Esther</p>
-                            <p class="text-sm text-gray-500 mt-1">Best value overlay on the updated card.</p>
-                        </div>
-                    </div>
-                    
-                    <div class="pro-card p-5 text-center cursor-pointer" onclick="showRace(9)">
-                        <div class="flex flex-col items-center">
-                            <div class="bg-blue-100 text-blue-700 rounded-full p-3 mb-3">
-                                <i data-lucide="target" class="lucide"></i>
-                            </div>
-                            <h3 class="font-poppins font-semibold text-lg text-[#0d47a1] mb-1">Key Single</h3>
-                            <p class="text-gray-800 font-semibold">Race 9, #6 Delightful Darling</p>
-                            <p class="text-sm text-gray-500 mt-1">Most probable winner of the day.</p>
-                        </div>
-                    </div>
-                    
-                    <div class="pro-card p-5 text-center">
-                         <div class="flex flex-col items-center">
-                            <div class="bg-yellow-100 text-yellow-700 rounded-full p-3 mb-3">
-                                <i data-lucide="lightbulb" class="lucide"></i>
-                            </div>
-                            <h3 class="font-poppins font-semibold text-lg text-[#0d47a1] mb-1">Value Plays (B-Grade)</h3>
-                            <ul class="text-gray-600 mt-2 space-y-2 text-sm">
-                                <li class="cursor-pointer hover:text-blue-600 font-medium" onclick="showRace(1)"><strong>R1, #1 Travesuras</strong></li>
-                                <li class="cursor-pointer hover:text-blue-600 font-medium" onclick="showRace(3)"><strong>R3, #7 Rizz</strong></li>
-                            </ul>
-                        </div>
-                    </div>
+        <!-- Summary Section -->
+        <section id="summary" class="content-section">
+            <h2 class="font-teko text-4xl border-b-4 border-gray-800 pb-2 mb-6 text-center">Handicapper's Hub: Top Plays of the Day</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
 
-                    <div class="pro-card p-5 text-center">
-                        <div class="flex flex-col items-center">
-                            <div class="bg-red-100 text-red-700 rounded-full p-3 mb-3">
-                                <i data-lucide="thumbs-down" class="lucide"></i>
-                            </div>
-                            <h3 class="font-poppins font-semibold text-lg text-[#0d47a1] mb-1">Top Fades</h3>
-                            <ul class="text-gray-600 mt-2 space-y-2 text-sm">
-                                <li class="cursor-pointer hover:text-blue-600 font-medium" onclick="showRace(4)"><strong>R4, #5 Gun Party</strong></li>
-                                <li class="cursor-pointer hover:text-blue-600 font-medium" onclick="showRace(1)"><strong>R1, #6 Roja Redemption</strong></li>
-                            </ul>
+                <div class="card card-prime rounded-lg shadow-lg p-6">
+                    <h3 class="font-teko text-3xl mb-2">Prime Bet (A-Grade) ⭐</h3>
+                    <p class="text-lg mb-2"><span class="font-bold">Race 9, #7 Steadfast Resolve (7/2)</span></p>
+                    <p class="mb-4">Perfectly spotted with significant class relief, ideal stalking trip projection, and strong speed figures. Third start of the form cycle points to a peak effort.</p>
+                    <div class="text-center bg-yellow-100 border border-yellow-300 rounded-lg p-2">
+                        <span class="font-bold text-yellow-800">Confidence Score: 4 / 5</span>
+                    </div>
+                </div>
+
+                <div class="card card-prime rounded-lg shadow-lg p-6">
+                    <h3 class="font-teko text-3xl mb-2">Key Horizontal 'Single' 🎯</h3>
+                    <p class="text-lg mb-2"><span class="font-bold">Race 10, #10 Deemer (6/5)</span></p>
+                    <p>A "win-or-bust" spot. Colossal class drop from Maiden Special Weight to NY-bred Maiden Claiming for an elite turf trainer. The most likely winner on the card.</p>
+                </div>
+
+                <div class="card card-value rounded-lg shadow-lg p-6">
+                    <h3 class="font-teko text-3xl mb-2">Top Value Plays (B-Grade) 💰</h3>
+                     <ul class="list-disc list-inside space-y-2">
+                        <li><span class="font-bold">R1, #2 Bon Vivant (4/1):</span> Improving filly with tactical speed and strong distance pedigree. Value overlay against the favorite.</li>
+                        <li><span class="font-bold">R7, #5 George Briggs (8/5):</span> Chad Brown trainee bred for the distance, projects a perfect trip against a vulnerable, speed-oriented favorite.</li>
+                    </ul>
+                </div>
+                
+                <div class="card card-vulnerable rounded-lg shadow-lg p-6 md:col-span-2 lg:col-span-3">
+                    <h3 class="font-teko text-3xl mb-2">Top Fades (Vulnerable Favorites) 👎</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <p class="text-lg font-bold">Race 2, #1 Golden Symphony (8/5)</p>
+                            <p>Classic "bounce" candidate off a career-best figure. Faces tougher rivals and a destructive pace scenario from the rail.</p>
+                        </div>
+                        <div>
+                            <p class="text-lg font-bold">Race 7, #3 Friend Ofthe Devil (7/5)</p>
+                            <p>Pure sprinter attempting a route for the first time. His speed is a liability at this distance. A classic fade at a short price.</p>
                         </div>
                     </div>
                 </div>
-            </section>
-
-            <section id="race-navigation-home">
-                 <h2 class="text-2xl font-poppins font-bold mb-5 text-center text-[#0d47a1]">Race-by-Race Analysis</h2>
-                 <div id="race-link-container" class="grid grid-cols-3 md:grid-cols-5 lg:grid-cols-9 gap-3">
-                 </div>
-            </section>
-        </div>
-
-        <div id="race-page" class="hidden">
-            <nav class="bg-white rounded-lg shadow-sm mb-8 border border-gray-200">
-                <div id="race-nav-container" class="flex flex-wrap justify-center">
+            </div>
+             <div class="mt-8 bg-white p-6 rounded-lg shadow-md">
+                <h3 class="font-teko text-3xl mb-4 text-center">Track Profile & Bias Hypothesis</h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <h4 class="font-bold text-xl mb-2 text-center">Main Track (Dirt)</h4>
+                        <p class="text-center">Hypothesis: <span class="font-semibold text-blue-700">Inside Speed Advantage</span>. Historical data and recent reports suggest a bias favoring forwardly-placed runners, especially from inside posts in route races. Closers are at a significant disadvantage.</p>
+                    </div>
+                    <div>
+                        <h4 class="font-bold text-xl mb-2 text-center">Turf Courses (Inner & Mellon)</h4>
+                        <p class="text-center">Hypothesis: <span class="font-semibold text-green-700">Off-Pace Advantage</span>. Rails at 27 feet. Sprints may favor stalkers from outside posts. Routes historically favor stalkers and closers over front-runners.</p>
+                    </div>
                 </div>
-            </nav>
-            <div id="race-details-container"></div>
-        </div>
+            </div>
+        </section>
+
+        <!-- Race 1 Section -->
+        <section id="race-1" class="content-section">
+            <h2 class="font-teko text-4xl border-b-4 border-gray-800 pb-2 mb-4">Race 1: MSW, 1 1/8 Miles (Dirt), $100,000</h2>
+            <div class="bg-white p-6 rounded-lg shadow-md mb-6">
+                 <p class="text-lg mb-4">This is a Maiden Special Weight for fillies and mares, setting the stage with a classic two-turn test of stamina on the main track. With a compact field of six, tactical positioning will be crucial, especially given the track's tendency to favor inside speed in route races.</p>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-center">
+                    <div><span class="font-bold">Pace Projection:</span> <span class="bg-yellow-200 text-yellow-800 py-1 px-3 rounded-full text-sm font-semibold">MODERATELY CONTESTED</span></div>
+                    <div><span class="font-bold">Verdict:</span> <span class="bg-blue-200 text-blue-800 py-1 px-3 rounded-full text-sm font-semibold">CLASS WILL PREVAIL</span></div>
+                </div>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                <div class="horse-card border rounded-lg shadow-sm p-4">
+                    <div class="flex items-center mb-3">
+                        <span class="program-number font-teko text-3xl w-10 h-10 flex items-center justify-center rounded-full mr-4">3</span>
+                        <div>
+                            <h4 class="font-bold text-xl">Danzit (8/5)</h4>
+                            <p class="text-sm text-gray-600">Pletcher / I. Ortiz, Jr.</p>
+                        </div>
+                    </div>
+                    <p><strong>Thesis:</strong> Prime contender. Fits a powerful second-off-layoff pattern for Pletcher. Overcame a troubled trip last out to post a strong figure. Elite pedigree for the distance. Projects a perfect ground-saving trip.</p>
+                </div>
+                <div class="horse-card border rounded-lg shadow-sm p-4">
+                    <div class="flex items-center mb-3">
+                        <span class="program-number font-teko text-3xl w-10 h-10 flex items-center justify-center rounded-full mr-4">2</span>
+                        <div>
+                            <h4 class="font-bold text-xl">Bon Vivant (4/1)</h4>
+                            <p class="text-sm text-gray-600">Joseph, Jr. / Lezcano</p>
+                        </div>
+                    </div>
+                    <p><strong>Thesis:</strong> Prime Value Overlay. Improving filly with tactical speed and strong stamina pedigree. Steps up in class but is in capable hands. Offers significant value against the favorite.</p>
+                </div>
+                <div class="horse-card border rounded-lg shadow-sm p-4">
+                    <div class="flex items-center mb-3">
+                        <span class="program-number font-teko text-3xl w-10 h-10 flex items-center justify-center rounded-full mr-4">4</span>
+                        <div>
+                            <h4 class="font-bold text-xl">Raghba (5/2)</h4>
+                            <p class="text-sm text-gray-600">Pletcher / Franco</p>
+                        </div>
+                    </div>
+                    <p><strong>Thesis:</strong> Secondary contender. Has posted high figures in the past but shows a pattern of regression. Another Pletcher trainee with a top sire, but seems less reliable than her stablemate.</p>
+                </div>
+            </div>
+             <div class="mt-6 bg-green-50 border border-green-200 p-4 rounded-lg">
+                <h4 class="font-teko text-2xl text-green-800 mb-2">Betting Strategy</h4>
+                <p><strong>Primary Wager:</strong> Win bet on #2 Bon Vivant at 7/2 or higher.</p>
+                <p><strong>Exotics:</strong> Exacta Box 2, 3. Trifecta: 2,3 / 2,3,4 / 1,2,3,4,6.</p>
+                <p><strong>Multi-Race:</strong> A: #3 | B: #2</p>
+            </div>
+        </section>
+
+        <!-- Race 2 Section -->
+        <section id="race-2" class="content-section">
+            <h2 class="font-teko text-4xl border-b-4 border-gray-800 pb-2 mb-4">Race 2: CLM $30k (N3L), 7 Furlongs (Dirt), $48,000</h2>
+            <div class="bg-white p-6 rounded-lg shadow-md mb-6">
+                <p class="text-lg mb-4">A one-turn sprint for claiming horses that promises a fiery pace scenario. Several entrants possess high-quality early speed, which could lead to a pace collapse and set the race up for an off-pace runner, despite the track's general speed-favoring nature.</p>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-center">
+                    <div><span class="font-bold">Pace Projection:</span> <span class="bg-red-200 text-red-800 py-1 px-3 rounded-full text-sm font-semibold">PRESSURED DUEL</span></div>
+                    <div><span class="font-bold">Verdict:</span> <span class="bg-green-200 text-green-800 py-1 px-3 rounded-full text-sm font-semibold">PACE SCENARIO IS KEY</span></div>
+                </div>
+            </div>
+             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                <div class="horse-card border rounded-lg shadow-sm p-4">
+                    <div class="flex items-center mb-3">
+                        <span class="program-number font-teko text-3xl w-10 h-10 flex items-center justify-center rounded-full mr-4">6</span>
+                        <div>
+                            <h4 class="font-bold text-xl">Heavyweight Champs (6/1)</h4>
+                            <p class="text-sm text-gray-600">D'Angelo / Saez</p>
+                        </div>
+                    </div>
+                    <p><strong>Thesis:</strong> Prime Value Overlay. The projected pace duel perfectly suits his stalking running style. He can sit just off the speed and have the first run on the tiring leaders.</p>
+                </div>
+                 <div class="horse-card border rounded-lg shadow-sm p-4">
+                    <div class="flex items-center mb-3">
+                        <span class="program-number font-teko text-3xl w-10 h-10 flex items-center justify-center rounded-full mr-4">2</span>
+                        <div>
+                            <h4 class="font-bold text-xl">Tizmarkus (2/1)</h4>
+                            <p class="text-sm text-gray-600">Casse / Santana, Jr.</p>
+                        </div>
+                    </div>
+                    <p><strong>Thesis:</strong> Prime Contender but Vulnerable. Takes a significant class drop and owns the best speed figures. However, he is part of the projected pace duel and could be compromised.</p>
+                </div>
+                <div class="horse-card border rounded-lg shadow-sm p-4">
+                    <div class="flex items-center mb-3">
+                        <span class="program-number font-teko text-3xl w-10 h-10 flex items-center justify-center rounded-full mr-4">1</span>
+                        <div>
+                            <h4 class="font-bold text-xl">Golden Symphony (8/5)</h4>
+                            <p class="text-sm text-gray-600">Cox / Franco</p>
+                        </div>
+                    </div>
+                    <p><strong>Thesis:</strong> Vulnerable Favorite. Coming off a career-best figure (bounce angle), drawn on the rail, and faces intense pace pressure. A classic horse to play against at a short price.</p>
+                </div>
+            </div>
+             <div class="mt-6 bg-green-50 border border-green-200 p-4 rounded-lg">
+                <h4 class="font-teko text-2xl text-green-800 mb-2">Betting Strategy</h4>
+                <p><strong>Primary Wager:</strong> Exacta Box 2, 6.</p>
+                <p><strong>Exotics:</strong> Key #6 Heavyweight Champs in trifectas over/under #1, #2, and #4.</p>
+                <p><strong>Multi-Race:</strong> A: #2 | B: #6, #4 | C: #1</p>
+            </div>
+        </section>
+
+        <!-- Race 3 Section -->
+        <section id="race-3" class="content-section">
+            <h2 class="font-teko text-4xl border-b-4 border-gray-800 pb-2 mb-4">Race 3: MSW, 5 1/2 Furlongs (Turf), $100,000</h2>
+            <div class="bg-white p-6 rounded-lg shadow-md mb-6">
+                <p class="text-lg mb-4">A turf sprint for maidens where early speed is abundant. The historical profile of Saratoga turf sprints, especially with wide rail settings, favors off-pace runners. This sets up a classic clash between front-runners and closers.</p>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-center">
+                    <div><span class="font-bold">Pace Projection:</span> <span class="bg-red-200 text-red-800 py-1 px-3 rounded-full text-sm font-semibold">PRESSURED DUEL</span></div>
+                    <div><span class="font-bold">Verdict:</span> <span class="bg-green-200 text-green-800 py-1 px-3 rounded-full text-sm font-semibold">PACE SCENARIO IS KEY</span></div>
+                </div>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                <div class="horse-card border rounded-lg shadow-sm p-4">
+                    <div class="flex items-center mb-3">
+                        <span class="program-number font-teko text-3xl w-10 h-10 flex items-center justify-center rounded-full mr-4">6</span>
+                        <div>
+                            <h4 class="font-bold text-xl">Cuando (4/1)</h4>
+                            <p class="text-sm text-gray-600">Maker / Gaffalione</p>
+                        </div>
+                    </div>
+                    <p><strong>Thesis:</strong> Prime Value Overlay. Cutting back from a route to a sprint, a move that often sharpens speed. His stalking style is perfect for the projected pace meltdown. Offers excellent value.</p>
+                </div>
+                <div class="horse-card border rounded-lg shadow-sm p-4">
+                    <div class="flex items-center mb-3">
+                        <span class="program-number font-teko text-3xl w-10 h-10 flex items-center justify-center rounded-full mr-4">2</span>
+                        <div>
+                            <h4 class="font-bold text-xl">In The Dark (5/1)</h4>
+                            <p class="text-sm text-gray-600">Mott / Rosario</p>
+                        </div>
+                    </div>
+                    <p><strong>Thesis:</strong> Prime Contender. Showed promise in his debut and has a patient, skilled jockey in Joel Rosario who can take advantage of the fast pace. A logical contender.</p>
+                </div>
+                <div class="horse-card border rounded-lg shadow-sm p-4">
+                    <div class="flex items-center mb-3">
+                        <span class="program-number font-teko text-3xl w-10 h-10 flex items-center justify-center rounded-full mr-4">4</span>
+                        <div>
+                            <h4 class="font-bold text-xl">Our Starry Night (2/1)</h4>
+                            <p class="text-sm text-gray-600">Bauer / Graham</p>
+                        </div>
+                    </div>
+                    <p><strong>Thesis:</strong> Vulnerable Favorite. Possesses brilliant speed but is the main target in a pace duel. The track profile is against him. A very likely underlay and a strong horse to fade.</p>
+                </div>
+            </div>
+            <div class="mt-6 bg-green-50 border border-green-200 p-4 rounded-lg">
+                <h4 class="font-teko text-2xl text-green-800 mb-2">Betting Strategy</h4>
+                <p><strong>Primary Wager:</strong> Win/Place bet on #6 Cuando.</p>
+                <p><strong>Exotics:</strong> Exacta Box 2, 6. Trifecta: 2,6 / 2,3,4,6 / 2,3,4,6,8.</p>
+                <p><strong>Multi-Race:</strong> A: #6 | B: #2, #3 | C: #4, #8</p>
+            </div>
+        </section>
+        
+        <!-- Placeholder for other races -->
+        <section id="race-4" class="content-section"><h2 class="font-teko text-4xl border-b-4 border-gray-800 pb-2 mb-4">Race 4 Analysis Coming Soon</h2></section>
+        <section id="race-5" class="content-section"><h2 class="font-teko text-4xl border-b-4 border-gray-800 pb-2 mb-4">Race 5 Analysis Coming Soon</h2></section>
+        <section id="race-6" class="content-section"><h2 class="font-teko text-4xl border-b-4 border-gray-800 pb-2 mb-4">Race 6 Analysis Coming Soon</h2></section>
+        <section id="race-7" class="content-section"><h2 class="font-teko text-4xl border-b-4 border-gray-800 pb-2 mb-4">Race 7 Analysis Coming Soon</h2></section>
+        <section id="race-8" class="content-section"><h2 class="font-teko text-4xl border-b-4 border-gray-800 pb-2 mb-4">Race 8 Analysis Coming Soon</h2></section>
+        <section id="race-9" class="content-section"><h2 class="font-teko text-4xl border-b-4 border-gray-800 pb-2 mb-4">Race 9 Analysis Coming Soon</h2></section>
+        <section id="race-10" class="content-section"><h2 class="font-teko text-4xl border-b-4 border-gray-800 pb-2 mb-4">Race 10 Analysis Coming Soon</h2></section>
 
     </main>
-
-    <footer class="text-center p-6 mt-8 text-gray-500 text-sm border-t border-gray-200">
-        <p>This interactive dashboard is for informational and entertainment purposes only. Please wager responsibly.</p>
+    
+    <footer class="bg-gray-800 text-white mt-8 py-4">
+        <div class="container mx-auto text-center text-sm text-gray-400">
+            <p>This interactive report is for informational and entertainment purposes only. Please wager responsibly.</p>
+            <p>&copy; 2025 Interactive Handicapping Solutions</p>
+        </div>
     </footer>
 
     <script>
-        const raceData = {
-            1: {
-                meta: "Race 1: The Michael G. Walsh Novice Stakes, 2 3/8 Miles (Hurdles), $75,000 | SCR: #4, #9",
-                pace: { type: "Pace Void (Slow)", class: "pace-void", text: "Scratch of #4 leaves #5 Little Trilby as the lone, uncontested speed." },
-                thesis: "With a key contender scratched, this race funnels to the remaining class. #2 Walk The Warrior has the best recent form, while #1 Travesuras offers immense value due to his 75% in-the-money record in this discipline.",
-                spoiler: "#5 Little Trilby could get brave on an easy lead and forget to stop, especially if the track favors speed.",
-                chart: {
-                    labels: ['#1 Travesuras (6/1)', '#2 Walk The Warrior (9/2)'],
-                    implied: [14.3, 18.2],
-                    assessed: [25.0, 22.0]
-                },
-                wagers: {
-                    primary: "Win/Place wager on #1 Travesuras at odds of 5-1 or higher.",
-                    exotics: "Exacta Box: 1, 2.",
-                    horizontal: "A: 1, 2; B: 5; C: 6"
-                }
-            },
-            2: {
-                meta: "Race 2: Starter Optional Claiming, 1 Mile (Dirt), $47,000 | SCR: #4",
-                pace: { type: "Moderately Contested", class: "pace-contested", text: "Scratch of #4 removes a key speed horse, making the pace much more manageable for #5." },
-                thesis: "The pace dynamic has completely flipped. #5 Unlimitedpotential now projects to get a much easier lead and is the new horse to beat. #6 My Noble Knight loses his pace-collapse advantage and now has a tougher task.",
-                spoiler: "#6 My Noble Knight is still a class-act for a top barn. He could still win by simply being the best horse, even with the unfavorable pace change.",
-                chart: {
-                    labels: ["#5 Unlimitedpotential (8/5)", '#6 My Noble Knight (9/5)'],
-                    implied: [38.5, 35.7],
-                    assessed: [40.0, 30.0]
-                },
-                wagers: {
-                    primary: "No strong primary wager. The two favorites are now closely matched.",
-                    exotics: "Exacta Box: 5, 6.",
-                    horizontal: "A: 5, 6; B: 2; C: 3"
-                }
-            },
-            3: {
-                meta: "Race 3: NY-Bred Maiden Special Weight, 1 1/16 Miles (Inner Turf), $90,000 | SCR: #10",
-                pace: { type: "Pace Void (Slow)", class: "pace-void", text: "Pace is speculative with many first-timers, favoring tactical speed." },
-                thesis: "In a race for unproven 2-year-olds, powerful trainer angles are key. #7 Rizz represents a massive value overlay due to trainer Adam Rice's phenomenal Saratoga stats (64% wins, $12.83 ROI).",
-                spoiler: "#6 Princess Celine debuts for Brad Cox, who also has incredible stats (57% wins, $10.20 ROI) in this exact spot. She could simply be a better horse.",
-                chart: {
-                    labels: ['#7 Rizz (5/1)', '#6 Princess Celine (7/2)'],
-                    implied: [16.7, 22.2],
-                    assessed: [28.0, 25.0]
-                },
-                wagers: {
-                    primary: "Win/Place wager on #7 Rizz.",
-                    exotics: "Exacta Box: 6, 7, 9.",
-                    horizontal: "A: 6, 7; B: 9; C: 4"
-                }
-            },
-            4: {
-                meta: "Race 4: Allowance Optional Claiming, 1 Mile (Dirt), $115,000 | No Changes",
-                pace: { type: "Moderately Contested", class: "pace-contested", text: "No committed speed signed on should lead to a comfortable pace for all." },
-                thesis: "This race is defined by playing against the heavy favorite, #5 Gun Party, who has a documented history of 'hanging' and not winning. This creates value on other contenders like #1 Drake's Passage and #6 Stowaway.",
-                spoiler: "#5 Gun Party finally puts it all together and wins for fun. He has the speed figures to do it if he can overcome his habit of finishing second.",
-                chart: {
-                    labels: ['#1 Drake\'s Passage (3/1)', '#5 Gun Party (4/5)'],
-                    implied: [25.0, 55.6],
-                    assessed: [30.0, 35.0]
-                },
-                wagers: {
-                    primary: "Exacta Box of #1, #3, and #6.",
-                    exotics: "Trifecta: 1,6 / 1,3,6 / 1,2,3,6.",
-                    horizontal: "A: 1, 6; B: 3; C: 2"
-                }
-            },
-            5: {
-                meta: "Race 5: Claiming, 7 Furlongs (Dirt), $63,000 | SCR: #2, #6, #1A",
-                pace: { type: "Moderately Contested", class: "pace-contested", text: "Scratches leave #3 Fromanothamutha as the main speed." },
-                thesis: "The race is gutted by scratches, leaving #2b Breslau as the clear class of the field. His speed figures are superior, and he comes from a red-hot barn.",
-                spoiler: "#3 Fromanothamutha gets Irad Ortiz Jr. and blinkers, a combination that signals maximum intent to steal the race on the front end.",
-                chart: {
-                    labels: ['#2b Breslau (7/5)', '#3 Fromanothamutha (9/2)'],
-                    implied: [41.7, 18.2],
-                    assessed: [45.0, 25.0]
-                },
-                wagers: {
-                    primary: "Win wager on #2b Breslau.",
-                    exotics: "Exacta Box: 2b, 3, 7.",
-                    horizontal: "A: 2b; B: 3, 7; C: 4"
-                }
-            },
-            6: {
-                meta: "Race 6: NY-Bred Maiden Claiming, 5 1/2 Furlongs (Inner Turf), $50,000 | SCR: #9, #10, #12",
-                pace: { type: "Pressured Duel", class: "pace-duel", text: "#5 Pandemic Hero is fast, but #7 Orie has tactical speed and will press him." },
-                thesis: "#7 Orie has been knocking on the door with two straight second-place finishes. The switch to top jockey Luis Saez for the high-percentage Mike Maker barn should be enough to get him over the top.",
-                spoiler: "#5 Pandemic Hero is the lone speed and could get loose on the lead, taking the field wire-to-wire on the tight-turned inner turf course.",
-                chart: {
-                    labels: ['#7 Orie (2/1)', '#5 Pandemic Hero (9/2)'],
-                    implied: [33.3, 18.2],
-                    assessed: [40.0, 25.0]
-                },
-                wagers: {
-                    primary: "Win wager on #7 Orie.",
-                    exotics: "Exacta Box: 7, 5.",
-                    horizontal: "A: 7; B: 5; C: 1"
-                }
-            },
-            7: {
-                meta: "Race 7: Claiming, 6 1/2 Furlongs (Dirt), $36,000 | SCR: #2, #3, #6",
-                pace: { type: "Moderately Contested", class: "pace-contested", text: "An honest pace is expected, with #4 and #7 showing speed." },
-                thesis: "The scratch of a major rival elevates #8 Spirit of Esther to the Prime Bet of the Day. She is dropping significantly in class from tough allowance races and her speed figures are far superior to this field.",
-                spoiler: "#7 Melle Mel is the likely favorite and broke her maiden impressively. She could be good enough to handle the class drop of the top pick.",
-                chart: {
-                    labels: ['#8 Spirit of Esther (7/2)', "#7 Melle Mel (6/5)"],
-                    implied: [22.2, 45.5],
-                    assessed: [40.0, 35.0]
-                },
-                wagers: {
-                    primary: "Strong Win wager on #8 Spirit of Esther.",
-                    exotics: "Exacta: 8 over 7, 4.",
-                    horizontal: "A: 8; B: 7; C: 4"
-                }
-            },
-            8: {
-                meta: "Race 8: The NY Stallion Series Stakes, 1 Mile (Inner Turf), $150,000 | SCR: #2, #4, #9",
-                pace: { type: "Pace Void (Slow)", class: "pace-void", text: "Scratches slow the pace, with #7 Blossoming Erudite the likely leader." },
-                thesis: "In a field now lacking depth, the immense upside of #6 Hangover Heaven makes her a standout. She was a visually stunning debut winner and has the most potential for improvement.",
-                spoiler: "#1 Disco Star is remarkably consistent and gets a perfect ground-saving trip from the rail post, a huge advantage on this course.",
-                chart: {
-                    labels: ['#6 Hangover Heaven (7/2)', '#1 Disco Star (5/2)'],
-                    implied: [22.2, 28.6],
-                    assessed: [35.0, 30.0]
-                },
-                wagers: {
-                    primary: "Win wager on #6 Hangover Heaven.",
-                    exotics: "Exacta Box: 1, 6, 8.",
-                    horizontal: "A: 6; B: 1, 8; C: 5"
-                }
-            },
-            9: {
-                meta: "Race 9: Maiden Special Weight, 5 1/2 Furlongs (Turf), $100,000 | SCR: #11-16",
-                pace: { type: "Pace Void (Slow)", class: "pace-void", text: "Massive scratches leave #6 Delightful Darling as the undisputed lone speed." },
-                thesis: "The race is decimated by scratches, giving #6 Delightful Darling an insurmountable tactical advantage as the controlling speed. She will be on the lead and will be the only horse they have to catch.",
-                spoiler: "In a field of inexperienced horses, a well-bred first-timer like #4 Bint Mischief could show unexpected talent and run down the favorite.",
-                chart: {
-                    labels: ['#6 Delightful Darling (3/1)', '#4 Bint Mischief (4/1)'],
-                    implied: [25.0, 20.0],
-                    assessed: [45.0, 22.0]
-                },
-                wagers: {
-                    primary: "Strong Win wager on #6 Delightful Darling.",
-                    exotics: "Exacta: 6 over 4, 10.",
-                    horizontal: "SINGLE: 6"
+        document.addEventListener('DOMContentLoaded', function() {
+            const navButtons = document.querySelectorAll('.nav-button');
+            const contentSections = document.querySelectorAll('.content-section');
+            const summaryNavButton = document.getElementById('nav-summary');
+
+            function showSection(targetId) {
+                contentSections.forEach(section => {
+                    section.classList.remove('active');
+                });
+                const targetSection = document.getElementById(targetId);
+                if (targetSection) {
+                    targetSection.classList.add('active');
                 }
             }
-        };
-        
-        let currentChart = null;
-        const homePage = document.getElementById('home-page');
-        const racePage = document.getElementById('race-page');
-        const raceDetailsContainer = document.getElementById('race-details-container');
 
-        function showHome() {
-            homePage.classList.remove('hidden');
-            racePage.classList.add('hidden');
-            window.scrollTo(0, 0);
-        }
-
-        function showRace(raceNumber) {
-            const race = raceData[raceNumber];
-            if (!race) return;
-
-            homePage.classList.add('hidden');
-            racePage.classList.remove('hidden');
-
-            raceDetailsContainer.innerHTML = `
-                <div id="race-${raceNumber}" class="race-content pro-card p-5 md:p-6">
-                    <div class="border-b border-gray-200 pb-4 mb-4">
-                        <h2 class="font-poppins text-2xl font-bold text-[#0d47a1]">${race.meta}</h2>
-                        <div class="mt-2 flex items-center">
-                            <span class="pace-tag ${race.pace.class}">
-                                <i data-lucide="wind" class="h-4 w-4"></i>
-                                ${race.pace.type}
-                            </span>
-                            <p class="text-gray-600 ml-3 text-sm">${race.pace.text}</p>
-                        </div>
-                    </div>
-
-                    <div class="grid grid-cols-1 lg:grid-cols-5 gap-6">
-                        <div class="lg:col-span-3">
-                            <h3 class="font-poppins text-xl font-semibold mb-2 text-[#0d47a1]">Value Analysis: Probability vs. Price</h3>
-                            <p class="text-sm text-gray-500 mb-3">Comparing implied win probability (from odds) with our assessed probability. A taller "Assessed" bar indicates a potential value overlay.</p>
-                            <div class="chart-container">
-                                <canvas id="raceChart"></canvas>
-                            </div>
-                        </div>
-                        <div class="lg:col-span-2 bg-slate-50 p-4 rounded-lg border border-gray-200">
-                            <h3 class="font-poppins text-xl font-semibold mb-3 text-[#0d47a1]">Strategic Breakdown</h3>
-                            <div class="space-y-4">
-                                <div>
-                                    <h4 class="font-semibold text-gray-700 flex items-center"><i data-lucide="brain-circuit" class="mr-2 h-5 w-5 text-blue-500"></i>Primary Thesis:</h4>
-                                    <p class="text-gray-600 text-sm mt-1 pl-7">${race.thesis}</p>
-                                </div>
-                                <div>
-                                    <h4 class="font-semibold text-gray-700 flex items-center"><i data-lucide="alert-triangle" class="mr-2 h-5 w-5 text-yellow-500"></i>Spoiler Scenario:</h4>
-                                    <p class="text-gray-600 text-sm mt-1 pl-7">${race.spoiler}</p>
-                                </div>
-                                <div>
-                                    <h4 class="font-semibold text-gray-700 flex items-center"><i data-lucide="dollar-sign" class="mr-2 h-5 w-5 text-green-500"></i>Wager Construction:</h4>
-                                    <ul class="list-disc list-inside text-sm text-gray-600 space-y-1 mt-2 pl-7">
-                                        <li><strong>Primary:</strong> ${race.wagers.primary}</li>
-                                        <li><strong>Exotics:</strong> ${race.wagers.exotics}</li>
-                                        <li><strong>Horizontal:</strong> ${race.wagers.horizontal}</li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            `;
-            
-            lucide.createIcons();
-            renderChart(race.chart);
-            updateActiveNav(raceNumber);
-            window.scrollTo(0, 0);
-        }
-        
-        function renderChart(chartData) {
-            const ctx = document.getElementById('raceChart').getContext('2d');
-            
-            if (currentChart) {
-                currentChart.destroy();
+            function setActiveButton(activeButton) {
+                navButtons.forEach(button => {
+                    button.classList.remove('active');
+                });
+                activeButton.classList.add('active');
             }
 
-            currentChart = new Chart(ctx, {
-                type: 'bar',
-                data: {
-                    labels: chartData.labels,
-                    datasets: [
-                        {
-                            label: 'Implied Probability (Odds)',
-                            data: chartData.implied,
-                            backgroundColor: '#90caf9', 
-                            borderColor: '#42a5f5',
-                            borderWidth: 1,
-                            borderRadius: 4
-                        },
-                        {
-                            label: 'Assessed Probability (Analysis)',
-                            data: chartData.assessed,
-                            backgroundColor: '#455a64',
-                            borderColor: '#1e2b33',
-                            borderWidth: 1,
-                            borderRadius: 4
-                        }
-                    ]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    scales: {
-                        y: {
-                            beginAtZero: true,
-                            grid: { color: '#e0e0e0' },
-                            ticks: { color: '#334155' },
-                            title: {
-                                display: true,
-                                text: 'Win Probability (%)',
-                                color: '#334155',
-                                font: { family: "'Roboto', sans-serif" }
-                            }
-                        },
-                        x: {
-                             grid: { display: false },
-                             ticks: { color: '#334155' }
-                        }
-                    },
-                    plugins: {
-                        legend: {
-                            position: 'top',
-                            labels: {
-                                color: '#334155',
-                                font: { family: "'Roboto', sans-serif" }
-                            }
-                        },
-                        tooltip: {
-                            backgroundColor: '#0d47a1',
-                            titleColor: '#ffffff',
-                            bodyColor: '#ffffff',
-                            titleFont: { family: "'Poppins', sans-serif" },
-                            bodyFont: { family: "'Roboto', sans-serif" },
-                            callbacks: {
-                                label: function(context) {
-                                    let label = context.dataset.label || '';
-                                    if (label) { label += ': '; }
-                                    if (context.parsed.y !== null) { label += context.parsed.y + '%'; }
-                                    return label;
-                                }
-                            }
-                        }
+            navButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    const targetId = button.dataset.target;
+                    if (targetId) {
+                        showSection(targetId);
+                        setActiveButton(button);
                     }
-                }
+                });
             });
-        }
 
-        function updateActiveNav(raceNumber) {
-            const buttons = document.querySelectorAll('.race-nav-btn');
-            buttons.forEach(btn => {
-                if (btn.dataset.race === raceNumber.toString()) {
-                    btn.classList.add('active', 'font-bold');
-                } else {
-                    btn.classList.remove('active', 'font-bold');
-                }
+            summaryNavButton.addEventListener('click', () => {
+                showSection('summary');
+                setActiveButton(summaryNavButton);
             });
-        }
 
-        function initializeApp() {
-            const raceLinkContainer = document.getElementById('race-link-container');
-            const navContainer = document.getElementById('race-nav-container');
-            const raceKeys = Object.keys(raceData);
-
-            raceLinkContainer.innerHTML = '';
-            navContainer.innerHTML = '';
-
-            for (const raceKey of raceKeys) {
-                // Create links for the home page
-                const raceLink = document.createElement('div');
-                raceLink.className = 'race-link-card';
-                raceLink.textContent = `Race ${raceKey}`;
-                raceLink.onclick = () => showRace(raceKey);
-                raceLinkContainer.appendChild(raceLink);
-
-                // Create navigation buttons for the race page
-                const navButton = document.createElement('button');
-                navButton.textContent = `Race ${raceKey}`;
-                navButton.dataset.race = raceKey;
-                navButton.className = 'race-nav-btn font-semibold';
-                navButton.onclick = () => showRace(raceKey);
-                navContainer.appendChild(navButton);
-            }
-            
-            lucide.createIcons();
-            showHome();
-        }
-
-        window.onload = initializeApp;
+            showSection('summary');
+            setActiveButton(summaryNavButton);
+        });
     </script>
+
 </body>
 </html>
