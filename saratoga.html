@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Saratoga Handicapping Dashboard - August 14, 2025 (Sloppy Track Update)</title>
+    <title>Saratoga Handicapping Dashboard - August 14, 2025 (Off The Turf)</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -97,7 +97,7 @@
             transform: scale(1.05);
         }
         .update-banner {
-            background-color: #8B4513;
+            background-color: #c53030;
             color: white;
             padding: 0.75rem;
             text-align: center;
@@ -108,7 +108,7 @@
 <body class="antialiased">
 
     <div class="update-banner">
-        <i data-lucide="cloud-drizzle" class="inline-block h-5 w-5 mr-2"></i>Main Track is now SLOPPY. Analysis updated for wet track conditions.
+        <i data-lucide="cloud-off" class="inline-block h-5 w-5 mr-2"></i>ALL TURF RACES MOVED to the SLOPPY MAIN TRACK. Analysis completely revised.
     </div>
 
     <header class="bg-white border-b border-gray-200 py-3 sticky top-0 z-20">
@@ -132,28 +132,28 @@
         
         <div id="home-page">
             <section id="executive-summary" class="mb-10">
-                <h2 class="text-2xl font-poppins font-bold mb-5 text-center text-[#0d47a1]">Executive Summary: Top Plays (Sloppy Track)</h2>
+                <h2 class="text-2xl font-poppins font-bold mb-5 text-center text-[#0d47a1]">Executive Summary: Top Plays (Off The Turf)</h2>
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
                     
-                    <div class="pro-card p-5 text-center cursor-pointer" onclick="showRace('9')">
+                    <div class="pro-card p-5 text-center cursor-pointer" onclick="showRace('8')">
                         <div class="flex flex-col items-center">
                             <div class="bg-green-100 text-green-700 rounded-full p-3 mb-3">
                                 <i data-lucide="star" class="lucide"></i>
                             </div>
                             <h3 class="font-poppins font-semibold text-lg text-[#0d47a1] mb-1">Prime Bet (A-Grade)</h3>
-                            <p class="text-gray-800 font-semibold">Race 9, #7 Steadfast Resolve</p>
-                            <p class="text-sm text-gray-500 mt-1">Unaffected by dirt condition; remains top play.</p>
+                            <p class="text-gray-800 font-semibold">Race 8, #1 Buttah (6/1)</p>
+                            <p class="text-sm text-gray-500 mt-1">Monster wet track pedigree and proven form.</p>
                         </div>
                     </div>
                     
-                    <div class="pro-card p-5 text-center cursor-pointer" onclick="showRace('10')">
+                    <div class="pro-card p-5 text-center cursor-pointer" onclick="showRace('5')">
                         <div class="flex flex-col items-center">
                             <div class="bg-blue-100 text-blue-700 rounded-full p-3 mb-3">
                                 <i data-lucide="target" class="lucide"></i>
                             </div>
                             <h3 class="font-poppins font-semibold text-lg text-[#0d47a1] mb-1">Key Single</h3>
-                            <p class="text-gray-800 font-semibold">Race 10, #10 Deemer</p>
-                            <p class="text-sm text-gray-500 mt-1">Unaffected by dirt condition; remains key single.</p>
+                            <p class="text-gray-800 font-semibold">Race 5, #1 Toga Dancer (7/2)</p>
+                            <p class="text-sm text-gray-500 mt-1">Proven on a wet track with a great pedigree.</p>
                         </div>
                     </div>
                     
@@ -164,8 +164,8 @@
                             </div>
                             <h3 class="font-poppins font-semibold text-lg text-[#0d47a1] mb-1">Top Wet Track Plays</h3>
                             <ul class="text-gray-600 mt-2 space-y-2 text-sm">
+                                <li class="cursor-pointer hover:text-blue-600 font-medium" onclick="showRace('4')"><strong>R4, #2 Ranger Battalion (5/2)</strong></li>
                                 <li class="cursor-pointer hover:text-blue-600 font-medium" onclick="showRace('5')"><strong>R5, #6 Burn Rubber (8/1)</strong></li>
-                                <li class="cursor-pointer hover:text-blue-600 font-medium" onclick="showRace('8')"><strong>R8, #1 Buttah (6/1)</strong></li>
                             </ul>
                         </div>
                     </div>
@@ -175,10 +175,10 @@
                             <div class="bg-red-100 text-red-700 rounded-full p-3 mb-3">
                                 <i data-lucide="thumbs-down" class="lucide"></i>
                             </div>
-                            <h3 class="font-poppins font-semibold text-lg text-[#0d47a1] mb-1">Top Fades (Sloppy Track)</h3>
+                            <h3 class="font-poppins font-semibold text-lg text-[#0d47a1] mb-1">Top Fades (Off The Turf)</h3>
                             <ul class="text-gray-600 mt-2 space-y-2 text-sm">
-                                <li class="cursor-pointer hover:text-blue-600 font-medium" onclick="showRace('5')"><strong>R5, #3 Dark Vector (3/1)</strong></li>
-                                <li class="cursor-pointer hover:text-blue-600 font-medium" onclick="showRace('8')"><strong>R8, #10 My Man Matty (5/2)</strong></li>
+                                <li class="cursor-pointer hover:text-blue-600 font-medium" onclick="showRace('9')"><strong>R9, #7 Steadfast Resolve</strong></li>
+                                <li class="cursor-pointer hover:text-blue-600 font-medium" onclick="showRace('10')"><strong>R10, #10 Deemer</strong></li>
                             </ul>
                         </div>
                     </div>
@@ -186,7 +186,7 @@
             </section>
 
             <section id="horizontal-wagers" class="mb-10">
-                <h2 class="text-2xl font-poppins font-bold mb-5 text-center text-[#0d47a1]">Top Horizontal Wagers (Sloppy Track)</h2>
+                <h2 class="text-2xl font-poppins font-bold mb-5 text-center text-[#0d47a1]">Top Horizontal Wagers (Off The Turf)</h2>
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
                     <div class="pro-card p-5 md:col-span-2">
                         <div class="flex items-center mb-3">
@@ -200,20 +200,20 @@
                         </div>
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4">
                             <div class="bg-slate-50 p-4 rounded-lg border">
-                                <p class="font-semibold text-gray-700">Mid-Card Double: Race 5-6</p>
-                                <p class="text-sm mt-1">Pairing wet track plays with a turf class-dropper.</p>
+                                <p class="font-semibold text-gray-700">Early Double: Race 4-5</p>
+                                <p class="text-sm mt-1">Connecting two strong wet track opinions.</p>
                                 <ul class="list-disc list-inside text-sm text-gray-600 space-y-1 mt-2">
+                                    <li><strong>Race 4:</strong> #2 Ranger Battalion</li>
                                     <li><strong>Race 5:</strong> #1 Toga Dancer, #6 Burn Rubber</li>
-                                    <li><strong>Race 6:</strong> #5 Ruse</li>
                                 </ul>
                             </div>
                             <div class="bg-slate-50 p-4 rounded-lg border">
-                                <p class="font-semibold text-gray-700">Late Double: Race 9-10</p>
-                                <p class="text-sm mt-1">Pairing the Prime Bet with the Key Single for a high-probability ticket.</p>
+                                <p class="font-semibold text-gray-700">Late Double: Race 8-9</p>
+                                <p class="text-sm mt-1">Pairing the Prime Bet with a now wide-open race.</p>
                                  <ul class="list-disc list-inside text-sm text-gray-600 space-y-1 mt-2">
-                                    <li><strong>Race 9:</strong> #7 Steadfast Resolve</li>
-                                    <li><strong>Race 10:</strong> #10 Deemer</li>
-                                </ul>
+                                    <li><strong>Race 8:</strong> #1 Buttah</li>
+                                    <li><strong>Race 9:</strong> ALL (or spread deep)</li>
+                                 </ul>
                             </div>
                         </div>
                     </div>
@@ -230,12 +230,12 @@
                         <div class="bg-slate-50 p-4 rounded-lg border mt-4">
                             <p class="font-semibold text-gray-700">Late Pick 4 (Races 7-10)</p>
                             <ul class="text-sm text-gray-600 space-y-1 mt-2 font-mono">
-                                <li><strong>R7:</strong> 5 (A - SINGLE)</li>
-                                <li><strong>R8:</strong> 1, 6 (A) / 5 (B)</li>
-                                <li><strong>R9:</strong> 7 (A - SINGLE)</li>
-                                <li><strong>R10:</strong> 10 (A - SINGLE)</li>
+                                <li><strong>R7:</strong> 2, 5 (A)</li>
+                                <li><strong>R8:</strong> 1 (A) / 6 (B)</li>
+                                <li><strong>R9:</strong> ALL</li>
+                                <li><strong>R10:</strong> 1, 4 (A) / 8 (B)</li>
                             </ul>
-                             <p class="text-xs text-gray-500 mt-2">Now using wet track specialists in Race 8.</p>
+                             <p class="text-xs text-gray-500 mt-2">Requires spreading in the chaotic off-the-turf races.</p>
                         </div>
                     </div>
                 </div>
@@ -266,7 +266,7 @@
         const raceData = {
             4: {
                 meta: "Race 4: CLM $16k, 7 Furlongs (Sloppy)",
-                pace: { type: "Moderately Contested", class: "pace-contested", text: "Sloppy track. Pedigree and proven wet track form are key." },
+                pace: { type: "Moderately Contested", class: "pace-contested", text: "Sloppy track. Proven wet track form is key." },
                 thesis: "UPDATED: The sloppy track elevates #2 Ranger Battalion, who has shown good efforts on an off-track in the past. He now holds a distinct advantage over #5 Bear Claw Necklace, who has no wet track experience.",
                 spoiler: "#5 Bear Claw Necklace handles the slop well in his first try and outruns the favorite.",
                 chart: {
@@ -286,94 +286,94 @@
                 thesis: "UPDATED: This race is turned upside down. #6 Burn Rubber (sire Flatter) and #1 Toga Dancer (sire Tonalist) both have excellent wet track pedigrees and proven form. They are major contenders now. #3 Dark Vector (sire Into Mischief) has questionable wet track breeding and becomes a fade.",
                 spoiler: "#3 Dark Vector's class overcomes his pedigree questions and the track condition.",
                 chart: {
-                    labels: ['#6 Burn Rubber (8/1)', '#1 Toga Dancer (7/2)', '#3 Dark Vector (3/1)'],
-                    implied: [11.1, 22.2, 25.0],
-                    assessed: [25, 28, 15]
+                    labels: ['#1 Toga Dancer (7/2)', '#6 Burn Rubber (8/1)', '#3 Dark Vector (3/1)'],
+                    implied: [22.2, 11.1, 25.0],
+                    assessed: [35, 25, 15]
                 },
                 wagers: {
-                    primary: "Win/Place bet on #6 Burn Rubber.",
+                    primary: "Win bet on #1 Toga Dancer. Value bet on #6.",
                     exotics: "Exacta Box 1, 6.",
-                    horizontal: "A: #1, #6 | C: #3"
+                    horizontal: "A: #1 (Key Single) | B: #6"
                 }
             },
             6: {
-                meta: "Race 6: MCL $40k, 5 1/2 Furlongs (Turf)",
-                pace: { type: "Pace Void", class: "pace-void", text: "Paceless race on a firm turf course." },
-                thesis: "No change. This race is on the turf. #5 Ruse remains the class of the field against a depleted group.",
-                spoiler: "#7 Augustinian gets loose on the lead and wires the field.",
+                meta: "Race 6: MCL $40k, 5 1/2 Furlongs (Sloppy)",
+                pace: { type: "Pace Void", class: "pace-void", text: "OFF THE TURF. Race is now a chaotic dirt sprint." },
+                thesis: "UPDATED: Complete re-evaluation. Most will scratch. Of those remaining, focus on dirt pedigree. #2 Belgian (sire Constitution) and #3 Carlin Contention (sire Declaration of War) have breeding for this. A chaotic race to tread lightly in.",
+                spoiler: "A horse with no wet track pedigree takes to the surface and wins.",
                 chart: {
-                    labels: ['#5 Ruse (2/1)', '#7 Augustinian (5/1)'],
-                    implied: [33.3, 16.7],
-                    assessed: [55, 18]
+                    labels: ['#2 Belgian', '#3 Carlin Contention'],
+                    implied: [20, 15],
+                    assessed: [25, 22]
                 },
                 wagers: {
-                    primary: "Pass. #5 will be an unbettable price.",
-                    exotics: "Use #5 on top in trifectas.",
-                    horizontal: "A: #5 (Strong single)"
+                    primary: "Pass race or small exacta box with likely runners.",
+                    exotics: "Use 'ALL' in this leg of Pick 4/5.",
+                    horizontal: "C: #2, #3"
                 }
             },
             7: {
-                meta: "Race 7: ALW, 1 Mile (Turf)",
-                pace: { type: "Pace Void", class: "pace-void", text: "Scratch of speed confirms a tactical, slow-paced affair." },
-                thesis: "No change. This race is on the turf. #5 George Briggs has the best tactical speed and is the most likely winner.",
-                spoiler: "#1 Coach Case steals the race on the lead from the rail.",
+                meta: "Race 7: ALW, 1 Mile (Sloppy)",
+                pace: { type: "Moderately Contested", class: "pace-contested", text: "OFF THE TURF. Now a sloppy mile." },
+                thesis: "UPDATED: Complete re-evaluation. #5 George Briggs is a turf horse and a fade. #2 Buttah now draws into this race and has a monster wet track pedigree (Frosted). He becomes a major contender along with #1 Coach Case who has tactical speed.",
+                spoiler: "A turf horse handles the dirt surprisingly well.",
                 chart: {
-                    labels: ['#5 George Briggs (8/5)', '#1 Coach Case (12/1)'],
-                    implied: [38.5, 7.7],
-                    assessed: [50, 12]
+                    labels: ['#2 Buttah (4-1)', '#1 Coach Case (5-1)'],
+                    implied: [20, 16.7],
+                    assessed: [30, 25]
                 },
                 wagers: {
-                    primary: "Pass for win bets. Fade the price, not the horse.",
-                    exotics: "Exacta: 5 / 1, 4.",
-                    horizontal: "A: #5 (Strong single)"
+                    primary: "Win bet on #2 Buttah.",
+                    exotics: "Exacta Box 1, 2.",
+                    horizontal: "A: #2 | B: #1"
                 }
             },
             8: {
                 meta: "Race 8: ALW, 6 1/2 Furlongs (Sloppy)",
                 pace: { type: "Pressured Duel", class: "pace-duel", text: "Sloppy track favors front-runners and wet track specialists." },
-                thesis: "UPDATED: Major changes. #1 Buttah (sire Frosted by Tapit) has a monster wet track pedigree and proven form. He moves way up. #6 Two for Charging also has a win on a wet track and remains a top contender. #10 My Man Matty has questionable wet track breeding and is downgraded significantly.",
+                thesis: "UPDATED: #1 Buttah (sire Frosted) has a monster wet track pedigree and proven form. He becomes the Prime Bet of the day. #6 Two for Charging also has a win on a wet track and is the main danger. #10 My Man Matty has questionable wet track breeding and is downgraded significantly.",
                 spoiler: "#10 My Man Matty handles the slop and proves his class is superior.",
                 chart: {
                     labels: ['#1 Buttah (6/1)', '#6 Two for Charging (4/1)', '#10 My Man Matty (5/2)'],
                     implied: [14.3, 20.0, 28.6],
-                    assessed: [30, 25, 15]
+                    assessed: [35, 25, 15]
                 },
                 wagers: {
                     primary: "Win bet on #1 Buttah.",
                     exotics: "Exacta Box 1, 6.",
-                    horizontal: "A: #1, #6 | C: #10"
+                    horizontal: "A: #1 (Prime Bet) | B: #6"
                 }
             },
             9: {
-                meta: "Race 9: Starter ALW, 1 1/16 Miles (Turf)",
-                pace: { type: "Moderately Contested", class: "pace-contested", text: "Perfect setup for a stalker on a firm turf course." },
-                thesis: "No change. This race is on the turf. #7 Steadfast Resolve's stalking style is ideal. Confidence remains high.",
-                spoiler: "An unexpected horse gets loose on the lead and never looks back.",
+                meta: "Race 9: Starter ALW, 1 1/16 Miles (Sloppy)",
+                pace: { type: "Moderately Contested", class: "pace-contested", text: "OFF THE TURF. Now a two-turn sloppy route." },
+                thesis: "UPDATED: Complete re-evaluation. #7 Steadfast Resolve is a turf horse and a fade. The race now favors proven dirt routers who handle the slop. #2 Dark Magic (sire Good Magic) and #5 Brit's Wit (sire English Channel, surprisingly good wet stats) are now the key horses.",
+                spoiler: "The original favorite, #7 Steadfast Resolve, transfers his form to the dirt.",
                 chart: {
-                    labels: ['#7 Steadfast Resolve (7/2)', "#3 Brit's Wit (4/1)"],
-                    implied: [22.2, 20.0],
-                    assessed: [40, 20]
+                    labels: ['#2 Dark Magic (5-1)', "#5 Brit's Wit (4-1)", '#7 Steadfast Resolve (7/2)'],
+                    implied: [16.7, 20.0, 22.2],
+                    assessed: [25, 22, 10]
                 },
                 wagers: {
-                    primary: "Win bet on #7 Steadfast Resolve.",
-                    exotics: "Exacta: 7 / 3, 9.",
-                    horizontal: "A: #7 (Prime Bet & Strong Single)"
+                    primary: "Exacta Box #2, #5.",
+                    exotics: "Use 'ALL' in this leg of Pick 4/5.",
+                    horizontal: "C: #2, #5"
                 }
             },
             10: {
-                meta: "Race 10: NY-Bred MCL $50k, 1 1/16 Miles (Turf)",
-                pace: { type: "Moderately Contested", class: "pace-contested", text: "A massive class drop is the story." },
-                thesis: "No change. This race is on the turf. #10 Deemer's class advantage is overwhelming and he remains the key single.",
-                spoiler: "The heavy favorite inexplicably fails to fire after the class drop.",
+                meta: "Race 10: NY-Bred MCL $50k, 1 1/16 Miles (Sloppy)",
+                pace: { type: "Moderately Contested", class: "pace-contested", text: "OFF THE TURF. Now a sloppy route for maidens." },
+                thesis: "UPDATED: Complete re-evaluation. #10 Deemer is a turf horse and a fade. This race is now about wet track pedigree. #1 Blue Pill (sire Practical Joke) and #4 Bob's Carrot (sire Audible) have strong wet track breeding and become the main contenders.",
+                spoiler: "The class of #10 Deemer allows him to handle the surface change.",
                 chart: {
-                    labels: ['#10 Deemer (6/5)', '#5 Blame It On KJ (5/1)'],
-                    implied: [45.5, 16.7],
-                    assessed: [60, 15]
+                    labels: ['#1 Blue Pill (6-1)', '#4 Bob\'s Carrot (8-1)', '#10 Deemer (6/5)'],
+                    implied: [14.3, 11.1, 45.5],
+                    assessed: [25, 20, 10]
                 },
                 wagers: {
-                    primary: "Use as a single in all multi-race wagers.",
-                    exotics: "Key #10 on top of #5, #6, #12.",
-                    horizontal: "A: #10 (Key Single)"
+                    primary: "Win/Place bets on #1 and #4.",
+                    exotics: "Exacta Box 1, 4.",
+                    horizontal: "A: #1, #4 | C: #10"
                 }
             }
         };
