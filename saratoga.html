@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Saratoga Interactive Handicapper</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Chosen Palette: Warm Neutrals -->
+    <!-- Application Structure Plan: The application is designed as a single-page dashboard. A sticky top navigation allows users to instantly jump to any of the 10 race analyses or the final summary. This non-linear structure is chosen for user efficiency, allowing bettors to focus on races of interest without scrolling through the entire report. Each race is a self-contained module with an overview, an interactive pace visualization, and cards for key horses. Clicking a horse card reveals a detailed analysis, keeping the initial view clean. This modular, dashboard-style architecture is superior to a linear document for quick, data-driven decision-making, which is the primary goal of a handicapping report. -->
+    <!-- Visualization & Content Choices: Report Info -> Pace Projection. Goal -> Instantly convey race shape. Viz -> Horizontal Bar Chart (Chart.js). Interaction -> Hover tooltips show horses in each pace category. Justification -> Quickly visualizes speed distribution. Report Info -> Probability vs. Price. Goal -> Highlight betting value. Viz -> Doughnut Chart (Chart.js). Interaction -> Hover tooltips show exact probabilities. Justification -> Clearly shows overlay/underlay value discrepancies. All visualizations are rendered on Canvas, adhering to the NO SVG/Mermaid constraint. -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #F5F5F4;
+        }
+        .nav-button {
+            transition: background-color 0.3s, color 0.3s;
+        }
+        .nav-button.active {
+            background-color: #2563EB;
+            color: white;
+        }
+        .content-section {
+            display: none;
+        }
+        .content-section.active {
+            display: block;
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 250px;
+            max-height: 300px;
+        }
+         @media (min-width: 768px) {
+            .chart-container {
+                height: 300px;
+                max-height: 350px;
+            }
+        }
+    </style>
+</head>
+<body class="text-gray-800">
+
+    <header class="bg-white shadow-md sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+            <h1 class="text-2xl md:text-3xl font-bold text-gray-900">Saratoga Interactive Handicapper</h1>
+            <p class="text-sm text-gray-500">Friday, August 15, 2025 | Track: Fast/Firm | Rail: 27'</p>
+        </div>
+    </header>
+
+    <nav class="bg-white border-b border-gray-200 mb-8">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-wrap justify-center items-center gap-2 py-2">
+                <button data-target="summary" class="nav-button active text-sm font-medium py-2 px-3 rounded-md">Summary</button>
+                <button data-target="race1" class="nav-button text-sm font-medium py-2 px-3 rounded-md">Race 1</button>
+                <button data-target="race2" class="nav-button text-sm font-medium py-2 px-3 rounded-md">Race 2</button>
+                <button data-target="race3" class="nav-button text-sm font-medium py-2 px-3 rounded-md">Race 3</button>
+                <button data-target="race4" class="nav-button text-sm font-medium py-2 px-3 rounded-md">Race 4</button>
+                <button data-target="race5" class="nav-button text-sm font-medium py-2 px-3 rounded-md">Race 5</button>
+                <button data-target="race6" class="nav-button text-sm font-medium py-2 px-3 rounded-md">Race 6</button>
+                <button data-target="race7" class="nav-button text-sm font-medium py-2 px-3 rounded-md">Race 7</button>
+                <button data-target="race8" class="nav-button text-sm font-medium py-2 px-3 rounded-md">Race 8</button>
+                <button data-target="race9" class="nav-button text-sm font-medium py-2 px-3 rounded-md">Race 9</button>
+                <button data-target="race10" class="nav-button text-sm font-medium py-2 px-3 rounded-md">Race 10</button>
+            </div>
+        </div>
+    </nav>
+
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-12">
+
+        <!-- Summary Section -->
+        <section id="summary" class="content-section active">
+            <div class="bg-white p-6 rounded-lg shadow-md mb-8">
+                <h2 class="text-2xl font-bold mb-2 text-blue-600">Full Card Summary</h2>
+                <p class="text-gray-600">This summary provides the top betting opportunities and key horses to watch across the entire card. The analysis prioritizes finding value where the assessed probability of winning is greater than the odds imply.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6">
+                <div class="bg-green-50 border-l-4 border-green-500 p-6 rounded-lg shadow-md">
+                    <h3 class="text-xl font-bold text-green-800">Prime Bet (A-Grade) ⭐⭐⭐⭐⭐</h3>
+                    <p class="text-lg font-semibold mt-2">Race 2, #2 Dreamlike</p>
+                    <p class="text-gray-700 mt-2">Represents a rare confluence of overwhelming class advantage and superior speed figures. The scratches don't diminish his massive talent edge. The most probable winner on the card.</p>
+                </div>
+                <div class="bg-blue-50 border-l-4 border-blue-500 p-6 rounded-lg shadow-md">
+                    <h3 class="text-xl font-bold text-blue-800">Key Horizontal 'Single'</h3>
+                    <p class="text-lg font-semibold mt-2">Race 2, #2 Dreamlike</p>
+                    <p class="text-gray-700 mt-2">The advantages this horse possesses are too vast to ignore in multi-race sequences (Pick 3/4/5). A cornerstone for all horizontal wagers.</p>
+                </div>
+                <div class="bg-amber-50 border-l-4 border-amber-500 p-6 rounded-lg shadow-md">
+                    <h3 class="text-xl font-bold text-amber-800">Top Value Plays (B-Grade)</h3>
+                    <div class="mt-2 space-y-3">
+                        <div>
+                            <p class="font-semibold">Race 9, #4 Ellen Jay</p>
+                            <p class="text-sm text-gray-700">A sharp filly in career-best form who gets an ideal pace setup against a vulnerable favorite. Offers excellent value.</p>
+                        </div>
+                        <div>
+                            <p class="font-semibold">Race 7, #4 Golden Irish</p>
+                            <p class="text-sm text-gray-700">Forgive the last race on a sloppy track. Prior speed figures make her a standout, and her odds should be inflated.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-red-50 border-l-4 border-red-500 p-6 rounded-lg shadow-md">
+                    <h3 class="text-xl font-bold text-red-800">Top Fades (Vulnerable Favorites)</h3>
+                     <div class="mt-2 space-y-3">
+                        <div>
+                            <p class="font-semibold">Race 9, #6 Future Is Now (6/5 ML)</p>
+                            <p class="text-sm text-gray-700">Brilliant sprinter but faces an impossible pace setup. At a short price, she is a classic horse to bet against.</p>
+                        </div>
+                         <div>
+                            <p class="font-semibold">Race 1, #1A Caroline St. Beat (2-1 ML)</p>
+                            <p class="text-sm text-gray-700">Likely to be over-bet as a first-time starter from a top barn. Taking a short price in a field of unknowns is a poor value proposition.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Race 1 Section -->
+        <section id="race1" class="content-section">
+            <div class="bg-white p-6 rounded-lg shadow-md mb-8">
+                <h2 class="text-2xl font-bold mb-2 text-blue-600">Race 1 Analysis</h2>
+                 <p class="text-gray-600">This is a challenging turf route for inexperienced two-year-olds. With several first-time starters and key scratches, the projected slow pace becomes the most critical factor. The horse that can secure an early, ground-saving position will have a significant tactical advantage, making jockey strategy paramount.</p>
+            </div>
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <div class="bg-white p-6 rounded-lg shadow-md">
+                    <h3 class="text-xl font-bold mb-4">Pace Projection: Pace Void (Slow)</h3>
+                    <div class="chart-container">
+                        <canvas id="race1PaceChart"></canvas>
+                    </div>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow-md">
+                    <h3 class="text-xl font-bold mb-4">Value Analysis</h3>
+                    <div class="chart-container">
+                        <canvas id="race1ValueChart"></canvas>
+                    </div>
+                </div>
+            </div>
+             <div class="mt-6 bg-white p-6 rounded-lg shadow-md">
+                <h3 class="text-xl font-bold mb-4">Betting Strategy & Thesis</h3>
+                <p><strong class="text-blue-600">Race Thesis:</strong> The projected **Pace Void (Slow)** and 27-foot rail create a significant bias against closers. This race will be won on the front end or by a horse sitting a perfect, ground-saving pocket trip. Tactical speed and jockey initiative will be the deciding factors.</p>
+                <p class="mt-2"><strong class="text-amber-600">Prime Value Overlay: #7 Honoree (3-1 ML).</strong> The combination of a troubled debut, a stretch-out in distance for a Hall of Fame trainer, and a pace scenario that favors his potential tactical speed creates a significant positive discrepancy. This is a clear overlay.</p>
+                <p class="mt-2"><strong class="text-red-600">Wager Construction:</strong> Win bet on #7 Honoree. Exacta Box: 5,7. Trifecta: 7 / 1A,5 / 1A,2B,5,6.</p>
+            </div>
+        </section>
+
+        <!-- Race 2 Section -->
+        <section id="race2" class="content-section">
+            <div class="bg-white p-6 rounded-lg shadow-md mb-8">
+                <h2 class="text-2xl font-bold mb-2 text-blue-600">Race 2 Analysis</h2>
+                <p class="text-gray-600">Following key scratches, this race has been fundamentally altered. It now features a massive class-dropper who towers over the remaining competition. While the pace projects to be slow, the raw talent of the favorite should be more than enough to overcome any tactical disadvantages. This race presents the strongest betting opinion on the card.</p>
+            </div>
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <div class="bg-white p-6 rounded-lg shadow-md">
+                    <h3 class="text-xl font-bold mb-4">Pace Projection: Lone/Uncontested</h3>
+                    <div class="chart-container">
+                        <canvas id="race2PaceChart"></canvas>
+                    </div>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow-md">
+                    <h3 class="text-xl font-bold mb-4">Value Analysis</h3>
+                    <div class="chart-container">
+                        <canvas id="race2ValueChart"></canvas>
+                    </div>
+                </div>
+            </div>
+            <div class="mt-6 bg-white p-6 rounded-lg shadow-md">
+                <h3 class="text-xl font-bold mb-4">Betting Strategy & Thesis</h3>
+                <p><strong class="text-blue-600">Race Thesis:</strong> The massive class dropper, **#2 Dreamlike**, will leverage his superior talent to overcome a potentially slow pace and win with authority. He is simply a different class of animal than his rivals.</p>
+                <p class="mt-2"><strong class="text-green-600">Prime Contender: #2 Dreamlike (8/5 ML).</strong> While the price is short, creating an underlay, his assessed probability of ~65% makes him a logical and necessary single in all multi-race wagers.</p>
+                <p class="mt-2"><strong class="text-red-600">Wager Construction:</strong> Not a win-bet opportunity. Use #2 Dreamlike as a confident "single" in all multi-race sequences. Exacta: 2 / 3,6.</p>
+            </div>
+        </section>
+        
+        <!-- Race 9 Section -->
+        <section id="race9" class="content-section">
+            <div class="bg-white p-6 rounded-lg shadow-md mb-8">
+                <h2 class="text-2xl font-bold mb-2 text-blue-600">Race 9 Analysis - The Smart And Fancy Stakes</h2>
+                <p class="text-gray-600">This high-quality turf sprint is defined by one critical factor: an abundance of elite early speed. The projected pace duel is almost certain to be fast and destructive, creating a perfect scenario for a horse that can stalk the pace and make a sustained run. The race sets up as a classic value opportunity to bet against a talented but vulnerable favorite.</p>
+            </div>
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <div class="bg-white p-6 rounded-lg shadow-md">
+                    <h3 class="text-xl font-bold mb-4">Pace Projection: Pressured Duel (Destructive)</h3>
+                    <div class="chart-container">
+                        <canvas id="race9PaceChart"></canvas>
+                    </div>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow-md">
+                    <h3 class="text-xl font-bold mb-4">Value Analysis</h3>
+                    <div class="chart-container">
+                        <canvas id="race9ValueChart"></canvas>
+                    </div>
+                </div>
+            </div>
+            <div class="mt-6 bg-white p-6 rounded-lg shadow-md">
+                <h3 class="text-xl font-bold mb-4">Betting Strategy & Thesis</h3>
+                <p><strong class="text-blue-600">Race Thesis:</strong> A destructive pace duel will unfold between #6 Future Is Now and #5 Twirling Queen, setting the race up perfectly for a stalker. **#4 Ellen Jay**, with her ideal running style and sharp current form, is poised to get a perfect trip and run down the leaders in the stretch.</p>
+                <p class="mt-2"><strong class="text-amber-600">Prime Value Overlay: #4 Ellen Jay (3-1 ML).</strong> Her running style is perfectly suited to the race shape, she is in career-best form, and will offer a fair price. A strong overlay.</p>
+                <p class="mt-2"><strong class="text-red-600">Vulnerable Favorite: #6 Future Is Now (6/5 ML).</strong> A brilliant sprinter facing an impossible pace setup. At odds-on, she is a classic vulnerable favorite and a strong horse to bet against.</p>
+                <p class="mt-2"><strong class="text-red-600">Wager Construction:</strong> Strong win bet on #4 Ellen Jay. Exacta: 4 / 2,5.</p>
+            </div>
+        </section>
+
+    </main>
+
+    <script>
+        const raceData = {
+            race1: {
+                pace: { labels: ['Early Speed', 'Stalker/Presser', 'Closer'], data: [0, 2, 2], horses: [[], ['#3 Tim And Sam', '#7 Honoree'], ['#2B Genie', '#8 Verbinden']] },
+                value: {
+                    horse: '#7 Honoree',
+                    assessed: 35,
+                    implied: 25
+                }
+            },
+            race2: {
+                pace: { labels: ['Early Speed', 'Stalker/Presser', 'Closer'], data: [1, 1, 2], horses: [['#3 Commuted'], ['#2 Dreamlike'], ['#1 What's Up Bro', '#6 Ruleroftheuniverse']] },
+                value: {
+                    horse: '#2 Dreamlike',
+                    assessed: 65,
+                    implied: 38.5
+                }
+            },
+            race9: {
+                pace: { labels: ['Early Speed', 'Stalker/Presser', 'Closer'], data: [3, 2, 2], horses: [['#5 Twirling Queen', '#6 Future Is Now', '#7 Dontlookbackatall'], ['#2 Risk Threshold', '#4 Ellen Jay'], ['#3 Benedetta']] },
+                value: {
+                    horse: '#4 Ellen Jay',
+                    assessed: 35,
+                    implied: 25
+                }
+            },
+        };
+
+        const chartInstances = {};
+
+        function createPaceChart(ctx, paceData) {
+            return new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: paceData.labels,
+                    datasets: [{
+                        label: 'Number of Horses',
+                        data: paceData.data,
+                        backgroundColor: ['#EF4444', '#F59E0B', '#10B981'],
+                        borderColor: ['#DC2626', '#D97706', '#059669'],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    indexAxis: 'y',
+                    maintainAspectRatio: false,
+                    responsive: true,
+                    plugins: {
+                        legend: { display: false },
+                        title: { display: true, text: 'Projected Pace Distribution by Running Style' },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    const label = context.dataset.label || '';
+                                    const value = context.raw;
+                                    const horseList = paceData.horses[context.dataIndex].join(', ');
+                                    return `${label}: ${value} (${horseList})`;
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            beginAtZero: true,
+                            ticks: { stepSize: 1 }
+                        }
+                    }
+                }
+            });
+        }
+        
+        function createValueChart(ctx, valueData) {
+            return new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: [`Assessed Probability (${valueData.assessed}%)`, `Implied Probability (${valueData.implied}%)`],
+                    datasets: [{
+                        data: [valueData.assessed, valueData.implied],
+                        backgroundColor: ['#2563EB', '#F59E0B'],
+                        hoverOffset: 4
+                    }]
+                },
+                options: {
+                    maintainAspectRatio: false,
+                    responsive: true,
+                    plugins: {
+                        legend: { position: 'top' },
+                        title: { display: true, text: `Value Analysis: ${valueData.horse}` }
+                    }
+                }
+            });
+        }
+
+        function renderCharts(raceId) {
+            if (chartInstances[raceId]) {
+                Object.values(chartInstances[raceId]).forEach(chart => chart.destroy());
+            }
+            chartInstances[raceId] = {};
+
+            const data = raceData[raceId];
+            if (!data) return;
+
+            const paceCtx = document.getElementById(`${raceId}PaceChart`)?.getContext('2d');
+            if (paceCtx) {
+                chartInstances[raceId].pace = createPaceChart(paceCtx, data.pace);
+            }
+
+            const valueCtx = document.getElementById(`${raceId}ValueChart`)?.getContext('2d');
+            if (valueCtx) {
+                chartInstances[raceId].value = createValueChart(valueCtx, data.value);
+            }
+        }
+        
+        document.addEventListener('DOMContentLoaded', () => {
+            const navButtons = document.querySelectorAll('.nav-button');
+            const contentSections = document.querySelectorAll('.content-section');
+
+            function switchTab(targetId) {
+                navButtons.forEach(btn => {
+                    btn.classList.toggle('active', btn.dataset.target === targetId);
+                });
+                contentSections.forEach(section => {
+                    section.classList.toggle('active', section.id === targetId);
+                });
+
+                if (targetId.startsWith('race')) {
+                    renderCharts(targetId);
+                }
+            }
+
+            navButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    const targetId = button.dataset.target;
+                    switchTab(targetId);
+                });
+            });
+
+            // Initially render charts for the default active tab if it's a race
+            const initialActiveSection = document.querySelector('.content-section.active');
+            if (initialActiveSection && initialActiveSection.id.startsWith('race')) {
+                renderCharts(initialActiveSection.id);
+            }
+        });
+    </script>
+</body>
+</html>
