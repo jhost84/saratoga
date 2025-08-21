@@ -1,511 +1,546 @@
 <!DOCTYPE html>
-<html lang="en" class="scroll-smooth">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Saratoga Interactive Handicapping Report</title>
+    <title>Saratoga Interactive Handicapping Dashboard</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <!-- Chosen Palette: Calm Harmony -->
-    <!-- Application Structure Plan: The application is designed as a single-page dashboard. A sticky top navigation allows users to instantly jump to any of the 9 race analyses or the final "Best Bets" summary. This non-linear structure is superior to a simple document scroll, as users may want to compare specific races or quickly find the day's top plays. Each race is a self-contained card with two interactive tabs: "Analysis" for the detailed breakdown and "Picks & Strategy" for actionable insights. This tabbed approach condenses a large amount of information, preventing cognitive overload and allowing users to choose their desired level of detail. The flow is designed for both deep-dive analysis and quick, at-a-glance decision-making. -->
-    <!-- Visualization & Content Choices: The core visualization is a dynamic Chart.js bar chart for each race's "Probability vs. Price" section. Goal: To visually quantify the "value" concept central to the report. Method: A grouped bar chart compares Implied vs. Assessed Probability. Interaction: Hover tooltips provide precise data. Justification: This transforms a key numerical comparison into an immediate, intuitive visual insight, making the concept of an "overlay" or "underlay" instantly understandable. Pace projections are represented by icons for quick recognition. All other content is presented in structured HTML with clear typography to support the user's ability to scan and synthesize information efficiently. -->
+    <!-- Chosen Palette: "Warm Neutral" - A calm, professional palette with shades of beige, tan, and brown, accented with a subtle blue for interactive elements. -->
+    <!-- Application Structure Plan: The application is structured as a single-page dashboard. A persistent left-hand navigation allows users to jump to any of the 10 races. The main content area is divided into three key thematic sections: a high-level "At a Glance" summary with key bets, a detailed "Race-by-Race Analysis" section, and a "Track Bias Insights" section for contextual data. This structure was chosen to cater to different user needs: quick access to top picks, deep dives into specific races, and foundational track data. The flow is non-linear, allowing users to explore based on their priorities. -->
+    <!-- Visualization & Content Choices: 
+        - Race Overview: Goal: Inform. Method: Structured HTML text. Interaction: None. Justification: Clear, scannable presentation of basic race facts.
+        - Pace Projection: Goal: Inform/Organize. Method: HTML card with color-coded badge. Interaction: None. Justification: Immediately conveys the critical pace scenario.
+        - Speed Figure Comparison: Goal: Compare. Method: Horizontal Bar Chart (Chart.js). Interaction: Tooltips on hover to show exact figures. Justification: Provides a quick, visual comparison of the top contenders' speed figures, a key handicapping factor.
+        - Value-Oriented Rankings: Goal: Organize/Inform. Method: Tabbed interface (HTML/JS). Interaction: Clicking tabs to switch between Contenders, Value Overlays, and Vulnerable Favorites. Justification: Organizes complex rankings into digestible, user-selectable categories.
+        - Betting Strategy: Goal: Inform. Method: Accordion (HTML/JS). Interaction: Click to expand/collapse Thesis, Spoiler, and Wager Construction. Justification: Hides detailed text to keep the UI clean, allowing users to drill down as needed.
+        - Track Bias: Goal: Compare. Method: Bar Chart (Chart.js). Interaction: Dropdown to select different distances/surfaces to update the chart. Justification: Allows for dynamic exploration of the rich track bias data provided in the report.
+    -->
     <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
     <style>
         body {
-            font-family: 'Inter', sans-serif;
-            background-color: #f8f9fa;
+            background-color: #F5F5DC; /* Beige */
         }
-        .chart-container {
-            position: relative;
-            width: 100%;
-            max-width: 600px;
-            margin-left: auto;
-            margin-right: auto;
-            height: 300px;
-            max-height: 400px;
+        .nav-link {
+            transition: all 0.3s;
         }
-        @media (min-width: 768px) {
-            .chart-container {
-                height: 350px;
-            }
+        .nav-link.active {
+            background-color: #A0522D; /* Sienna */
+            color: white;
+            transform: scale(1.05);
+        }
+        .tab-link.active {
+            border-bottom: 2px solid #A0522D; /* Sienna */
+            color: #A0522D; /* Sienna */
+        }
+        .accordion-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s ease-in-out;
         }
     </style>
 </head>
-<body class="text-gray-800">
+<body class="font-sans">
 
-    <header class="bg-white shadow-md py-4 px-6 text-center sticky top-0 z-20">
-        <h1 class="text-2xl md:text-3xl font-bold text-gray-900">Saratoga Race Course Analysis</h1>
-        <p class="text-md text-gray-600">August 20, 2025</p>
-    </header>
+    <div class="flex flex-col lg:flex-row">
+        <!-- Sidebar Navigation -->
+        <nav id="sidebar" class="w-full lg:w-64 bg-[#D2B48C] text-[#654321] p-4 lg:fixed lg:h-full">
+            <h1 class="text-2xl font-bold mb-4 text-center">Saratoga Races</h1>
+            <p class="text-center text-sm mb-6">August 21, 2025</p>
+            <ul class="space-y-2">
+                <li><a href="#summary" class="nav-link block p-2 rounded-lg text-center font-semibold">At a Glance</a></li>
+                <li><a href="#race1" class="nav-link block p-2 rounded-lg text-center">Race 1</a></li>
+                <li><a href="#race2" class="nav-link block p-2 rounded-lg text-center">Race 2</a></li>
+                <li><a href="#race3" class="nav-link block p-2 rounded-lg text-center">Race 3</a></li>
+                <li><a href="#race4" class="nav-link block p-2 rounded-lg text-center">Race 4</a></li>
+                <li><a href="#race5" class="nav-link block p-2 rounded-lg text-center">Race 5</a></li>
+                <li><a href="#race6" class="nav-link block p-2 rounded-lg text-center">Race 6</a></li>
+                <li><a href="#race7" class="nav-link block p-2 rounded-lg text-center">Race 7</a></li>
+                <li><a href="#race8" class="nav-link block p-2 rounded-lg text-center">Race 8</a></li>
+                <li><a href="#race9" class="nav-link block p-2 rounded-lg text-center">Race 9</a></li>
+                <li><a href="#race10" class="nav-link block p-2 rounded-lg text-center">Race 10</a></li>
+                <li><a href="#bias" class="nav-link block p-2 rounded-lg text-center font-semibold">Track Bias</a></li>
+            </ul>
+        </nav>
 
-    <nav class="bg-gray-800 text-white p-2 sticky top-[84px] z-20 overflow-x-auto whitespace-nowrap">
-        <div class="container mx-auto flex justify-center items-center">
-            <a href="#summary" class="px-3 py-1 font-semibold hover:bg-gray-700 rounded-md">Best Bets</a>
-            <span class="px-2">|</span>
-            <a href="#race1" class="px-2 py-1 hover:bg-gray-700 rounded-md">R1</a>
-            <a href="#race2" class="px-2 py-1 hover:bg-gray-700 rounded-md">R2</a>
-            <a href="#race3" class="px-2 py-1 hover:bg-gray-700 rounded-md">R3</a>
-            <a href="#race4" class="px-2 py-1 hover:bg-gray-700 rounded-md">R4</a>
-            <a href="#race5" class="px-2 py-1 hover:bg-gray-700 rounded-md">R5</a>
-            <a href="#race6" class="px-2 py-1 hover:bg-gray-700 rounded-md">R6</a>
-            <a href="#race7" class="px-2 py-1 hover:bg-gray-700 rounded-md">R7</a>
-            <a href="#race8" class="px-2 py-1 hover:bg-gray-700 rounded-md">R8</a>
-            <a href="#race9" class="px-2 py-1 hover:bg-gray-700 rounded-md">R9</a>
-        </div>
-    </nav>
-
-    <main class="container mx-auto p-4 md:p-6 lg:p-8">
-        
-        <section id="overview" class="mb-8 bg-white p-6 rounded-lg shadow-lg border border-red-200">
-            <h2 class="text-2xl font-bold mb-3 text-red-700">Card-Wide Update</h2>
-            <p class="text-lg">
-                All races originally scheduled for the turf have been moved to the main track. The main track is officially rated <span class="font-semibold bg-yellow-200 px-2 py-1 rounded">Sloppy</span>. This fundamentally alters the analysis for a majority of the day's races, placing a premium on proven wet-track form and pedigrees suited for an "off" going.
-            </p>
-        </section>
-
-        <!-- Race sections will be dynamically generated here -->
-        <div id="race-sections"></div>
-
-        <section id="summary" class="pt-8">
-            <h2 class="text-3xl font-bold mb-4 text-center">Full Card Summary & Strategic Recommendations</h2>
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6">
-                
-                <div class="bg-green-100 border-l-4 border-green-500 text-green-800 p-6 rounded-lg shadow-md">
-                    <h3 class="text-xl font-bold mb-2">Prime Bet (A-Grade) ⭐</h3>
-                    <p class="font-semibold text-lg">Race 8, #5 Castle Island (30-1 ML)</p>
-                    <p>This is a rare situation where the morning line is completely irrelevant due to the surface change. This horse has strong dirt form and figures that make him a prime contender in the now-decimated field. He should offer the best value on the card.</p>
-                </div>
-
-                <div class="bg-red-100 border-l-4 border-red-500 text-red-800 p-6 rounded-lg shadow-md">
-                    <h3 class="text-xl font-bold mb-2">Key Horizontal 'Single' 🎯</h3>
-                    <p class="font-semibold text-lg">Race 4, #4 Barksdale (2-1 ML)</p>
-                    <p>Despite the smaller field, he remains a strong single candidate. He drops in class, has a win on a sloppy track, had a major excuse last race, and has a recent bullet workout. He is the most likely winner in a key sequence.</p>
-                </div>
-
-                <div class="bg-blue-100 border-l-4 border-blue-500 text-blue-800 p-6 rounded-lg shadow-md md:col-span-2">
-                    <h3 class="text-xl font-bold mb-2">Top Value Plays (B-Grade) 💰</h3>
-                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mt-4">
-                        <div>
-                            <p class="font-semibold">Race 3, #9 Mr. J (8-1 ML)</p>
-                            <p class="text-sm">Debut severely compromised by a catastrophic start. Pedigree suggests he will relish the sloppy track. A clean break could lead to massive improvement.</p>
-                        </div>
-                        <div>
-                            <p class="font-semibold">Race 4, #2 Jackson Heights (6-1 ML)</p>
-                            <p class="text-sm">With the favorite scratched, his proven form on a sloppy track makes him a major contender at a good price.</p>
-                        </div>
-                        <div>
-                            <p class="font-semibold">Race 9, #2 Darty Time (8-1 ML)</p>
-                            <p class="text-sm">In a chaotic maiden race moved to a sloppy track, her proven second-place finish in similar conditions makes her a standout value play.</p>
-                        </div>
+        <!-- Main Content -->
+        <main class="w-full lg:ml-64 p-4 md:p-8">
+            <section id="summary" class="mb-12">
+                <h2 class="text-3xl font-bold text-[#8B4513] mb-4">Handicapper's Dashboard: At a Glance</h2>
+                <p class="mb-6 text-[#654321]">This dashboard synthesizes the expert handicapping report for Saratoga's August 21, 2025 card. It's designed for quick access to key insights and value opportunities. Use the navigation to explore detailed race analyses and track bias data. The core objective is to identify market inefficiencies, not just likely winners.</p>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <div class="bg-white p-6 rounded-xl shadow-lg border border-gray-200">
+                        <h3 class="font-bold text-xl text-[#A0522D] mb-2">⭐ Prime Bet (A-Grade)</h3>
+                        <p class="text-lg"><span class="font-semibold">Race 2:</span> #8 St. Brigid's Cross (6/1)</p>
+                        <p class="text-sm mt-2 text-gray-600">A lone speed scenario after scratches gives this horse a massive tactical advantage. Excellent value.</p>
+                    </div>
+                    <div class="bg-white p-6 rounded-xl shadow-lg border border-gray-200">
+                        <h3 class="font-bold text-xl text-[#A0522D] mb-2">🎯 Key Horizontal 'Single'</h3>
+                        <p class="text-lg"><span class="font-semibold">Race 8:</span> #5 Catherine Wheel</p>
+                        <p class="text-sm mt-2 text-gray-600">The class of the field, in top form with a great workout pattern. A reliable anchor for multi-race wagers.</p>
+                    </div>
+                    <div class="bg-white p-6 rounded-xl shadow-lg border border-gray-200">
+                        <h3 class="font-bold text-xl text-[#A0522D] mb-2">📉 Top Fades</h3>
+                        <p class="text-sm"><span class="font-semibold">Race 3, #3 Kay Cup (6/5):</span> Vulnerable to a pace duel.</p>
+                        <p class="text-sm"><span class="font-semibold">Race 7, #12 Gin's Beach Road (1/2):</span> Poor value at very low odds.</p>
                     </div>
                 </div>
+            </section>
 
-                <div class="bg-yellow-100 border-l-4 border-yellow-500 text-yellow-800 p-6 rounded-lg shadow-md md:col-span-2">
-                    <h3 class="text-xl font-bold mb-2">Top Fades (Vulnerable Favorites) 👎</h3>
-                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4">
-                        <div>
-                            <p class="font-semibold">Race 1, #1 Givemefive (IRE) (2-1 ML)</p>
-                            <p class="text-sm">Faces a perfect storm of negative factors: top weight, a contentious pace duel, and first start at Saratoga. A horse to bet against at a short price.</p>
-                        </div>
-                        <div>
-                            <p class="font-semibold">Race 6, #6 Ticket to Ride (5/2 ML)</p>
-                            <p class="text-sm">May take money based on a troubled turf debut, but the switch to a sloppy dirt track is a complete unknown, making her a vulnerable favorite.</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-    </main>
-
-<script>
-const raceData = [
-    {
-        id: 1,
-        title: "The Grade 1 Jonathan Sheppard H.",
-        distance: "2 3/8 Miles",
-        surface: "Turf (Hurdle)",
-        class: "Grade 1 Stakes",
-        purse: "$150,000",
-        pace: { projection: "Pressured Duel", icon: "🐇💨" },
-        thesis: "A \"Pressured Duel\" is projected, orchestrated in part by the connections of #3 Jimmy P to set up his late run. The combination of a strong pace, the demanding 2 3/8-mile distance, and soft turf conditions will favor European-bred horses with proven stamina who can sit off the early speed and make a sustained run.",
-        spoiler: "The primary spoiler would be if #1 Givemefive (IRE)'s jockey opts to rate him, allowing #7 The Insider (IRE) to secure an uncontested lead and slow the pace.",
-        wagers: "<strong>Primary Wager:</strong> Exacta Box: 3, 5, 6<br><strong>Trifecta:</strong> 3,6 / 3,5,6 / 2,3,5,6,8<br><strong>Multi-Race:</strong> 'A' Horses: 3, 6 | 'B' Horse: 5",
-        rankings: [
-            { category: "Prime Contenders", horse: "#6 Zarak The Brave (FR)", odds: "4-1" },
-            { category: "Prime Contenders", horse: "#3 Jimmy P", odds: "3-1" },
-            { category: "Prime Value Overlays", horse: "#5 Who's Counting", odds: "9/2" },
-            { category: "Vulnerable Favorites", horse: "#1 Givemefive (IRE)", odds: "2-1" }
-        ],
-        chartData: {
-            labels: ["#5 Who's Counting", "#1 Givemefive (IRE)"],
-            implied: [18.2, 33.3],
-            assessed: [22, 20],
-            verdicts: ["Overlay", "Underlay"]
-        }
-    },
-    {
-        id: 2,
-        title: "Allowance Optional Claiming",
-        distance: "6 Furlongs",
-        surface: "Dirt",
-        class: "Allowance",
-        purse: "$120,000",
-        pace: { projection: "Pressured Duel", icon: "🐇💨" },
-        thesis: "A \"Pressured Duel\" between #3 R Disaster and #4 Striker Has Dial is the most probable race shape on a sloppy track. The superior class and proven sloppy track ability of #3 R Disaster should allow her to prevail. However, the duel will likely compromise her margin of victory and set the table for a stalking horse with proven wet track form, #5 Patricia Ann, to complete the exacta at a good price.",
-        spoiler: "#4 Striker Has Dial is not sent aggressively from the gate, allowing #3 R Disaster to secure an easy, uncontested lead.",
-        wagers: "<strong>Primary Wager:</strong> Exacta: 3 / 5<br><strong>Trifecta:</strong> 3 / 5 / 2,4<br><strong>Multi-Race:</strong> 'A' Horse (Single): 3",
-        rankings: [
-            { category: "Prime Contenders", horse: "#3 R Disaster", odds: "3/5" },
-            { category: "Prime Value Overlays", horse: "#5 Patricia Ann", odds: "5-1" },
-            { category: "Vulnerable Favorites", horse: "#3 R Disaster (Win Bet)", odds: "3/5" }
-        ],
-        chartData: {
-            labels: ["#5 Patricia Ann (Place)", "#3 R Disaster (Win)"],
-            implied: [16.7, 62.5],
-            assessed: [25, 55],
-            verdicts: ["Overlay (Exotics)", "Underlay (Win Bet)"]
-        }
-    },
-    {
-        id: 3,
-        title: "Maiden Optional Claiming",
-        distance: "7 Furlongs",
-        surface: "Dirt (OFF TURF)",
-        class: "Maiden",
-        purse: "$80,000",
-        pace: { projection: "Moderately Contested", icon: "🐇" },
-        thesis: "The race has come off the turf and will be run on a sloppy main track. This gives a significant advantage to horses with proven sloppy track form like #7 Chalky White and those with strong wet-track pedigrees like #9 Mr. J and the Pletcher firsters. The troubled trip of #9 Mr. J in his debut makes him a prime candidate for a major form reversal.",
-        spoiler: "The first-time starter #8 Lexington Pike is a monster for the powerful Pletcher/Ortiz Jr. combination and simply runs away from this field on debut.",
-        wagers: "<strong>Primary Wager:</strong> Win/Place/Show bet on #9 Mr. J.<br><strong>Exacta Box:</strong> 7, 8, 9<br><strong>Multi-Race:</strong> 'A' Horses: 7, 8, 9 | 'B' Horse: 3",
-        rankings: [
-            { category: "Prime Contenders", horse: "#7 Chalky White", odds: "3-1" },
-            { category: "Prime Contenders", horse: "#8 Lexington Pike", odds: "5/2" },
-            { category: "Prime Value Overlays", horse: "#9 Mr. J", odds: "8-1" },
-            { category: "Vulnerable Favorites", horse: "#7 Chalky White", odds: "3-1" }
-        ],
-        chartData: {
-            labels: ["#9 Mr. J", "#7 Chalky White"],
-            implied: [11.1, 25.0],
-            assessed: [20, 22],
-            verdicts: ["Overlay", "Underlay"]
-        }
-    },
-    {
-        id: 4,
-        title: "Starter Optional Claiming",
-        distance: "6 Furlongs",
-        surface: "Dirt",
-        class: "Starter",
-        purse: "$63,000",
-        pace: { projection: "Moderately Contested", icon: "🐇" },
-        thesis: "With the favorite scratched and on a sloppy track, the race is wide open. The class-dropping #4 Barksdale holds a significant advantage due to his proven ability on a wet surface, his troubled trip last out, and sharp recent workout. He is the horse to beat.",
-        spoiler: "The pace is slower than anticipated, allowing a horse like #3 Stewie or #6 Amundson to get an easy lead and steal the race on the front end.",
-        wagers: "<strong>Primary Wager:</strong> Win bet on #4 Barksdale.<br><strong>Exacta Box:</strong> 2, 4<br><strong>Multi-Race:</strong> 'A' Horse (Single): 4",
-        rankings: [
-            { category: "Prime Contenders", horse: "#4 Barksdale", odds: "2-1" },
-            { category: "Prime Value Overlays", horse: "#2 Jackson Heights", odds: "6-1" },
-        ],
-        chartData: {
-            labels: ["#2 Jackson Heights", "#4 Barksdale"],
-            implied: [14.3, 33.3],
-            assessed: [20, 45],
-            verdicts: ["Overlay", "Overlay"]
-        }
-    },
-    {
-        id: 5,
-        title: "Maiden Special Weight",
-        distance: "1 Mile",
-        surface: "Dirt (OFF TURF)",
-        class: "Maiden",
-        purse: "$90,000",
-        pace: { projection: "Pace Void (Slow)", icon: "🐢" },
-        thesis: "A \"Pace Void\" on a sloppy track creates a tactical race where jockey intent and wet-track pedigree are paramount. The combination of a top wet-track pedigree and aggressive jockey Irad Ortiz Jr. makes #2 Askingforafriend a prime value play.",
-        spoiler: "#6 Oat Coutour, who has some dirt experience, gets an uncontested lead and wires the field at a price.",
-        wagers: "<strong>Primary Wager:</strong> Win bet on #2 Askingforafriend.<br><strong>Exacta Box:</strong> 2, 3, 8<br><strong>Multi-Race:</strong> 'A' Horses: 2, 3, 8 | 'B' Horse: 6",
-        rankings: [
-            { category: "Prime Contenders", horse: "#3 Spirit of the Law", odds: "3-1" },
-            { category: "Prime Contenders", horse: "#8 Willpowered", odds: "4-1" },
-            { category: "Prime Value Overlays", horse: "#2 Askingforafriend", odds: "7/2" },
-        ],
-        chartData: {
-            labels: ["#2 Askingforafriend", "#3 Spirit of the Law"],
-            implied: [22.2, 25.0],
-            assessed: [30, 25],
-            verdicts: ["Overlay", "Fair Value"]
-        }
-    },
-    {
-        id: 6,
-        title: "Maiden Special Weight",
-        distance: "5 1/2 Furlongs",
-        surface: "Dirt (OFF TURF)",
-        class: "Maiden",
-        purse: "$90,000",
-        pace: { projection: "Moderately Contested", icon: "🐇" },
-        thesis: "In a race moved to a sloppy dirt track, the well-bred and well-prepared first-time starter #12 Hot Currency from the high-percentage Rice/Ortiz Jr. combination is the horse to beat. Her pedigree is suitable for the conditions, and she is trained for a top debut effort.",
-        spoiler: "#2 Cara's Dreamchaser uses her experience on a sloppy track to her advantage and pulls off the upset.",
-        wagers: "<strong>Primary Wager:</strong> Win bet on #12 Hot Currency.<br><strong>Exacta Box:</strong> 2, 7, 12<br><strong>Multi-Race:</strong> 'A' Horse: 12 | 'B' Horses: 2, 7",
-        rankings: [
-            { category: "Prime Contenders", horse: "#12 Hot Currency", odds: "7/2" },
-            { category: "Prime Contenders", horse: "#7 Midtown Mischief", odds: "5-1" },
-            { category: "Prime Value Overlays", horse: "#2 Cara's Dreamchaser", odds: "12-1" },
-            { category: "Vulnerable Favorites", horse: "#6 Ticket to Ride", odds: "5/2" },
-        ],
-        chartData: {
-            labels: ["#2 Cara's Dreamchaser", "#12 Hot Currency"],
-            implied: [7.7, 22.2],
-            assessed: [15, 30],
-            verdicts: ["Overlay", "Overlay"]
-        }
-    },
-    {
-        id: 7,
-        title: "Claiming",
-        distance: "1 Mile",
-        surface: "Dirt",
-        class: "Claiming",
-        purse: "$60,000",
-        pace: { projection: "Pace Void (Slow)", icon: "🐢" },
-        thesis: "A \"Pace Void\" on a sloppy track makes this a tactical affair. #2 Passing Game is the class of the field and is in the best current form. His tactical speed and proven ability on an off-track should allow him to work out a perfect trip. He is the most likely winner.",
-        spoiler: "#5 Notah with Irad Ortiz Jr. aboard gets an uncontested lead and wires the field.",
-        wagers: "<strong>Primary Wager:</strong> Exacta Box: 2, 5<br><strong>Trifecta:</strong> 2,5 / 2,5 / 1,4,6<br><strong>Multi-Race:</strong> 'A' Horse: 2 | 'B' Horse: 5",
-        rankings: [
-            { category: "Prime Contenders", horse: "#2 Passing Game", odds: "5/2" },
-            { category: "Prime Value Overlays", horse: "#5 Notah", odds: "4-1" },
-        ],
-        chartData: {
-            labels: ["#5 Notah", "#2 Passing Game"],
-            implied: [20.0, 28.6],
-            assessed: [25, 45],
-            verdicts: ["Overlay", "Overlay"]
-        }
-    },
-    {
-        id: 8,
-        title: "Claiming",
-        distance: "1 Mile",
-        surface: "Dirt (OFF TURF)",
-        class: "Claiming",
-        purse: "$68,000",
-        pace: { projection: "Moderately Contested", icon: "🐇" },
-        thesis: "In a small field on a sloppy track, early speed and proven wet-track form are key. #1A Loco Abarrio is the speed of the race, but the consistent #5 Castle Island and the sloppy track specialist #13 He's Got This are major threats.",
-        spoiler: "#1A Loco Abarrio gets an easy lead and wires the field.",
-        wagers: "<strong>Primary Wager:</strong> Win/Place/Show bet on #5 Castle Island.<br><strong>Exacta Box:</strong> 1A, 5, 13<br><strong>Multi-Race:</strong> 'A' Horses: 5, 13 | 'B' Horse: 1A",
-        rankings: [
-            { category: "Prime Contenders", horse: "#5 Castle Island", odds: "30-1" },
-            { category: "Prime Contenders", horse: "#1A Loco Abarrio", odds: "6-1" },
-            { category: "Prime Value Overlays", horse: "#13 He's Got This", odds: "6-1" },
-        ],
-        chartData: {
-            labels: ["#13 He's Got This", "#5 Castle Island"],
-            implied: [14.3, 3.2],
-            assessed: [25, 35],
-            verdicts: ["Overlay", "Massive Overlay"]
-        }
-    },
-    {
-        id: 9,
-        title: "Maiden Claiming",
-        distance: "5 1/2 Furlongs",
-        surface: "Dirt (OFF TURF)",
-        class: "Maiden",
-        purse: "$55,000",
-        pace: { projection: "Moderately Contested", icon: "🐇" },
-        thesis: "The class drop and strong dirt figures make #13 Miss Im Pulsive the horse to beat. Her pedigree suggests she will handle the sloppy track. #2 Darty Time is a major threat due to her proven form on a wet surface.",
-        spoiler: "#14 Laughing Lady takes to the sloppy track and uses her class drop to her advantage, wiring the field.",
-        wagers: "<strong>Primary Wager:</strong> Win bet on #2 Darty Time.<br><strong>Exacta Box:</strong> 2, 13, 14<br><strong>Multi-Race:</strong> 'A' Horses: 2, 13, 14 | 'B' Horse: 3",
-        rankings: [
-            { category: "Prime Contenders", horse: "#13 Miss Im Pulsive", odds: "6-1" },
-            { category: "Prime Contenders", horse: "#2 Darty Time", odds: "8-1" },
-            { category: "Prime Value Overlays", horse: "#14 Laughing Lady", odds: "3-1" },
-        ],
-        chartData: {
-            labels: ["#2 Darty Time", "#14 Laughing Lady"],
-            implied: [11.1, 25.0],
-            assessed: [25, 30],
-            verdicts: ["Overlay", "Overlay"]
-        }
-    }
-];
-
-function createRaceSection(race) {
-    const section = document.createElement('section');
-    section.id = `race${race.id}`;
-    section.className = 'pt-8 mb-8';
-
-    section.innerHTML = `
-        <div class="bg-white p-6 rounded-lg shadow-lg">
-            <div class="border-b-2 border-gray-200 pb-4 mb-4">
-                <h2 class="text-3xl font-bold">Race ${race.id}: ${race.title}</h2>
-                <div class="flex flex-wrap text-gray-600 mt-2 text-sm md:text-base">
-                    <span class="mr-4"><strong>Distance:</strong> ${race.distance}</span>
-                    <span class="mr-4"><strong>Surface:</strong> ${race.surface}</span>
-                    <span class="mr-4"><strong>Class:</strong> ${race.class}</span>
-                    <span><strong>Purse:</strong> ${race.purse}</span>
-                </div>
+            <!-- Race Sections -->
+            <div id="race-analysis">
+                <h2 class="text-3xl font-bold text-[#8B4513] mb-6">Race-by-Race Analysis</h2>
+                <!-- Race data will be injected here by JavaScript -->
             </div>
 
-            <div>
-                <div class="mb-4 border-b border-gray-200">
-                    <ul class="flex flex-wrap -mb-px text-sm font-medium text-center" id="tabs-${race.id}" role="tablist">
-                        <li class="mr-2" role="presentation">
-                            <button class="inline-block p-4 border-b-2 rounded-t-lg" id="analysis-tab-${race.id}" type="button" role="tab" aria-controls="analysis-${race.id}" aria-selected="true">Analysis</button>
-                        </li>
-                        <li class="mr-2" role="presentation">
-                            <button class="inline-block p-4 border-b-2 rounded-t-lg hover:text-gray-600 hover:border-gray-300" id="picks-tab-${race.id}" type="button" role="tab" aria-controls="picks-${race.id}" aria-selected="false">Picks & Strategy</button>
-                        </li>
-                    </ul>
+            <section id="bias" class="mt-12">
+                <h2 class="text-3xl font-bold text-[#8B4513] mb-4">Interactive Track Bias Analysis</h2>
+                <p class="mb-6 text-[#654321]">Saratoga's track biases are a critical handicapping factor. The main dirt track heavily favors early speed, while the turf courses present different challenges. Use the dropdown below to explore the historical performance of different running styles and post positions across various distances and surfaces to see how these trends might influence today's races.</p>
+                <div class="bg-white p-6 rounded-xl shadow-lg border border-gray-200">
+                    <div class="mb-4">
+                        <label for="biasSelector" class="block text-sm font-medium text-gray-700">Select Track/Distance:</label>
+                        <select id="biasSelector" class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-[#A0522D] focus:border-[#A0522D] sm:text-sm rounded-md">
+                            <!-- Options will be injected here -->
+                        </select>
+                    </div>
+                    <div class="chart-container" style="position: relative; height:40vh; width:80vw; max-width: 600px; margin: auto;">
+                        <canvas id="biasChart"></canvas>
+                    </div>
                 </div>
-                <div id="tab-content-${race.id}">
-                    <div class="p-4 rounded-lg bg-gray-50" id="analysis-${race.id}" role="tabpanel" aria-labelledby="analysis-tab-${race.id}">
-                        <h3 class="text-xl font-semibold mb-3">Pace Projection: <span class="text-blue-600">${race.pace.projection} ${race.pace.icon}</span></h3>
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            <div>
-                                <h4 class="font-semibold text-lg mb-2">Race Thesis</h4>
-                                <p>${race.thesis}</p>
-                            </div>
-                            <div>
-                                <h4 class="font-semibold text-lg mb-2">Spoiler Scenario</h4>
-                                <p>${race.spoiler}</p>
-                            </div>
+            </section>
+        </main>
+    </div>
+
+    <script>
+        const raceData = [
+            {
+                id: "race1",
+                title: "Race 1: Allowance",
+                overview: "7 Furlongs, Dirt, NY-Bred Fillies & Mares 3YO+, Purse: $95,000. A sprint where the main track's speed bias is a key factor.",
+                pace: { type: "Pressured Duel", color: "bg-red-200 text-red-800" },
+                contenders: [
+                    { name: "#6 Accelerated News", speed: 111 },
+                    { name: "#7 Grace And Grit", speed: 107 },
+                    { name: "#3 City Blocks", speed: 98 }
+                ],
+                rankings: {
+                    contenders: ["#6 Accelerated News", "#7 Grace And Grit", "#3 City Blocks"],
+                    value: ["#1 Intentious (9/2 ML) - Hidden potential from a troubled trip likely to be overlooked."],
+                    vulnerable: ["#6 Accelerated News (5/2 ML) - Strong talent but an underlay given the high risk of a taxing pace duel."]
+                },
+                thesis: "The primary thesis is that the likely **Pressured Duel** between early speeds will set up a pace collapse, favoring a horse with a stalking or pressing style.",
+                spoiler: "The spoiler is if #6 Accelerated News demonstrates her overwhelming speed figure is no fluke and wires the field on an uncontested lead.",
+                wagers: "Exacta Box: 1-3-7. Trifecta: 1,7 / 1,3,7 / 1,3,4,5,6,7. This race is unsuitable for a horizontal single."
+            },
+            {
+                id: "race2",
+                title: "Race 2: Maiden Optional Claiming",
+                overview: "1 1/16 Miles, Inner Turf, 2YO Fillies, Purse: $80,000. Scratches have fundamentally altered this race.",
+                pace: { type: "Lone/Uncontested", color: "bg-green-200 text-green-800" },
+                contenders: [
+                    { name: "#8 St. Brigid's Cross", speed: 112 },
+                    { name: "#5 Mappy", speed: 109 },
+                    { name: "#7 Birch Run", speed: 95 }
+                ],
+                rankings: {
+                    contenders: ["#8 St. Brigid's Cross", "#6 Irtiqaa", "#7 Birch Run"],
+                    value: ["#8 St. Brigid's Cross (6/1 ML) - Now the lone speed, offering a massive tactical advantage and value."],
+                    vulnerable: ["#5 Mappy (2/1 ML) - High speed figure from a sprint is questionable at this route distance."]
+                },
+                thesis: "The scratch of the other primary speed horse turns this into a **Lone/Uncontested** pace scenario, giving a significant tactical advantage to #8 St. Brigid's Cross.",
+                spoiler: "A talented first-time starter, like #6 Irtiqaa, could be a hidden speed horse and contest the lead.",
+                wagers: "Exacta Box: 6-7-8. Trifecta: 8 / 6,7 / 1,4,5,6,7,10. Not recommended for a horizontal single."
+            },
+            {
+                id: "race3",
+                title: "Race 3: Fleet Indian Stakes",
+                overview: "1 1/8 Miles, Dirt, NY-Bred 3YO Fillies, Purse: $200,000. A small but tactical stakes field.",
+                pace: { type: "Pressured Duel", color: "bg-red-200 text-red-800" },
+                contenders: [
+                    { name: "#3 Kay Cup", speed: 102 },
+                    { name: "#2 Vehemente", speed: 102 },
+                    { name: "#5 Valtellina", speed: 100 }
+                ],
+                rankings: {
+                    contenders: ["#2 Vehemente", "#3 Kay Cup", "#5 Valtellina"],
+                    value: ["#5 Valtellina (5/1 ML) - Competitive form and figures at a higher price offer a significant overlay."],
+                    vulnerable: ["#3 Kay Cup (6/5 ML) - Likely to be over-bet and is vulnerable to a pace duel."]
+                },
+                thesis: "A pressured pace will set up perfectly for a horse that can stalk and finish strongly. The bullet work and consistent class of #2 Vehemente make her the horse to beat.",
+                spoiler: "If #3 Kay Cup and #4 Lottie Margaret do not duel and one gets an easy lead, they could wire the field.",
+                wagers: "Exacta: 2 / 3,5. Trifecta: 2 / 3,5 / 1,3,5. #2 Vehemente is a strong candidate for a horizontal single."
+            },
+            {
+                id: "race4",
+                title: "Race 4: Allowance",
+                overview: "1 1/16 Miles, Inner Turf, 3YO+, Purse: $95,000. A competitive allowance race on the turf.",
+                pace: { type: "Moderately Contested", color: "bg-yellow-200 text-yellow-800" },
+                contenders: [
+                    { name: "#8 Ortus", speed: 117 },
+                    { name: "#7 Miztertonic", speed: 114 },
+                    { name: "#4 Outtawaterbury", speed: 111 }
+                ],
+                rankings: {
+                    contenders: ["#7 Miztertonic", "#8 Ortus"],
+                    value: ["#8 Ortus (6/1 ML) - Top speed figure and a recent troubled trip make him a major contender at a generous price."],
+                    vulnerable: ["#7 Miztertonic (8/5 ML) - A strong contender but a vulnerable price in a competitive field."]
+                },
+                thesis: "#7 Miztertonic is the class of the field, is in top form, and has a bullet work. The moderate pace should set up perfectly for his stalking style.",
+                spoiler: "A complete pace collapse could allow a deep closer like #9 Golden Reign to win at a huge price.",
+                wagers: "Exacta: 7 / 8. Trifecta: 7 / 8 / ALL. #7 Miztertonic is a solid single for multi-race wagers."
+            },
+            {
+                id: "race5",
+                title: "Race 5: Maiden Optional Claiming",
+                overview: "1 1/16 Miles, Inner Turf, 2YO Fillies, Purse: $80,000. A difficult race to handicap with many first-time starters and key scratches.",
+                pace: { type: "Pace Void (Slow)", color: "bg-blue-200 text-blue-800" },
+                contenders: [
+                    { name: "#4 Pan Pan", speed: 98 },
+                    { name: "#10 River Empress", speed: 0 },
+                    { name: "#3 Fonzi Angel", speed: 0 }
+                ],
+                rankings: {
+                    contenders: ["#4 Pan Pan", "#10 River Empress"],
+                    value: ["#10 River Empress (6/1 ML) - Trainer has a high win rate with 2YOs and a proven sire.", "#4 Pan Pan (7/2 ML) - Likely to be on the lead and a deserving favorite."],
+                    vulnerable: ["No vulnerable favorites in this race due to the scratches."]
+                },
+                thesis: "The scratch of the lone speed horse creates a **Pace Void**. This gives a huge tactical advantage to any horse that can get a clean trip on or near the lead.",
+                spoiler: "A talented first-time starter could be a hidden speed horse and contest the lead with #4 Pan Pan.",
+                wagers: "Exacta Box: 4-10. Trifecta: 4,10 / 4,10 / ALL. #4 Pan Pan is a logical single for multi-race wagers."
+            },
+            {
+                id: "race6",
+                title: "Race 6: Maiden Special Weight",
+                overview: "6 Furlongs, Dirt, 2YO Fillies, Purse: $80,000. A large field of inexperienced fillies where pace will be key.",
+                pace: { type: "Pressured Duel", color: "bg-red-200 text-red-800" },
+                contenders: [
+                    { name: "#7 Jetty's Home", speed: 96 },
+                    { name: "#4 Sparkling Mama", speed: 93 },
+                    { name: "#12 Looks To Kill", speed: 0 }
+                ],
+                rankings: {
+                    contenders: ["#12 Looks To Kill", "#1 Donna Romano", "#7 Jetty's Home"],
+                    value: ["#12 Looks To Kill (12/1 ML) - Trainer Jena Antonucci has an excellent 23% win rate with 2-year-old first-time starters, making this an elite value play."],
+                    vulnerable: ["No vulnerable favorites in this race due to the scratches."]
+                },
+                thesis: "A fast, pressured pace will cause the front-runners to falter, giving a huge advantage to a horse with a good closing kick or a talented first-time starter.",
+                spoiler: "If one horse, likely #7 Jetty's Home, is much faster than the rest and gets a lone, easy lead, she could wire the field.",
+                wagers: "Exacta Box: 1,7,12. Trifecta: 12 / 1,7 / ALL. #12 Looks To Kill is an excellent longshot single."
+            },
+            {
+                id: "race7",
+                title: "Race 7: Maiden Special Weight",
+                overview: "5 1/2 Furlongs, Inner Turf, 3YO+, Purse: $100,000. A turf sprint with a clear pace dynamic.",
+                pace: { type: "Pressured Duel", color: "bg-red-200 text-red-800" },
+                contenders: [
+                    { name: "#2 Gellhorn", speed: 108 },
+                    { name: "#12 Gin's Beach Road", speed: 104 },
+                    { name: "#3 Shades Of Jade", speed: 95 }
+                ],
+                rankings: {
+                    contenders: ["#2 Gellhorn", "#12 Gin's Beach Road", "#3 Shades Of Jade"],
+                    value: ["#2 Gellhorn (4/1 ML) - Strong speed figures and a significant trip excuse make her a strong contender at a generous price."],
+                    vulnerable: ["#12 Gin's Beach Road (1/2 ML) - A solid horse but a very poor value bet at extremely low odds."]
+                },
+                thesis: "A fast pace will set up for a stalker/closer. #2 Gellhorn is the class of the field and should get a perfect trip to run down the leaders.",
+                spoiler: "If #12 Gin's Beach Road is allowed an easy lead, she could wire the field.",
+                wagers: "Exacta: 2 / 3,12. Trifecta: 2 / 3,12 / ALL. #2 Gellhorn is an excellent single for multi-race wagers."
+            },
+            {
+                id: "race8",
+                title: "Race 8: Allowance Optional Claiming",
+                overview: "1 Mile, Dirt, Fillies & Mares 3YO+, Purse: $115,000. A small but competitive field of older females.",
+                pace: { type: "Moderately Contested", color: "bg-yellow-200 text-yellow-800" },
+                contenders: [
+                    { name: "#7 Cupid's Heart", speed: 107 },
+                    { name: "#5 Catherine Wheel", speed: 105 },
+                    { name: "#6 Perfect Shot", speed: 102 }
+                ],
+                rankings: {
+                    contenders: ["#5 Catherine Wheel", "#6 Perfect Shot", "#3 Lemon Muffin"],
+                    value: ["#6 Perfect Shot (5/1 ML) - Her figures are competitive with the favorite, making her a great value bet."],
+                    vulnerable: ["#5 Catherine Wheel (2/1 ML) - A solid contender but a vulnerable price in a competitive field."]
+                },
+                thesis: "#5 Catherine Wheel is the class of the field, in top form, and has a great workout pattern. The moderate pace should set up perfectly for her stalking style.",
+                spoiler: "A deep closer like #2 Goodnightngodbless could benefit from an unexpectedly fast pace and win at a huge price.",
+                wagers: "Exacta Box: 3,5,6. Trifecta: 5,6 / 3,5,6 / 2,7,8. #5 Catherine Wheel is the Key Horizontal Single of the day."
+            },
+            {
+                id: "race9",
+                title: "Race 9: Albany Stakes",
+                overview: "1 1/8 Miles, Dirt, NY-Bred 3YOs, Purse: $200,000. A key scratch has completely changed the complexion of this stakes race.",
+                pace: { type: "Lone/Uncontested", color: "bg-green-200 text-green-800" },
+                contenders: [
+                    { name: "#4 Iron Dome", speed: 109 },
+                    { name: "#6 Hit The Post", speed: 99 },
+                    { name: "#1 King's Leap", speed: 96 }
+                ],
+                rankings: {
+                    contenders: ["#4 Iron Dome", "#6 Hit The Post", "#1 King's Leap"],
+                    value: ["#2 Just Licorice (15/1 ML) - A closer who could benefit from a slow pace and finish strong. Generous odds for his potential."],
+                    vulnerable: ["#4 Iron Dome (7/5 ML) - Now the logical favorite, but his odds will likely drop, making him an underlay."]
+                },
+                thesis: "The scratch of the other main speed horse changes this into a **Lone/Uncontested** pace scenario, giving a massive tactical advantage to #4 Iron Dome.",
+                spoiler: "Another horse could be a hidden speed and unexpectedly contest the lead with #4 Iron Dome.",
+                wagers: "Exacta: 4 / 1,2,6. Trifecta: 4 / 1,2,6 / 1,2,3,6. #4 Iron Dome is a strong horizontal single."
+            },
+            {
+                id: "race10",
+                title: "Race 10: Maiden Special Weight",
+                overview: "5 1/2 Furlongs, Inner Turf, NY-Bred Fillies & Mares 3YO+, Purse: $90,000. The finale is a turf sprint with a clear pace advantage for one runner.",
+                pace: { type: "Lone/Uncontested", color: "bg-green-200 text-green-800" },
+                contenders: [
+                    { name: "#2 No Ordinary Love", speed: 117 },
+                    { name: "#3 One Last Knock", speed: 115 },
+                    { name: "#10 Aperitif", speed: 90 }
+                ],
+                rankings: {
+                    contenders: ["#3 One Last Knock", "#2 No Ordinary Love"],
+                    value: ["No prime value overlays in this race."],
+                    vulnerable: ["#2 No Ordinary Love (5/2 ML) - A solid contender, but her low odds are an underlay in a race with unknown factors."]
+                },
+                thesis: "#3 One Last Knock is the lone speed and will be very difficult to beat. She and #2 No Ordinary Love are the two fastest horses in the race.",
+                spoiler: "A deep closer like #10 Aperitif could benefit from an unexpectedly fast pace and win at a huge price.",
+                wagers: "Exacta Box: 2,3. Trifecta: 2,3 / 2,3 / ALL. This race is a pass for a single."
+            }
+        ];
+
+        const biasData = {
+            "6.5f Dirt": { labels: ['Early', 'Early/Presser', 'Presser', 'Stalker'], data: [33, 0, 0, 0], posts: "Outside" },
+            "7.0f Dirt": { labels: ['Early', 'Early/Presser', 'Presser', 'Stalker'], data: [25, 0, 0, 0], posts: "Outside" },
+            "1 Mile Dirt": { labels: ['Early', 'Early/Presser', 'Presser', 'Stalker'], data: [0, 25, 0, 0], posts: "Outside" },
+            "1 1/8m Dirt": { labels: ['Early', 'Early/Presser', 'Presser', 'Stalker'], data: [0, 24, 0, 0], posts: "Rail/Inside" },
+            "Turf Sprint (Inner)": { labels: ['Early', 'Early/Presser', 'Presser', 'Stalker'], data: [0, 30, 26, 0], posts: "Mid/Out" },
+            "Inner Turf Route": { labels: ['Early', 'Early/Presser', 'Presser', 'Stalker'], data: [0, 0, 11, 0], posts: "Rail/Inside" },
+            "Turf Routes (Outer)": { labels: ['Early', 'Early/Presser', 'Presser', 'Stalker'], data: [0, 0, 41, 0], posts: "7 and greater" }
+        };
+
+        function createRaceCard(race) {
+            return `
+                <section id="${race.id}" class="mb-8 p-6 bg-white rounded-xl shadow-lg border border-gray-200">
+                    <div class="flex justify-between items-start mb-4">
+                        <div>
+                            <h3 class="text-2xl font-bold text-[#A0522D]">${race.title}</h3>
+                            <p class="text-sm text-gray-600">${race.overview}</p>
+                        </div>
+                        <div class="text-right">
+                            <span class="font-semibold text-sm">Pace Projection:</span>
+                            <span class="px-3 py-1 text-xs font-semibold rounded-full ${race.pace.color}">${race.pace.type}</span>
                         </div>
                     </div>
-                    <div class="hidden p-4 rounded-lg bg-gray-50" id="picks-${race.id}" role="tabpanel" aria-labelledby="picks-tab-${race.id}">
-                        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                            <div>
-                                <h4 class="font-semibold text-lg mb-2">Value-Oriented Rankings</h4>
-                                <div id="rankings-table-${race.id}" class="space-y-2"></div>
-                                <h4 class="font-semibold text-lg mt-4 mb-2">Wager Construction</h4>
-                                <div class="text-sm p-3 bg-gray-100 rounded-md">${race.wagers}</div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <h4 class="font-semibold text-lg mb-2 text-[#654321]">Top Speed Figures</h4>
+                            <div class="chart-container" style="position: relative; height:200px; max-height: 250px; width:100%;">
+                                <canvas id="chart-${race.id}"></canvas>
                             </div>
-                            <div>
-                                <h4 class="font-semibold text-lg mb-2 text-center">Probability vs. Price</h4>
-                                <div class="chart-container">
-                                    <canvas id="chart-${race.id}"></canvas>
+                        </div>
+                        <div>
+                            <h4 class="font-semibold text-lg mb-2 text-[#654321]">Value-Oriented Rankings</h4>
+                            <div class="tabs">
+                                <div class="border-b border-gray-200">
+                                    <nav class="-mb-px flex space-x-4" aria-label="Tabs">
+                                        <button class="tab-link active whitespace-nowrap py-2 px-1 border-b-2 font-medium text-sm" data-tab="contenders-${race.id}">Contenders</button>
+                                        <button class="tab-link whitespace-nowrap py-2 px-1 border-b-2 font-medium text-sm text-gray-500 hover:text-gray-700" data-tab="value-${race.id}">Value</button>
+                                        <button class="tab-link whitespace-nowrap py-2 px-1 border-b-2 font-medium text-sm text-gray-500 hover:text-gray-700" data-tab="vulnerable-${race.id}">Vulnerable</button>
+                                    </nav>
+                                </div>
+                                <div id="contenders-${race.id}" class="tab-content py-4">
+                                    <ul class="list-disc list-inside text-sm space-y-1">${race.rankings.contenders.map(h => `<li>${h}</li>`).join('')}</ul>
+                                </div>
+                                <div id="value-${race.id}" class="tab-content hidden py-4">
+                                    <p class="text-sm">${race.rankings.value.join('<br>')}</p>
+                                </div>
+                                <div id="vulnerable-${race.id}" class="tab-content hidden py-4">
+                                    <p class="text-sm">${race.rankings.vulnerable.join('<br>')}</p>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
-            </div>
-        </div>
-    `;
-    
-    const raceSectionsContainer = document.getElementById('race-sections');
-    raceSectionsContainer.appendChild(section);
+                    
+                    <div class="mt-6">
+                         <div class="accordion">
+                            <button class="accordion-header w-full text-left font-semibold text-lg text-[#654321] p-3 bg-gray-100 rounded-t-lg hover:bg-gray-200 transition duration-300 flex justify-between items-center">
+                                <span>Betting Strategy & Thesis</span>
+                                <span class="transform transition-transform duration-300">&#9662;</span>
+                            </button>
+                            <div class="accordion-content bg-gray-50 p-4 rounded-b-lg border border-t-0 border-gray-200">
+                                <h5 class="font-bold text-md text-[#A0522D]">Race Thesis</h5>
+                                <p class="text-sm mb-3">${race.thesis}</p>
+                                <h5 class="font-bold text-md text-[#A0522D]">Spoiler Scenario</h5>
+                                <p class="text-sm mb-3">${race.spoiler}</p>
+                                <h5 class="font-bold text-md text-[#A0522D]">Wager Construction</h5>
+                                <p class="text-sm">${race.wagers}</p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            `;
+        }
 
-    const rankingsTable = document.getElementById(`rankings-table-${race.id}`);
-    race.rankings.forEach(r => {
-        const div = document.createElement('div');
-        div.className = 'flex justify-between items-center p-2 rounded-md';
-        let bgColor = 'bg-gray-100';
-        if (r.category.includes('Value')) bgColor = 'bg-green-100';
-        if (r.category.includes('Vulnerable')) bgColor = 'bg-red-100';
-        div.classList.add(bgColor);
-        div.innerHTML = `
-            <div>
-                <p class="font-semibold">${r.horse}</p>
-                <p class="text-xs text-gray-600">${r.category}</p>
-            </div>
-            <p class="font-bold text-lg">${r.odds}</p>
-        `;
-        rankingsTable.appendChild(div);
-    });
+        document.addEventListener('DOMContentLoaded', () => {
+            const raceContainer = document.getElementById('race-analysis');
+            raceData.forEach(race => {
+                raceContainer.innerHTML += createRaceCard(race);
+            });
 
-    setupTabs(race.id);
-    createChart(race.id, race.chartData);
-}
-
-function setupTabs(raceId) {
-    const analysisTab = document.getElementById(`analysis-tab-${raceId}`);
-    const picksTab = document.getElementById(`picks-tab-${raceId}`);
-    const analysisContent = document.getElementById(`analysis-${raceId}`);
-    const picksContent = document.getElementById(`picks-${raceId}`);
-
-    const activeClasses = ['border-blue-600', 'text-blue-600'];
-    const inactiveClasses = ['border-transparent', 'hover:text-gray-600', 'hover:border-gray-300'];
-
-    analysisTab.classList.add(...activeClasses);
-
-    analysisTab.addEventListener('click', () => {
-        analysisContent.classList.remove('hidden');
-        picksContent.classList.add('hidden');
-        analysisTab.classList.add(...activeClasses);
-        analysisTab.classList.remove(...inactiveClasses);
-        picksTab.classList.remove(...activeClasses);
-        picksTab.classList.add(...inactiveClasses);
-    });
-
-    picksTab.addEventListener('click', () => {
-        picksContent.classList.remove('hidden');
-        analysisContent.classList.add('hidden');
-        picksTab.classList.add(...activeClasses);
-        picksTab.classList.remove(...inactiveClasses);
-        analysisTab.classList.remove(...activeClasses);
-        analysisTab.classList.add(...inactiveClasses);
-    });
-}
-
-function createChart(raceId, data) {
-    const ctx = document.getElementById(`chart-${raceId}`).getContext('2d');
-    new Chart(ctx, {
-        type: 'bar',
-        data: {
-            labels: data.labels.map(label => label.length > 16 ? label.substring(0, 16) + '...' : label),
-            datasets: [
-                {
-                    label: 'Implied Probability (%)',
-                    data: data.implied,
-                    backgroundColor: 'rgba(255, 99, 132, 0.5)',
-                    borderColor: 'rgba(255, 99, 132, 1)',
-                    borderWidth: 1
-                },
-                {
-                    label: 'Assessed Probability (%)',
-                    data: data.assessed,
-                    backgroundColor: 'rgba(54, 162, 235, 0.5)',
-                    borderColor: 'rgba(54, 162, 235, 1)',
-                    borderWidth: 1
-                }
-            ]
-        },
-        options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            scales: {
-                y: {
-                    beginAtZero: true,
-                    title: {
-                        display: true,
-                        text: 'Probability (%)'
-                    }
-                }
-            },
-            plugins: {
-                tooltip: {
-                    callbacks: {
-                        footer: function(tooltipItems) {
-                            const index = tooltipItems[0].dataIndex;
-                            return 'Verdict: ' + data.verdicts[index];
+            raceData.forEach(race => {
+                const ctx = document.getElementById(`chart-${race.id}`).getContext('2d');
+                new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: race.contenders.map(c => c.name),
+                        datasets: [{
+                            label: 'Top Speed Figure',
+                            data: race.contenders.map(c => c.speed),
+                            backgroundColor: '#D2B48C',
+                            borderColor: '#A0522D',
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        indexAxis: 'y',
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: { display: false },
+                            tooltip: {
+                                callbacks: {
+                                    label: function(context) {
+                                        return `Speed Figure: ${context.raw}`;
+                                    }
+                                }
+                            }
+                        },
+                        scales: {
+                            x: {
+                                beginAtZero: true,
+                                suggestedMin: 50,
+                                grid: {
+                                    display: false
+                                }
+                            },
+                            y: {
+                                grid: {
+                                    display: false
+                                }
+                            }
                         }
                     }
-                },
-                legend: {
-                    position: 'top',
-                },
+                });
+            });
+
+            const biasSelector = document.getElementById('biasSelector');
+            Object.keys(biasData).forEach(key => {
+                const option = document.createElement('option');
+                option.value = key;
+                option.textContent = key;
+                biasSelector.appendChild(option);
+            });
+
+            let biasChart;
+            function updateBiasChart(key) {
+                const data = biasData[key];
+                if (biasChart) {
+                    biasChart.destroy();
+                }
+                const ctx = document.getElementById('biasChart').getContext('2d');
+                biasChart = new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: data.labels,
+                        datasets: [{
+                            label: `% Winners by Style (Best Posts: ${data.posts})`,
+                            data: data.data,
+                            backgroundColor: ['#A0522D', '#D2B48C', '#8B4513', '#F5F5DC'],
+                            borderColor: '#654321',
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                position: 'top',
+                            },
+                            title: {
+                                display: true,
+                                text: `Win % by Running Style for ${key}`
+                            }
+                        },
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                title: {
+                                    display: true,
+                                    text: 'Win Percentage'
+                                }
+                            }
+                        }
+                    }
+                });
             }
-        }
-    });
-}
 
-document.addEventListener('DOMContentLoaded', () => {
-    raceData.forEach(createRaceSection);
-});
+            biasSelector.addEventListener('change', (e) => {
+                updateBiasChart(e.target.value);
+            });
+            updateBiasChart(Object.keys(biasData)[0]);
 
-</script>
+            // Tab functionality
+            document.querySelectorAll('.tab-link').forEach(button => {
+                button.addEventListener('click', () => {
+                    const tabId = button.dataset.tab;
+                    const container = button.closest('.tabs');
+                    container.querySelectorAll('.tab-link').forEach(b => b.classList.remove('active'));
+                    button.classList.add('active');
+                    container.querySelectorAll('.tab-content').forEach(content => {
+                        if (content.id === tabId) {
+                            content.classList.remove('hidden');
+                        } else {
+                            content.classList.add('hidden');
+                        }
+                    });
+                });
+            });
+
+            // Accordion functionality
+            document.querySelectorAll('.accordion-header').forEach(header => {
+                header.addEventListener('click', () => {
+                    const content = header.nextElementSibling;
+                    const icon = header.querySelector('span:last-child');
+                    if (content.style.maxHeight) {
+                        content.style.maxHeight = null;
+                        icon.style.transform = 'rotate(0deg)';
+                    } else {
+                        content.style.maxHeight = content.scrollHeight + "px";
+                        icon.style.transform = 'rotate(180deg)';
+                    }
+                });
+            });
+            
+            // Sidebar active link functionality
+            const sections = document.querySelectorAll('section');
+            const navLinks = document.querySelectorAll('.nav-link');
+
+            window.addEventListener('scroll', () => {
+                let current = '';
+                sections.forEach(section => {
+                    const sectionTop = section.offsetTop;
+                    if (pageYOffset >= sectionTop - 70) {
+                        current = section.getAttribute('id');
+                    }
+                });
+
+                navLinks.forEach(link => {
+                    link.classList.remove('active');
+                    if (link.getAttribute('href').includes(current)) {
+                        link.classList.add('active');
+                    }
+                });
+            });
+        });
+    </script>
 </body>
 </html>
