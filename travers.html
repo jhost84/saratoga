@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Saratoga Interactive Handicapping Dashboard</title>
+    <title>Exacta AI - Handicapping Dashboard Template</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -109,6 +109,10 @@
                  </div>
             </div>
             <div class="flex items-center gap-2">
+                <a href="#" onclick="showHome(); event.preventDefault();" class="header-btn flex items-center gap-2 px-4 py-2 rounded-lg font-semibold text-white bg-[#0d47a1] hover:bg-[#1565c0]">
+                    <i data-lucide="home" class="h-5 w-5"></i>
+                    Home
+                </a>
                 <a href="#" onclick="showHome(); event.preventDefault();" class="header-btn flex items-center gap-2 px-4 py-2 rounded-lg font-semibold text-[#0d47a1] bg-white border border-[#0d47a1] hover:bg-blue-50">
                     <i data-lucide="layout-dashboard" class="h-5 w-5"></i>
                     Dashboard
@@ -124,13 +128,13 @@
                 <h2 class="text-2xl font-poppins font-bold mb-5 text-center text-[#0d47a1]">Executive Summary</h2>
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
                     
-                    <div class="pro-card p-5 text-center cursor-pointer" onclick="showRace(2)">
+                    <div class="pro-card p-5 text-center cursor-pointer" onclick="showRace(5)">
                         <div class="flex flex-col items-center">
                             <div class="bg-green-100 text-green-700 rounded-full p-3 mb-3">
                                 <i data-lucide="star" class="lucide"></i>
                             </div>
                             <h3 class="font-poppins font-semibold text-lg text-[#0d47a1] mb-1">Prime Bet</h3>
-                            <p class="text-gray-800 font-semibold">Race 2, #3 Then</p>
+                            <p class="text-gray-800 font-semibold">Race 5, #10 Silsbee</p>
                             <p class="text-sm text-gray-500 mt-1">Strongest value overlay on the card.</p>
                         </div>
                     </div>
@@ -141,23 +145,24 @@
                                 <i data-lucide="target" class="lucide"></i>
                             </div>
                             <h3 class="font-poppins font-semibold text-lg text-[#0d47a1] mb-1">Key Single</h3>
-                            <p class="text-gray-800 font-semibold">Race 13, #3 Strategic Focus</p>
+                            <p class="text-gray-800 font-semibold">Race 13, #4 Sovereignty</p>
                             <p class="text-sm text-gray-500 mt-1">Most probable winner of the day.</p>
                         </div>
                     </div>
                     
                     <div class="pro-card p-5 text-center">
-                         <div class="flex flex-col items-center">
-                            <div class="bg-yellow-100 text-yellow-700 rounded-full p-3 mb-3">
-                                <i data-lucide="lightbulb" class="lucide"></i>
-                            </div>
-                            <h3 class="font-poppins font-semibold text-lg text-[#0d47a1] mb-1">Top Value Plays</h3>
-                            <ul class="text-gray-600 mt-2 space-y-2 text-sm">
-                                <li class="cursor-pointer hover:text-blue-600 font-medium" onclick="showRace(4)"><strong>R4, #7 Keepinitreal</strong></li>
-                                <li class="cursor-pointer hover:text-blue-600 font-medium" onclick="showRace(8)"><strong>R8, #12 Tongue Twister</strong></li>
-                                <li class="cursor-pointer hover:text-blue-600 font-medium" onclick="showRace(13)"><strong>R13, #5 Mcafee</strong></li>
-                            </ul>
-                        </div>
+                           <div class="flex flex-col items-center">
+                                <div class="bg-yellow-100 text-yellow-700 rounded-full p-3 mb-3">
+                                    <i data-lucide="lightbulb" class="lucide"></i>
+                                </div>
+                                <h3 class="font-poppins font-semibold text-lg text-[#0d47a1] mb-1">Value Plays</h3>
+                                <ul class="text-gray-600 mt-2 space-y-2 text-sm">
+                                    <li class="cursor-pointer hover:text-blue-600 font-medium" onclick="showRace(1)"><strong>R1, #6 Bottas</strong></li>
+                                    <li class="cursor-pointer hover:text-blue-600 font-medium" onclick="showRace(6)"><strong>R6, #6 Vino Vici</strong></li>
+                                    <li class="cursor-pointer hover:text-blue-600 font-medium" onclick="showRace(8)"><strong>R8, #8 Loveumissumeanit</strong></li>
+                                    <li class="cursor-pointer hover:text-blue-600 font-medium" onclick="showRace(12)"><strong>R12, #2 Bishops Bay</strong></li>
+                                </ul>
+                           </div>
                     </div>
 
                     <div class="pro-card p-5 text-center">
@@ -167,8 +172,8 @@
                             </div>
                             <h3 class="font-poppins font-semibold text-lg text-[#0d47a1] mb-1">Top Fades</h3>
                             <ul class="text-gray-600 mt-2 space-y-2 text-sm">
-                                <li class="cursor-pointer hover:text-blue-600 font-medium" onclick="showRace(2)"><strong>R2, #8 Vesting (ire)</strong></li>
-                                <li class="cursor-pointer hover:text-blue-600 font-medium" onclick="showRace(13)"><strong>R13, #4 Sovereignty</strong></li>
+                                <li class="cursor-pointer hover:text-blue-600 font-medium" onclick="showRace(11)"><strong>R11, #7 Scylla</strong></li>
+                                <li class="cursor-pointer hover:text-blue-600 font-medium" onclick="showRace(14)"><strong>R14, #1 Dancin Jane</strong></li>
                             </ul>
                         </div>
                     </div>
@@ -176,9 +181,9 @@
             </section>
 
             <section id="race-navigation-home">
-                 <h2 class="text-2xl font-poppins font-bold mb-5 text-center text-[#0d47a1]">Race-by-Race Analysis</h2>
-                 <div id="race-link-container" class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-8 gap-3">
-                 </div>
+                    <h2 class="text-2xl font-poppins font-bold mb-5 text-center text-[#0d47a1]">Race-by-Race Analysis</h2>
+                    <div id="race-link-container" class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-8 gap-3">
+                    </div>
             </section>
         </div>
 
@@ -197,186 +202,237 @@
     </footer>
 
     <script>
+        // TEMPLATE INSTRUCTIONS:
+        // To use this template for a new race card, simply replace the placeholder
+        // data in the `raceData` object below with your own analysis.
+        // The number of races will be dynamically generated based on the number of
+        // entries in the `raceData` object.
+        
         const raceData = {
             1: {
                 meta: "Race 1: Maiden Special Weight, 1 1/16 Miles (Turf), Purse $100,000",
-                pace: { type: "Moderately Contested", class: "pace-contested", text: "An honest but not destructive pace is expected, favoring horses with tactical speed and stamina." },
-                thesis: "With a field of unproven two-year-olds, pedigree and the strength of the trainer/jockey combination are the deciding factors. Value lies with a well-bred horse from a top barn that isn't the morning-line favorite.",
-                spoiler: "A horse from a lesser-known barn defies pedigree and delivers a surprisingly sharp debut performance.",
-                wagers: {
-                    primary: "Not recommended due to high variance of first-time starters.",
-                    exotics: "Exacta Box: #3 Franklin Delano, #10 Akkadian, #11 Tartabull.",
-                    horizontal: "'A' Horse: #3. 'B' Horses: #10, #11."
-                },
+                pace: { type: "Moderately Contested", class: "pace-contested", text: "With a field of debut runners, the pace is speculative. Pedigrees suggest multiple horses will show speed, leading to an honest pace that should favor a horse with a balanced, tactical running style." },
+                thesis: "This race will be won by the most talented and well-prepared first-time starter. The focus is on pedigree, trainer stats, and workout patterns.",
+                spoiler: "A previously raced horse with a troubled trip improves dramatically in its second start, or a longshot debut runner from a less-heralded barn shows unexpected talent.",
                 chart: {
-                    labels: ['#11 Tartabull', '#9 Grunge'],
-                    implied: [22.2, 20.0],
-                    assessed: [25.0, 10.0]
+                    labels: ['#3 Franklin Delano', '#6 Bottas', '#2 Ambassador Blue'],
+                    implied: [18.2, 22.2, 0],
+                    assessed: [22, 25, 15]
+                },
+                wagers: {
+                    primary: "Exacta Box: 3, 6.",
+                    exotics: "",
+                    horizontal: "'A' Horses: 3, 6."
                 }
             },
             2: {
                 meta: "Race 2: Allowance Optional Claiming, 1 3/16 Miles (Turf), Purse $115,000",
-                pace: { type: "Pressured Duel", class: "pace-duel", text: "Multiple front-runners project an energy-depleting pace, strongly favoring off-pace runners and closers." },
-                thesis: "A contested early pace will compromise the front-runners, setting the race up perfectly for a closer. The key value is a horse whose true ability is masked by a troubled trip in its last start.",
-                spoiler: "One of the speed horses, like #8 Vesting (ire), gets an unexpectedly easy lead and slows the pace down, stealing the race on the front end.",
-                wagers: {
-                    primary: "Win bet on #3 Then.",
-                    exotics: "Exacta Box #3, #7, #1/#1A.",
-                    horizontal: "'A' Horse: #3 Then."
-                },
+                pace: { type: "Moderately Contested", class: "pace-contested", text: "Several horses possess early speed, ensuring an honest pace. This setup could favor off-the-pace runners, especially with the tactical advantage of the #1/#1A Chad Brown entry." },
+                thesis: "A competitive race where class-droppers meet in-form rivals. An honest pace will favor a horse with a clean trip and a strong finishing kick.",
+                spoiler: "A deep closer gets a perfect setup with a fast pace, or one of the tactical speed horses gets an uncontested lead and is too good to be caught.",
                 chart: {
-                    labels: ['#3 Then', '#8 Vesting (ire)'],
-                    implied: [22.2, 25.0],
-                    assessed: [30.0, 15.0]
+                    labels: ['#7 Crystal Quest', '#3 Then', '#8 Vesting (ire)'],
+                    implied: [28.6, 22.2, 25.0],
+                    assessed: [35, 25, 28]
+                },
+                wagers: {
+                    primary: "Exacta: 7 with 3, 8.",
+                    exotics: "Trifecta: Key 7 over 3, 8.",
+                    horizontal: "'A' Horses: 7, 1."
                 }
             },
-            3: { meta: "Race 3: Analysis Not Available", available: false },
+            3: {
+                meta: "Race 3: Maiden Special Weight, 6 1/2 Furlongs, Purse $100,000",
+                pace: { type: "Moderately Contested", class: "pace-contested", text: "A field of well-bred first-time starters suggests a competitive pace from the start. A filly that can rate just off the early speed will have an advantage." },
+                thesis: "A showdown of blue-blooded first-time starters. The winner will be the one with the most raw talent and professional preparation.",
+                spoiler: "A longshot debut runner with a lesser-known pedigree or connections pulls a major upset.",
+                chart: {
+                    labels: ['#3 Touch Of Magic', '#8 Tam Tam'],
+                    implied: [25.0, 23.8],
+                    assessed: [35, 30]
+                },
+                wagers: {
+                    primary: "Exacta Box: 3, 8.",
+                    exotics: "",
+                    horizontal: "'A' Horse: 3, 'B' Horse: 8."
+                }
+            },
             4: {
                 meta: "Race 4: Maiden Special Weight (NY-Bred), 6 Furlongs, Purse $90,000",
-                pace: { type: "Pressured Duel", class: "pace-duel", text: "Multiple entrants with early speed project a taxing pace, favoring horses with a stalking or closing running style." },
-                thesis: "A fast and contested early pace will set up a stalker or closer to win. The public may over-bet the horse with the highest recent speed figure, creating a value opportunity on a more tactical runner.",
-                spoiler: "One of the front-runners proves to be a class above and withstands the pace pressure to wire the field.",
-                wagers: {
-                    primary: "Win bet on #7 Keepinitreal.",
-                    exotics: "Exacta Box #7, #10, and #2 Eighty Gold.",
-                    horizontal: "'A' Horse: #7 Keepinitreal. 'B' Horse: #10 Merica's Back."
-                },
+                pace: { type: "Pressured Duel", class: "pace-duel", text: "An abundance of early speed projects a fast and taxing early pace. This race shape strongly favors horses that can close from off the pace." },
+                thesis: "The intense pace battle will likely cause the front-runners to tire, setting the race up perfectly for a closer to capitalize in the stretch.",
+                spoiler: "A lone speed horse gets an easy lead and holds on to steal the race.",
                 chart: {
-                    labels: ['#7 Keepinitreal', '#10 Merica\'s Back'],
-                    implied: [28.6, 33.3],
-                    assessed: [35.0, 25.0]
+                    labels: ['#10 Merica\'s Back', '#7 Keepinitreal', '#8 Call Bob'],
+                    implied: [20.0, 14.3, 12.5],
+                    assessed: [30, 28, 20]
+                },
+                wagers: {
+                    primary: "Exacta Box: 10, 7, 8.",
+                    exotics: "",
+                    horizontal: "'A' Horses: 10, 7."
                 }
             },
             5: {
                 meta: "Race 5: Allowance, 5 1/2 Furlongs (Turf), Purse $95,000",
-                pace: { type: "Pressured Duel", class: "pace-duel", text: "Multiple horses with high early speed will likely vie for the lead, creating a significant advantage for late-running or stalking types." },
-                thesis: "The early speed duel will be destructive, setting up a late-running winner. The value is found in a horse that can capitalize on the pace.",
-                spoiler: "One of the speed horses is simply too talented and is able to out-class the field on the front end, despite the pace pressure.",
-                wagers: {
-                    primary: "Win bet on #12 Running Rio.",
-                    exotics: "Exacta Box of #12, #10, and #15.",
-                    horizontal: "'A' Horse: #12 Running Rio. 'B' Horses: #10 Silsbee, #15 Nina Kay."
-                },
+                pace: { type: "Pressured Duel", class: "pace-duel", text: "A large field sprinting on the turf almost guarantees a fast, contested pace. This scenario puts a premium on energy conservation and a strong late kick." },
+                thesis: "A pace collapse is highly likely, creating a perfect setup for a deep closer to rally past tiring leaders. Look for a horse with a history of finishing strongly.",
+                spoiler: "A lone speed horse gets an easy lead and is too good to be caught.",
                 chart: {
-                    labels: ['#12 Running Rio', '#6 Annascaul'],
-                    implied: [9.1, 28.6],
-                    assessed: [15.0, 20.0]
+                    labels: ['#10 Silsbee', '#7 Olivia\'s Grace'],
+                    implied: [25.0, 14.3],
+                    assessed: [35, 20]
+                },
+                wagers: {
+                    primary: "Exacta Box: 7, 10.",
+                    exotics: "Trifecta: Key 7, 10 over the field.",
+                    horizontal: "'A' Horses: 7, 10."
                 }
             },
             6: {
                 meta: "Race 6: Maiden Special Weight, 6 Furlongs, Purse $100,000",
-                pace: { type: "Pace Void (Slow)", class: "pace-void", text: "The field lacks a significant amount of early speed, strongly favoring horses on or near the lead." },
-                thesis: "The experience and proven high speed figure of #6 Vino Vici make him the horse to beat. However, the presence of several well-bred, top-trainer first-time starters creates uncertainty and potential for an upset.",
-                spoiler: "One of the well-bred first-time starters proves to be a natural runner with high raw talent and outclasses the lone horse with experience.",
-                wagers: {
-                    primary: "Win bet on #6 Vino Vici, but with caution.",
-                    exotics: "Exacta Box #6, #9, and #5.",
-                    horizontal: "'A' Horse: #6 Vino Vici. 'B' Horses: #9 Old Time Rocknroll, #5 Big Dom."
-                },
+                pace: { type: "Lone/Uncontested", class: "pace-void", text: "#6 Vino Vici is the only horse with race experience and could secure an easy, uncontested lead, giving him a major tactical advantage over the debut runners." },
+                thesis: "A classic matchup between an experienced runner with a promising, troubled debut (#6) and a flashy, well-regarded first-time starter (#5).",
+                spoiler: "A longshot first-time starter runs a big race and wins.",
                 chart: {
-                    labels: ['#5 Big Dom', '#6 Vino Vici'],
-                    implied: [10.0, 22.2],
-                    assessed: [20.0, 15.0]
+                    labels: ['#5 Big Dom', '#6 Vino Vici', '#9 Old Time Rocknroll'],
+                    implied: [28.6, 25.0, 14.3],
+                    assessed: [35, 32, 20]
+                },
+                wagers: {
+                    primary: "Exacta Box: 5, 6.",
+                    exotics: "Trifecta: Key 5, 6 over 3, 9.",
+                    horizontal: "'A' Horses: 5, 6."
                 }
             },
             7: {
-                meta: "Race 7: Grade 2 Lake Placid S., 1 Mile (Turf), Purse $400,000",
-                pace: { type: "Moderately Contested", class: "pace-contested", text: "The pace will be honest but not suicidal, which should benefit horses with a tactical running style who can pounce on the leaders." },
-                thesis: "The favorite, #3 May Day Ready, is a vulnerable favorite due to her potentially compromised performance in her last start. A horse with a cleaner trip and a favorable pace setup is a strong alternative.",
-                spoiler: "#2 Eponine (ire) proves to be a superior international competitor and is much better than her figures suggest.",
-                wagers: {
-                    primary: "Win bet on #3 May Day Ready.",
-                    exotics: "Exacta Box #3, #1, and #2.",
-                    horizontal: "'A' Horse: #3 May Day Ready. 'B' Horses: #1 Play With Fire, #2 Eponine (ire)."
-                },
+                meta: "Race 7: G2 Lake Placid S., 1 Mile (Turf), Purse $400,000",
+                pace: { type: "Moderately Contested", class: "pace-contested", text: "A small, elite field suggests a tactical pace. The race will likely be decided by finishing speed rather than being dictated by a taxing early pace." },
+                thesis: "A high-class G2 where the filly dropping from G1 company (#3 May Day Ready) holds a significant class advantage and is poised for a top effort.",
+                spoiler: "The pace collapses, allowing a deep closer to win.",
                 chart: {
-                    labels: ['#3 May Day Ready', '#1 Play With Fire'],
-                    implied: [28.6, 33.3],
-                    assessed: [40.0, 25.0]
+                    labels: ['#3 May Day Ready', '#1 Play With Fire', '#6 Reining Flowers'],
+                    implied: [25.0, 33.3, 14.3],
+                    assessed: [40, 35, 25]
+                },
+                wagers: {
+                    primary: "Exacta Box: 1, 3.",
+                    exotics: "Trifecta: Key 1, 3 over 6.",
+                    horizontal: "'A' Horses: 1, 3."
                 }
             },
             8: {
                 meta: "Race 8: Allowance, 1 1/16 Miles (Turf), Purse $95,000",
-                pace: { type: "Pressured Duel", class: "pace-duel", text: "The contested pace will set up perfectly for horses with a late-running or stalking style." },
-                thesis: "The pressured pace will compromise the front-runners, and a closer with a strong late kick will win. The value is found in a horse whose true ability is masked by a troubled trip.",
-                spoiler: "One of the front-running horses is simply too talented and is able to out-class the field despite the pace pressure.",
-                wagers: {
-                    primary: "Win bet on #12 Tongue Twister.",
-                    exotics: "Exacta Box #12, #2, and #8.",
-                    horizontal: "'A' Horse: #12 Tongue Twister. 'B' Horse: #2 Gallant Greta."
-                },
+                pace: { type: "Moderately Contested", class: "pace-contested", text: "A large field ensures an honest pace, which will favor horses that can settle mid-pack and make a sustained run, avoiding traffic trouble." },
+                thesis: "In a large, competitive field, a clean trip and a strong closing kick will be decisive. The winner will likely come from off the pace.",
+                spoiler: "A lone speed horse gets an easy lead and holds on to steal the race.",
                 chart: {
-                    labels: ['#12 Tongue Twister', '#2 Gallant Greta'],
-                    implied: [20.0, 22.2],
-                    assessed: [25.0, 15.0]
+                    labels: ['#6 Dividend Recap', '#2 Gallant Greta', '#8 Loveumissumeanit', '#12 Tongue Twister'],
+                    implied: [20.0, 16.7, 14.3, 12.5],
+                    assessed: [30, 28, 25, 22]
+                },
+                wagers: {
+                    primary: "Exacta Box: 2, 6.",
+                    exotics: "Trifecta keying 2 and 6 over 8 and 10.",
+                    horizontal: "'A' Horses: 2, 6."
                 }
             },
-            9: { meta: "Race 9: Analysis Not Available", available: false },
-            10: {
-                meta: "Race 10: Grade 1 H. Allen Jerkens Memorial S., 7 Furlongs, Purse $500,000",
-                pace: { type: "Pressured Duel", class: "pace-duel", text: "The pace will be extremely fast, which should benefit a late-running horse with a strong closing kick." },
-                thesis: "The destructive pace duel between the several front-runners will set up a horse with a strong late kick. The value is found in the closer whose figures are competitive but whose odds are longer than the top speed horses.",
-                spoiler: "#5 Verifire is a special talent who outclasses the field and is able to withstand the pace pressure, wiring the field.",
-                wagers: {
-                    primary: "Win bet on #4 Chancer Mcpatrick.",
-                    exotics: "Exacta Box #4 and #5.",
-                    horizontal: "'A' Horse: #4 Chancer Mcpatrick. 'B' Horse: #5 Verifire."
-                },
+            9: {
+                meta: "Race 9: G1 Personal Ensign S., 1 1/8 Miles, Purse $500,000",
+                pace: { type: "Moderately Contested", class: "pace-contested", text: "A tactical affair is expected. Champion #7 Thorpedo Anna is versatile enough to adapt to any pace scenario, but the race will test who has the most class in the final furlong." },
+                thesis: "A showdown between a proven champion (#7 Thorpedo Anna) and an improving, high-class challenger (#6 Leslie's Rose). While the champ is formidable, she is not unbeatable.",
+                spoiler: "A speed horse (#1 Randomized) gets an uncontested lead and never looks back.",
                 chart: {
-                    labels: ['#4 Chancer Mcpatrick', '#5 Verifire'],
-                    implied: [16.7, 20.0],
-                    assessed: [20.0, 15.0]
+                    labels: ['#7 Thorpedo Anna', '#6 Leslie\'s Rose', '#3 Raging Sea'],
+                    implied: [45.5, 28.6, 20.0],
+                    assessed: [45, 35, 20]
+                },
+                wagers: {
+                    primary: "Exacta Box: 7, 6.",
+                    exotics: "Trifecta keying 7 and 6 over 3.",
+                    horizontal: "'A' Horses: 7, 6."
+                }
+            },
+            10: {
+                meta: "Race 10: G1 H. Allen Jerkens Memorial S., 7 Furlongs, Purse $500,000",
+                pace: { type: "Pressured Duel", class: "pace-duel", text: "A significant amount of early speed projects a fast, taxing pace. This race shape is highly favorable for stalkers and closers who can capitalize on tiring leaders." },
+                thesis: "The intense pace duel on the front end will set the table for a horse with a powerful late kick. The winner will come from off the pace.",
+                spoiler: "A lone speed horse gets an uncontested lead and never looks back.",
+                chart: {
+                    labels: ['#5 Verifire', '#2 Midland Money', '#1 Patch Adams', '#6 Smoken Wicked'],
+                    implied: [28.6, 25.0, 20.0, 16.7],
+                    assessed: [35, 30, 25, 20]
+                },
+                wagers: {
+                    primary: "Exacta Box: 2, 5.",
+                    exotics: "Trifecta keying 2 and 5 over 1 and 6.",
+                    horizontal: "'A' Horses: 2, 5."
                 }
             },
             11: {
-                meta: "Race 11: Grade 1 Resorts World Casino Ballerina S., 7 Furlongs, Purse $500,000",
-                pace: { type: "Pressured Duel", class: "pace-duel", text: "The pace will be extremely fast, which will be a significant advantage for late-running types." },
-                thesis: "An extremely fast and contested pace will lead to a collapse of the leaders, giving a deep closer a chance to win at a price. The value is found in the horse who will get the perfect pace setup.",
-                spoiler: "#1 Mystic Lake or #9 Hope Road is a special talent who outclasses the field and holds on despite the pace pressure.",
-                wagers: {
-                    primary: "Win bet on #7 Scylla.",
-                    exotics: "Exacta Box #7, #9, and #1.",
-                    horizontal: "'A' Horse: #7 Scylla. 'B' Horse: #9 Hope Road."
-                },
+                meta: "Race 11: G1 Resorts World Casino Ballerina S., 7 Furlongs, Purse $500,000",
+                pace: { type: "Moderately Contested", class: "pace-contested", text: "Enough speed is present to ensure an honest pace, preventing any single horse from stealing it on the front end. This favors horses with tactical speed who can get a good stalking trip." },
+                thesis: "A competitive G1 sprint where the winner will need both class and a clean trip. The pace scenario favors a horse that can sit just behind the leaders and pounce in the stretch.",
+                spoiler: "A lone speed horse gets an uncontested lead and never looks back.",
                 chart: {
-                    labels: ['#7 Scylla', '#1 Mystic Lake'],
-                    implied: [28.6, 9.1],
-                    assessed: [35.0, 5.0]
+                    labels: ['#9 Hope Road', '#2 Brightwork', '#7 Scylla'],
+                    implied: [25.0, 22.2, 28.6],
+                    assessed: [40, 35, 25]
+                },
+                wagers: {
+                    primary: "Exacta Box: 9, 2.",
+                    exotics: "Trifecta keying 9 and 2 over 7.",
+                    horizontal: "'A' Horses: 9, 2."
                 }
             },
             12: {
-                meta: "Race 12: Grade 1 Forego S., 7 Furlongs, Purse $500,000",
-                pace: { type: "Pressured Duel", class: "pace-duel", text: "The contested pace will set up perfectly for a late-running horse with a strong closing kick." },
-                thesis: "The destructive pace duel between the front-runners will set up a closer with a strong late kick. The value is found in the closer whose figures are competitive but whose odds are longer than the top speed horses.",
-                spoiler: "#4 Book'em Danno is a special talent who outclasses the field and is able to withstand the pace pressure, wiring the field.",
-                wagers: {
-                    primary: "Win bet on #6 Crazy Mason.",
-                    exotics: "Exacta Box #6, #4, and #2.",
-                    horizontal: "'A' Horse: #4 Book'em Danno. 'B' Horse: #6 Crazy Mason."
-                },
+                meta: "Race 12: G1 Forego S., 7 Furlongs, Purse $500,000",
+                pace: { type: "Pressured Duel", class: "pace-duel", text: "Multiple high-quality speed horses ensure a blistering pace. This is a classic setup for a pace collapse, strongly favoring horses with a proven closing kick." },
+                thesis: "The destructive front-end speed duel will compromise the chances of the favorites, creating a prime opportunity for a stalker or closer to win at a price.",
+                spoiler: "A lone speed horse gets an uncontested lead and never looks back.",
                 chart: {
-                    labels: ['#6 Crazy Mason', '#4 Book\'em Danno'],
-                    implied: [9.1, 38.5],
-                    assessed: [15.0, 25.0]
+                    labels: ['#2 Bishops Bay', '#4 Book\'em Danno', '#1 Three Technique', '#11 Post Time'],
+                    implied: [14.3, 38.5, 12.5, 14.3],
+                    assessed: [35, 30, 15, 20]
+                },
+                wagers: {
+                    primary: "Exacta Box: 2, 4.",
+                    exotics: "Trifecta keying 2 and 4 over 1, 3, and 11.",
+                    horizontal: "'A' Horses: 2, 4."
                 }
             },
             13: {
-                meta: "Race 13: Grade 1 Draftkings Travers S., 1 1/4 Miles, Purse $1,250,000",
-                pace: { type: "Moderately Contested", class: "pace-contested", text: "An honest but not suicidal pace is expected, which should allow the most talented horse to prevail." },
-                thesis: "The supremely talented closer, #3 Strategic Focus, will be able to run down the speed of #4 Sovereignty in the stretch. The value is found in a closer whose odds are longer than the favorite.",
-                spoiler: "#4 Sovereignty proves to be a special talent, clears the field easily, and wires the field in a dominant performance.",
-                wagers: {
-                    primary: "Win bet on #3 Strategic Focus.",
-                    exotics: "Exacta Box #3 and #4.",
-                    horizontal: "'A' Horse: #3 Strategic Focus. 'B' Horse: #4 Sovereignty."
-                },
+                meta: "Race 13: G1 DraftKings Travers S., 1 1/4 Miles, Purse $1,250,000",
+                pace: { type: "Moderately Contested", class: "pace-contested", text: "A small, tactical field where #1 Magnitude is the likely pacesetter. The race will be a test of class and stamina, not raw speed." },
+                thesis: "In the 'Mid-Summer Derby,' the superior class and proven stamina of dual Classic winner #4 Sovereignty make him the horse to beat. The race shape is unlikely to compromise him.",
+                spoiler: "#1 Magnitude gets a loose, uncontested lead and steals the race.",
                 chart: {
-                    labels: ['#5 Mcafee', '#4 Sovereignty'],
-                    implied: [4.8, 71.4],
-                    assessed: [10.0, 50.0]
+                    labels: ['#4 Sovereignty', '#3 Strategic Focus'],
+                    implied: [71.4, 14.3],
+                    assessed: [65, 15]
+                },
+                wagers: {
+                    primary: "Exacta: 4 over 1, 3.",
+                    exotics: "",
+                    horizontal: "'A' Horse (Single): 4."
                 }
             },
-            14: { meta: "Race 14: Analysis Not Available", available: false }
+            14: {
+                meta: "Race 14: Maiden Claiming, 1 Mile (Turf), Purse $50,000",
+                pace: { type: "Moderately Contested", class: "pace-contested", text: "A large field of inconsistent runners makes for a potentially messy pace. A clean trip and the ability to finish will be more important than early speed." },
+                thesis: "A wide-open maiden claiming finale. The winner will likely be a horse that can stay out of trouble and make one sustained run, potentially at a long price.",
+                spoiler: "A horse gets an uncontested lead and never looks back.",
+                chart: {
+                    labels: ['#1 Dancin Jane', '#2 Amelia', '#3 Argentiera', '#4 Bank On Bebe'],
+                    implied: [28.6, 14.3, 14.3, 14.3],
+                    assessed: [20, 15, 15, 15]
+                },
+                wagers: {
+                    primary: "Exacta Box: 1, 2, 3, 4.",
+                    exotics: "",
+                    horizontal: "'A' Horse: 1."
+                }
+            }
         };
 
         let currentChart = null;
@@ -393,17 +449,7 @@
 
         function showRace(raceNumber) {
             const race = raceData[raceNumber];
-            if (!race || race.available === false) {
-                 raceDetailsContainer.innerHTML = `
-                    <div class="pro-card p-5 text-center text-gray-400">
-                        <h2 class="text-2xl font-bold mb-2">Race ${raceNumber}</h2>
-                        <p>Detailed analysis for this race is not available in the source report.</p>
-                    </div>
-                 `;
-                 homePage.classList.add('hidden');
-                 racePage.classList.remove('hidden');
-                 return;
-            }
+            if (!race) return;
 
             homePage.classList.add('hidden');
             racePage.classList.remove('hidden');
@@ -444,7 +490,7 @@
                                     <h4 class="font-semibold text-gray-700 flex items-center"><i data-lucide="dollar-sign" class="mr-2 h-5 w-5 text-green-500"></i>Wager Construction:</h4>
                                     <ul class="list-disc list-inside text-sm text-gray-600 space-y-1 mt-2 pl-7">
                                         <li><strong>Primary:</strong> ${race.wagers.primary}</li>
-                                        <li><strong>Exotics:</strong> ${race.wagers.exotics}</li>
+                                        <li><strong>Exotics:</strong> ${race.wagers.exotics || "Not recommended."}</li>
                                         <li><strong>Horizontal:</strong> ${race.wagers.horizontal}</li>
                                     </ul>
                                 </div>
@@ -475,7 +521,7 @@
                         {
                             label: 'Implied Probability (Odds)',
                             data: chartData.implied,
-                            backgroundColor: '#90caf9', 
+                            backgroundColor: '#90caf9',
                             borderColor: '#42a5f5',
                             borderWidth: 1,
                             borderRadius: 4
@@ -500,10 +546,7 @@
                                 color: '#e0e0e0'
                             },
                             ticks: {
-                                color: '#334155',
-                                callback: function(value) {
-                                     return value + '%'
-                                 }
+                                color: '#334155'
                             },
                             title: {
                                 display: true,
@@ -515,12 +558,12 @@
                             }
                         },
                         x: {
-                             grid: {
-                                 display: false
-                             },
-                             ticks: {
-                                 color: '#334155'
-                             }
+                                grid: {
+                                    display: false
+                                },
+                                ticks: {
+                                    color: '#334155'
+                                }
                         }
                     },
                     plugins: {
@@ -571,33 +614,23 @@
         function initializeApp() {
             const raceLinkContainer = document.getElementById('race-link-container');
             const navContainer = document.getElementById('race-nav-container');
-            const allRaceNumbers = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14];
+            const raceKeys = Object.keys(raceData);
 
             raceLinkContainer.innerHTML = '';
             navContainer.innerHTML = '';
 
-            for (const raceNumber of allRaceNumbers) {
-                const raceInfo = raceData[raceNumber];
-                
+            for (const raceKey of raceKeys) {
                 const raceLink = document.createElement('div');
                 raceLink.className = 'race-link-card';
-                raceLink.textContent = `Race ${raceNumber}`;
-                raceLink.onclick = () => showRace(raceNumber);
-                if (!raceInfo || raceInfo.available === false) {
-                     raceLink.classList.add('bg-gray-100', 'text-gray-400', 'cursor-not-allowed', 'hover:transform-none', 'hover:bg-gray-100');
-                }
+                raceLink.textContent = `Race ${raceKey}`;
+                raceLink.onclick = () => showRace(raceKey);
                 raceLinkContainer.appendChild(raceLink);
 
                 const navButton = document.createElement('button');
-                navButton.textContent = `Race ${raceNumber}`;
-                navButton.dataset.race = raceNumber;
+                navButton.textContent = `Race ${raceKey}`;
+                navButton.dataset.race = raceKey;
                 navButton.className = 'race-nav-btn font-semibold';
-                navButton.onclick = () => showRace(raceNumber);
-                 if (!raceInfo || raceInfo.available === false) {
-                    navButton.classList.add('text-gray-400', 'cursor-not-allowed', 'hover:bg-transparent');
-                } else {
-                    navButton.classList.add('text-gray-700', 'hover:bg-gray-300');
-                }
+                navButton.onclick = () => showRace(raceKey);
                 navContainer.appendChild(navButton);
             }
             lucide.createIcons();
