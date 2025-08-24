@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Saratoga Interactive Handicapping Report - August 22, 2025</title>
+    <title>Saratoga AI - Handicapping Dashboard</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -11,7 +11,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&family=Poppins:wght@600;700&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/lucide@latest"></script>
     <!-- Chosen Palette: Exacta AI (Navy, Electric Blue, Slate) -->
-    <!-- Application Structure Plan: The application is designed as a dashboard to prioritize user-centric exploration over the report's linear format. The initial view presents a high-level "Executive Summary" with the most actionable bets (Prime Bet, Value Plays, Fades), allowing users to immediately grasp key opportunities. A persistent navigation bar enables non-linear access to any of the races. Clicking a race dynamically updates the main content area with a detailed analysis for that specific race. This structure was chosen because horseplayers value efficiency; they need to quickly identify top plays and then drill down for justification, rather than being forced to read a long document sequentially. The core of this design is the dynamic rendering of race data, including an interactive chart, into a consistent template, which enhances usability and comparison. -->
+    <!-- Application Structure Plan: The application is designed as a dashboard to prioritize user-centric exploration over the report's linear format. The initial view presents a high-level "Executive Summary" with the most actionable bets (Prime Bet, Value Plays, Fades), allowing users to immediately grasp key opportunities. A persistent navigation bar enables non-linear access to any of the eight races. Clicking a race dynamically updates the main content area with a detailed analysis for that specific race. This structure was chosen because horseplayers value efficiency; they need to quickly identify top plays and then drill down for justification, rather than being forced to read a long document sequentially. The core of this design is the dynamic rendering of race data, including an interactive chart, into a consistent template, which enhances usability and comparison. -->
     <!-- Visualization & Content Choices: Report Info: Probability vs. Price analysis for key horses. -> Goal: Visually compare the handicapper's assessed win probability against the market's implied probability to instantly identify value (overlays) or risk (underlays). -> Viz/Presentation Method: A grouped bar chart (Chart.js/Canvas) for each race. -> Interaction: On hover, tooltips display precise odds, implied probability, and assessed probability. -> Justification: A chart is far more effective and immediate for comparing quantitative data than a table or text, directly supporting the report's central theme of "Price x Probability = Value". Report Info: Pace Projection. -> Goal: Quickly convey the expected race shape. -> Viz/Presentation Method: Color-coded HTML tags (e.g., red for "Pressured Duel"). -> Justification: Visual tags provide at-a-glance information that is faster to process than a sentence. Report Info: Wager construction. -> Goal: Clearly present betting strategies. -> Viz/Presentation Method: Structured HTML lists. -> Justification: Clean, scannable lists are ideal for actionable instructions. -> Library/Method: Chart.js for charts, Tailwind/HTML for all other visual elements. -->
     <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
     <style>
@@ -103,15 +103,19 @@
     <header class="bg-white border-b border-gray-200 py-3 sticky top-0 z-20">
         <div class="container mx-auto px-4 flex justify-between items-center">
             <div class="flex items-center gap-4">
-                <div>
+                 <div>
                     <h1 class="text-2xl font-bold text-[#0d47a1] font-poppins">Saratoga Dashboard</h1>
-                    <p class="text-md text-gray-500">Value-Driven Insights for August 22, 2025</p>
-                </div>
+                    <p class="text-md text-gray-500">Value-Driven Insights for Sunday, August 24, 2025</p>
+                 </div>
             </div>
             <div class="flex items-center gap-2">
-                <a href="index.html" onclick="showHome(); event.preventDefault();" class="header-btn flex items-center gap-2 px-4 py-2 rounded-lg font-semibold text-white bg-[#0d47a1] hover:bg-[#1565c0]">
+                <a href="#" onclick="showHome(); event.preventDefault();" class="header-btn flex items-center gap-2 px-4 py-2 rounded-lg font-semibold text-white bg-[#0d47a1] hover:bg-[#1565c0]">
                     <i data-lucide="home" class="h-5 w-5"></i>
                     Home
+                </a>
+                <a href="#" onclick="showHome(); event.preventDefault();" class="header-btn flex items-center gap-2 px-4 py-2 rounded-lg font-semibold text-[#0d47a1] bg-white border border-[#0d47a1] hover:bg-blue-50">
+                    <i data-lucide="layout-dashboard" class="h-5 w-5"></i>
+                    Dashboard
                 </a>
             </div>
         </div>
@@ -124,25 +128,25 @@
                 <h2 class="text-2xl font-poppins font-bold mb-5 text-center text-[#0d47a1]">Executive Summary</h2>
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
                     
-                    <div class="pro-card p-5 text-center cursor-pointer" onclick="showRace(2)">
+                    <div class="pro-card p-5 text-center cursor-pointer" onclick="showRace(8)">
                         <div class="flex flex-col items-center">
                             <div class="bg-green-100 text-green-700 rounded-full p-3 mb-3">
                                 <i data-lucide="star" class="lucide"></i>
                             </div>
                             <h3 class="font-poppins font-semibold text-lg text-[#0d47a1] mb-1">Prime Bet</h3>
-                            <p class="text-gray-800 font-semibold">Race 2, #2 Princess Madison</p>
-                            <p class="text-sm text-gray-500 mt-1">Strongest value overlay on the card.</p>
+                            <p class="text-gray-800 font-semibold">Race 8, #2 Clear Conscience</p>
+                            <p class="text-sm text-gray-500 mt-1">The single best betting opportunity on the card.</p>
                         </div>
                     </div>
                     
-                    <div class="pro-card p-5 text-center cursor-pointer" onclick="showRace(3)">
+                    <div class="pro-card p-5 text-center cursor-pointer" onclick="showRace(8)">
                         <div class="flex flex-col items-center">
                             <div class="bg-blue-100 text-blue-700 rounded-full p-3 mb-3">
                                 <i data-lucide="target" class="lucide"></i>
                             </div>
                             <h3 class="font-poppins font-semibold text-lg text-[#0d47a1] mb-1">Key Single</h3>
-                            <p class="text-gray-800 font-semibold">Race 3, #3 Iron Orchard</p>
-                            <p class="text-sm text-gray-500 mt-1">Most probable winner of the day.</p>
+                            <p class="text-gray-800 font-semibold">Race 8, #2 Clear Conscience</p>
+                            <p class="text-sm text-gray-500 mt-1">Most probable winner to anchor multi-race wagers.</p>
                         </div>
                     </div>
                     
@@ -153,9 +157,9 @@
                             </div>
                             <h3 class="font-poppins font-semibold text-lg text-[#0d47a1] mb-1">Top Value Plays</h3>
                             <ul class="text-gray-600 mt-2 space-y-2 text-sm">
-                                <li class="cursor-pointer hover:text-blue-600 font-medium" onclick="showRace(4)"><strong>R4, #4 Bold Endeavor</strong></li>
-                                <li class="cursor-pointer hover:text-blue-600 font-medium" onclick="showRace(6)"><strong>R6, #6 Amicable Farce & #5 Celebrity Warrior (ire)</strong></li>
-                                <li class="cursor-pointer hover:text-blue-600 font-medium" onclick="showRace(10)"><strong>R10, #11 Holding The Line (ire)</strong></li>
+                                <li class="cursor-pointer hover:text-blue-600 font-medium" onclick="showRace(5)"><strong>R5, #12 Fifi La Fume</strong></li>
+                                <li class="cursor-pointer hover:text-blue-600 font-medium" onclick="showRace(4)"><strong>R4, #13 Walk With Me</strong></li>
+                                <li class="cursor-pointer hover:text-blue-600 font-medium" onclick="showRace(1)"><strong>R1, #2B Just One More</strong></li>
                             </ul>
                         </div>
                     </div>
@@ -167,8 +171,9 @@
                             </div>
                             <h3 class="font-poppins font-semibold text-lg text-[#0d47a1] mb-1">Top Fades</h3>
                             <ul class="text-gray-600 mt-2 space-y-2 text-sm">
-                                <li class="cursor-pointer hover:text-blue-600 font-medium" onclick="showRace(2)"><strong>R2, #5 Tricky Temper</strong></li>
-                                <li class="cursor-pointer hover:text-blue-600 font-medium" onclick="showRace(5)"><strong>R5, #2 Tarpaulin</strong></li>
+                                <li class="cursor-pointer hover:text-blue-600 font-medium" onclick="showRace(8)"><strong>R8, #6 Rhetorical</strong></li>
+                                <li class="cursor-pointer hover:text-blue-600 font-medium" onclick="showRace(5)"><strong>R5, #6 Skylarky</strong></li>
+                                <li class="cursor-pointer hover:text-blue-600 font-medium" onclick="showRace(1)"><strong>R1, #5 Hello Beauty</strong></li>
                             </ul>
                         </div>
                     </div>
@@ -176,9 +181,9 @@
             </section>
 
             <section id="race-navigation-home">
-                <h2 class="text-2xl font-poppins font-bold mb-5 text-center text-[#0d47a1]">Race-by-Race Analysis</h2>
-                <div id="race-link-container" class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-8 gap-3">
-                </div>
+                 <h2 class="text-2xl font-poppins font-bold mb-5 text-center text-[#0d47a1]">Race-by-Race Analysis</h2>
+                 <div id="race-link-container" class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-8 gap-3">
+                 </div>
             </section>
         </div>
 
@@ -199,165 +204,79 @@
     <script>
         const raceData = {
             1: {
-                meta: "Race 1: Maiden Special Weight, 5 1/2 Furlongs (Turf), Purse $90,000",
-                pace: { type: "Pace Void", class: "pace-void", text: "With the key speed horse scratched, the race lacks a confirmed front-runner. This favors a horse ready to break sharply and control a soft pace." },
-                thesis: "This race, characterized by a lack of confirmed pace, will be won by a sharp first-time starter whose readiness is evident in their workout pattern. #7 Cristobal is the most logical candidate based on the available information.",
-                spoiler: "A horse with less impressive morning workouts, such as #4 Three Thirteen, shows a new level of ability and springs an upset.",
+                meta: "Race 1: Maiden Special Weight, 1 Mile(s) Turf, Purse $90,000",
+                pace: { type: "Moderately Contested", class: "pace-contested", text: "The analysis of running styles from past performance data points to a moderately contested pace scenario. There is no single dominant front-runner, but enough horses possess tactical speed to prevent a slow pace void. This projected pace is honest but not necessarily destructive, which will benefit horses with tactical versatility." },
+                thesis: "The primary thesis for this race is that the moderately contested pace will set up for a tactical runner with superior class or fitness. The field's dynamics favor a horse that can conserve energy early and make a sustained run.",
+                spoiler: "The spoiler scenario for this thesis would be if a speed horse, such as Our Preferred Pal (12), gets a loose lead and is able to wire the field on an unmolested pace.",
                 chart: {
-                    labels: ['#7 Cristobal'],
-                    implied: [55.5],
-                    assessed: [60.0]
+                    labels: ["Hello Beauty (5)", "Just One More (2B)"],
+                    implied: [25, 14.3],
+                    assessed: [35, 20]
                 },
                 wagers: {
-                    primary: "Exacta box 7-4.",
-                    exotics: "None",
-                    horizontal: "None"
-                }
-            },
-            2: {
-                meta: "Race 2: Allowance Optional Claiming, 6 Furlongs, Purse $115,000",
-                pace: { type: "Pressured Duel", class: "pace-duel", text: "A likely duel between #5 Tricky Temper and #1 Caress will set the race up for a stalker or closer." },
-                thesis: "The most likely scenario is a 'Pressured Duel' between #5 Tricky Temper and #1 Caress, setting up the race for a late-running horse with an ascending form cycle. #2 Princess Madison and #6 Bourbon Breeze are the primary beneficiaries of this pace dynamic.",
-                spoiler: "The single most likely event to invalidate this thesis would be if a horse, such as #5 Tricky Temper, gets a clean break and a surprisingly soft lead, turning the duel into a lone-speed scenario.",
-                chart: {
-                    labels: ['#2 Princess Madison', '#5 Tricky Temper'],
-                    implied: [22.2, 35.7],
-                    assessed: [30.0, 25.0]
+                    primary: "A solid wager is a box of 3 and 5, and also keying 2B underneath those two.",
+                    exotics: "A vertical wager with 2B on top over 3 and 5, with the rest of the field underneath, provides a high-upside play that capitalizes on a potential upset from the value play.",
+                    horizontal: "The strongest opinions are on 3 and 5, so they should be used as 'A' singles in multi-race wagers. 2B and 12 can be included as 'B' backups for a lower-cost ticket."
                 },
-                wagers: {
-                    primary: "Exacta box 2-6.",
-                    exotics: "Trifecta key #2 on top with #6 and #4 in the second and third positions.",
-                    horizontal: "'A' Horse: #2 Princess Madison. 'B' Horse: #6 Bourbon Breeze. 'C' Horse: #1 Caress."
-                }
+                hasData: true
             },
-            3: {
-                meta: "Race 3: Seeking the Ante Stakes, 6 Furlongs, Purse $150,000",
-                pace: { type: "Pace Void", class: "pace-void", text: "Heavy favorite #3 Iron Orchard projects as lone speed, giving her a significant tactical advantage." },
-                thesis: "#3 Iron Orchard will control the pace in a 'Pace Void' scenario and win in a wire-to-wire effort. She is the class of the field and has a tactical advantage that is likely to be insurmountable.",
-                spoiler: "The spoiler would be an unexpected pace collapse, where a rival like #5 Shakti or #1 Angel Gift suddenly shows a new burst of early speed and puts pressure on the favorite, causing her to tire in the stretch.",
-                chart: {
-                    labels: ['#3 Iron Orchard'],
-                    implied: [55.5],
-                    assessed: [70.0]
-                },
-                wagers: {
-                    primary: "Exacta: #3 with #5 and #6.",
-                    exotics: "Trifecta: #3 on top with #5, #6 in the second and third positions.",
-                    horizontal: "Key Horizontal 'Single'."
-                }
-            },
+            2: { meta: "Race 2: Claiming, 5 1/2 Furlongs Turf, Purse $50,000", hasData: false },
+            3: { meta: "Race 3: Allowance, 6 1/2 Furlongs, Purse $95,000", hasData: false },
             4: {
-                meta: "Race 4: Claiming, 1 Mile, Purse $34,000",
-                pace: { type: "Moderately Contested", class: "pace-contested", text: "An honest pace should prevent a gate-to-wire victory but not be so fast as to set up a deep closer." },
-                thesis: "The pace will be honest but not self-destructive. A horse with consistent recent form and the ability to handle a stalking trip will be in the best position to win. #4 Bold Endeavor fits this profile perfectly.",
-                spoiler: "The spoiler is if #7 Quick Hammer breaks sharply and gets an unexpectedly soft lead, turning the race into a 'Lone/Uncontested' scenario that he could dominate.",
+                meta: "Race 4: Allowance Optional Claiming, 1 3/8 Mile(s) Turf, Purse $110,000",
+                pace: { type: "Pace Void (Slow)", class: "pace-void", text: "The analysis of past performances for this field indicates a distinct lack of early speed. The projected pace scenario is a Pace Void (Slow)." },
+                thesis: "The primary thesis for this race is that the likely slow pace will give a significant tactical advantage to a horse with a blend of early speed and stamina. The most dangerous horse in this scenario is one with a recent top-class speed figure and the ability to get a forward position.",
+                spoiler: "The most likely spoiler is if the pace is faster than anticipated, allowing a deep closer like Fleetingly (5) to run her race and win.",
                 chart: {
-                    labels: ['#4 Bold Endeavor', '#7 Quick Hammer'],
-                    implied: [25.0, 33.3],
-                    assessed: [35.0, 25.0]
+                    labels: ["Walk With Me (13)", "Alimara (1)"],
+                    implied: [22.2, 20],
+                    assessed: [30, 25]
                 },
                 wagers: {
-                    primary: "Exacta key #4 over 1, 7.",
-                    exotics: "Trifecta box 1-4-7.",
-                    horizontal: "'A' Horse: #4 Bold Endeavor. 'B' Horse: #1 Peek. 'C' Horse: #7 Quick Hammer."
-                }
+                    primary: "The analysis favors Walk With Me (13). A good exacta key is to put her on top with Fleetingly (5), and Alimara (1) underneath.",
+                    exotics: "A vertical wager with 13 on top over 5 and 10, with 1 and 2 underneath for a vertical wager.",
+                    horizontal: "Use 13 as an 'A' single. Use 5 and 10 as 'B' backups."
+                },
+                hasData: true
             },
             5: {
-                meta: "Race 5: Claiming, 6 Furlongs, Purse $36,000",
-                pace: { type: "Pressured Duel", class: "pace-duel", text: "The scratch of #9 Zakat and #2b Tiote means #2 Tarpaulin remains a confirmed front-runner and will face pressure from #1 Mackville, creating a favorable setup for a stalker." },
-                thesis: "The remaining front-runners will engage in a self-destructive 'Pressured Duel' that will set up the race for a late-running horse. #6 Sittin Chilly is the most likely candidate to benefit from this pace collapse.",
-                spoiler: "The spoiler is if the remaining front-runner, #2 Tarpaulin, gets a soft lead and dictates the race.",
+                meta: "Race 5: Maiden Claiming, 5 1/2 Furlongs Turf, Purse $50,000",
+                pace: { type: "Pressured Duel", class: "pace-duel", text: "The past performance data for this race suggests a highly competitive and likely fast early pace. This combination of early speed points to a Pressured Duel scenario, which should set up the race favorably for a horse with a strong late closing kick." },
+                thesis: "The primary thesis for this race is that the projected pressurized duel on the front end will set up for a closer. The key to winning will be a horse with a strong turn of foot who can navigate the traffic and make a sustained run.",
+                spoiler: "The spoiler scenario would be if the pace-pressers, like Purest Performance (5) and Lollipops (14), get into a destructive duel, allowing a longshot closer to steal the race.",
                 chart: {
-                    labels: ['#6 Sittin Chilly', '#2 Tarpaulin'],
-                    implied: [9.1, 55.5],
-                    assessed: [20.0, 35.0]
+                    labels: ["Fifi La Fume (12)", "Skylarky (6)"],
+                    implied: [18.2, 22.2],
+                    assessed: [25, 15]
                 },
                 wagers: {
-                    primary: "Exacta key #6 over #1, #2, #4.",
-                    exotics: "Trifecta key #6 on top with #1, #2, #4, #8 in the second and third positions.",
-                    horizontal: "'A' Horse: #6 Sittin Chilly. 'B' Horse: #1 Mackville. 'C' Horse: #2 Tarpaulin."
-                }
-            },
-            6: {
-                meta: "Race 6: Maiden Special Weight, 1 1/16 Miles (Inner Turf), Purse $100,000",
-                pace: { type: "Pace Void", class: "pace-void", text: "The race lacks a confirmed front-runner, and the pace will likely be slow, favoring a horse who can get to the front and dictate the terms." },
-                thesis: "This race is a 'Pace Void' that will be won by a well-bred, well-trained first-time starter. The Chad Brown duo of #6 Amicable Farce and #5 Celebrity Warrior (ire) are the most logical candidates based on their superior pedigree and workout patterns.",
-                spoiler: "The spoiler is if the public's opinion of another horse is correct and they have a strong performance, or if #8 Curly Q Girl overcomes her prior trip trouble and fires a new top.",
-                chart: {
-                    labels: ['#6 Amicable Farce', '#5 Celebrity Warrior (ire)'],
-                    implied: [25.0, 18.2],
-                    assessed: [30.0, 25.0]
+                    primary: "A good exacta wager is a box of 5 and 12, which focuses on the two most likely winners with the best recent form.",
+                    exotics: "A strong vertical wager is to key 12 on top over 5 and 14, with the rest of the field underneath.",
+                    horizontal: "Use 12 as a key 'A' single, and 5 and 14 as 'B' backups."
                 },
-                wagers: {
-                    primary: "Exacta box 6-5.",
-                    exotics: "Trifecta key #6, #5 on top.",
-                    horizontal: "'A' Horse: #6 Amicable Farce. 'A' Horse: #5 Celebrity Warrior (ire)."
-                }
+                hasData: true
             },
-            7: {
-                meta: "Race 7: Claiming, 1 1/8 Miles, Purse $58,000",
-                pace: { type: "Pressured Duel", class: "pace-duel", text: "A swift and energy-draining pace is highly probable between #1 Margin Of Air and #7 Tisquantum, favoring closers." },
-                thesis: "A destructive 'Pressured Duel' between the confirmed speed horses will lead to a pace collapse, setting up the race for a late-running horse. #2 Suerte and #5 Manta Rey are the primary beneficiaries of this pace dynamic.",
-                spoiler: "The spoiler is if #1 Margin Of Air is able to get a soft lead and wire the field, invalidating the thesis.",
-                chart: {
-                    labels: ['#2 Suerte', '#1 Margin Of Air'],
-                    implied: [14.3, 25.0],
-                    assessed: [20.0, 20.0]
-                },
-                wagers: {
-                    primary: "Exacta key #2 and #5 over #1, #7, #8.",
-                    exotics: "Trifecta key #2, #5 on top.",
-                    horizontal: "'A' Horse: #2 Suerte. 'A' Horse: #5 Manta Rey."
-                }
-            },
+            6: { meta: "Race 6: Allowance, 6 1/2 Furlongs, Purse $110,000", hasData: false },
+            7: { meta: "Race 7: Maiden Claiming, 1 Mile(s) Turf, Purse $55,000", hasData: false },
             8: {
-                meta: "Race 8: Allowance Optional Claiming, 1 1/8 Miles, Purse $120,000",
-                pace: { type: "Lone/Uncontested", class: "pace-void", text: "The scratch of a key pace presence, #2 Speed Bias, fundamentally changes the pace scenario, leaving #1 Wynstock as the sole confirmed front-runner." },
-                thesis: "The pace will be slow and uncontested, allowing the lone speed horse, #1 Wynstock, to get a soft lead and dominate the race. The class of #3 Cagliostro might be enough to overcome the pace, but it is a significant risk.",
-                spoiler: "The spoiler is if the pace is unexpectedly fast, and #3 Cagliostro is able to close into a tiring leader.",
+                meta: "Race 8: Stakes, 1 1/16 Mile(s) Turf, Purse $150,000",
+                pace: { type: "Pressured Duel", class: "pace-duel", text: "The analysis of running styles reveals a strong likelihood of a Pressured Duel between the two short-priced favorites, Rhetorical (6) and Bank Frenzy (8). Both horses have shown a tendency to run on or near the lead, and this race shape is likely to force them into an energy-depleting pace." },
+                thesis: "The primary thesis for this race is that the likely pressurized duel on the front end will be detrimental to the pace-setting favorites, creating a perfect setup for a high-quality closer. The key to this race is identifying which horse has the class and running style to capitalize on this scenario.",
+                spoiler: "The spoiler scenario would be if the two pace horses, Rhetorical (6) and Bank Frenzy (8), get into a duel that is less taxing than anticipated, and one of them is able to get a second wind and hold on for the win.",
                 chart: {
-                    labels: ['#1 Wynstock', '#3 Cagliostro'],
-                    implied: [7.7, 28.6],
-                    assessed: [20.0, 25.0]
+                    labels: ["Rhetorical (6)", "Clear Conscience (2)"],
+                    implied: [66.7, 11.1],
+                    assessed: [40, 25]
                 },
                 wagers: {
-                    primary: "Exacta key #1 over #3, #8.",
-                    exotics: "Trifecta key #1 on top with #3, #8 in the second and third positions.",
-                    horizontal: "'A' Horse: #1 Wynstock. 'B' Horse: #3 Cagliostro. 'C' Horse: #8 Full Screen."
-                }
+                    primary: "The most logical approach is to key the top value play, Clear Conscience (2), over the field.",
+                    exotics: "A strong vertical wager is to key 2 on top, with the two pace horses, Rhetorical (6) and Bank Frenzy (8), in the second and third positions.",
+                    horizontal: "Use Clear Conscience (2) as an 'A' single, and Bank Frenzy (8) as a 'B' backup."
+                },
+                hasData: true
             },
-            9: {
-                meta: "Race 9: Yaddo Stakes, 1 1/16 Miles (Inner Turf), Purse $150,000",
-                pace: { type: "Moderately Contested", class: "pace-contested", text: "There are several horses with a stalking style, but no clear, dominant front-runner. The pace should be honest, but not destructive, allowing for stalkers and closers to make a run." },
-                thesis: "This race will be won by a stalker who can make a late run, and #2 Awesome Czech is the most likely candidate.",
-                spoiler: "The spoiler is if #1 Moonage Daydream gets a soft pace and is able to get the jump on her rivals.",
-                chart: {
-                    labels: ['#2 Awesome Czech', '#4 Spinning Colors'],
-                    implied: [14.3, 22.2],
-                    assessed: [20.0, 18.0]
-                },
-                wagers: {
-                    primary: "Exacta key #2 over #4, #1.",
-                    exotics: "Trifecta key #2 on top.",
-                    horizontal: "'A' Horse: #2 Awesome Czech. 'B' Horse: #4 Spinning Colors. 'B' Horse: #1 Moonage Daydream."
-                }
-            },
-            10: {
-                meta: "Race 10: Claiming, 5 1/2 Furlongs (Turf), Purse $50,000",
-                pace: { type: "Pressured Duel", class: "pace-duel", text: "A fast and energy-draining pace between #4 Alexis Zorba (gb) and #8 Nano Man is highly likely, which is favorable for a closer." },
-                thesis: "A destructive 'Pressured Duel' between the confirmed speed horses will lead to a pace collapse, setting up the race for a late-running horse. #11 Holding The Line (ire) is the most likely candidate to benefit from this pace dynamic.",
-                spoiler: "The spoiler is if #4 Alexis Zorba (gb) is able to clear the field easily and win wire-to-wire.",
-                chart: {
-                    labels: ['#11 Holding The Line (ire)', '#4 Alexis Zorba (gb)'],
-                    implied: [14.3, 22.2],
-                    assessed: [25.0, 15.0]
-                },
-                wagers: {
-                    primary: "Exacta key #11 over #6, #4.",
-                    exotics: "Trifecta key #11 on top.",
-                    horizontal: "'A' Horse: #11 Holding The Line (ire). 'B' Horse: #6 Identity Crisis."
-                }
-            }
+            9: { meta: "Race 9: Allowance, 6 Furlongs, Purse $110,000", hasData: false },
+            10: { meta: "Race 10: Claiming, 6 Furlongs, Purse $34,000", hasData: false }
         };
 
         let currentChart = null;
@@ -379,10 +298,27 @@
             homePage.classList.add('hidden');
             racePage.classList.remove('hidden');
 
+            if (!race.hasData) {
+                raceDetailsContainer.innerHTML = `
+                    <div class="pro-card p-5 md:p-6 text-center">
+                        <h2 class="font-poppins text-2xl font-bold text-[#0d47a1] mb-2">${race.meta.split(',')[0]}</h2>
+                        <p class="text-md text-gray-600 mb-6">${race.meta.substring(race.meta.indexOf(',') + 1).trim()}</p>
+                        <i data-lucide="folder-x" class="mx-auto h-12 w-12 text-gray-400 mb-4"></i>
+                        <p class="text-lg text-gray-500 font-semibold">No detailed analysis available for this race.</p>
+                        <p class="text-sm text-gray-400 mt-2">The source material did not contain sufficient past performance data.</p>
+                    </div>
+                `;
+                lucide.createIcons();
+                updateActiveNav(raceNumber);
+                window.scrollTo(0, 0);
+                return;
+            }
+
             raceDetailsContainer.innerHTML = `
                 <div id="race-${raceNumber}" class="race-content pro-card p-5 md:p-6">
                     <div class="border-b border-gray-200 pb-4 mb-4">
-                        <h2 class="font-poppins text-2xl font-bold text-[#0d47a1]">${race.meta}</h2>
+                        <h2 class="font-poppins text-2xl font-bold text-[#0d47a1]">${race.meta.split(',')[0]}</h2>
+                        <p class="text-md text-gray-600 mb-2">${race.meta.substring(race.meta.indexOf(',') + 1).trim()}</p>
                         <div class="mt-2 flex items-center">
                             <span class="pace-tag ${race.pace.class}">
                                 <i data-lucide="wind" class="h-4 w-4"></i>
@@ -483,12 +419,12 @@
                             }
                         },
                         x: {
-                                grid: {
-                                    display: false
-                                },
-                                ticks: {
-                                    color: '#334155'
-                                }
+                             grid: {
+                                display: false
+                            },
+                            ticks: {
+                                color: '#334155'
+                            }
                         }
                     },
                     plugins: {
